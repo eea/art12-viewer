@@ -1,0 +1,13 @@
+{% extends layout_template %}
+
+{% block extra_head %}
+  {% assets "js" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+  {% endassets %}
+  {% assets "css" %}
+    <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}"  />
+  {% endassets %}
+
+  <link rel="stylesheet" type="text/css" media="screen"
+      href="http://www.eionet.europa.eu/styles/eionet2007/screen.css">
+{% endblock %}

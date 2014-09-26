@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>{% block title %}{% endblock %}</title>
+  {% block extra_head %}{% endblock %}
+</head>
+
+<body class="fullscreen">
+{%- block afterbody %}{% endblock -%}
+
+<div>
+  {% block breadcrumbs %}
+  {% endblock %}
+</div>
+
+<div id="container">
+  <div id="workarea">
+    {% block content %}{% endblock content %}
+  </div>
+</div>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>

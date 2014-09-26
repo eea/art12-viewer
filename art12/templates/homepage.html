@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h1>Welcome to Article 12</h1>
+
+<ul>
+  <li><a href="{{ url_for('.summary') }}">EU Assessments</a></li>
+  <li><a href="{{ url_for('.progress') }}">Summary of EU Assessments</a></li>
+  <li><a href="{{ url_for('.report') }}">MS Data</a></li>
+</ul>
+{% endblock content %}
