@@ -14,7 +14,7 @@ def inject_globals():
         ['%s: %s' % (k, v) for k, v in d])
 
     return {
-        'APP_BREADCRUMBS': [('Article 17', url_for(HOMEPAGE_VIEW_NAME))],
+        'APP_BREADCRUMBS': [('Article 12', url_for(HOMEPAGE_VIEW_NAME))],
         'EU_COUNTRY': EU_COUNTRY,
         'TREND_TOOLTIP': make_tooltip(TREND_OPTIONS),
         'population_size_unit': population_size_unit,
