@@ -2,8 +2,10 @@
 import argparse
 from flask.ext.script import Manager
 from flask.ext.sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Float, Integer, Numeric, String, Text, text
+from sqlalchemy import Column, Float, Integer, Numeric, String, Text, text, \
+    ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 
 alembic_ignore_tables = []
 
@@ -12,6 +14,13 @@ metadata = Base.metadata
 
 db = SQLAlchemy()
 db_manager = Manager()
+
+
+class Dataset(Base):
+    __tablename__ = 'datasets'
+
+    id = Column(Integer, primary_key=True, unique=True)
+    name = Column(String(255), nullable=False)
 
 
 class EtcDataBird(Base):
@@ -130,8 +139,10 @@ class EtcDataBird(Base):
     percentage_range_grid_area = Column(Float(asdecimal=True))
     distribution_grid_area = Column(Float(asdecimal=True))
     percentage_distribution_grid_area = Column(Float(asdecimal=True))
-    ext_dataset_id = Column(Integer, primary_key=True, nullable=False,
-                            server_default=text("'0'"))
+    dataset_id = Column('ext_dataset_id', ForeignKey('datasets.id'),
+                        primary_key=True, nullable=False,
+                        server_default=text("'0'"))
+    dataset = relationship(Dataset)
 
 
 @db_manager.option('alembic_args', nargs=argparse.REMAINDER)
