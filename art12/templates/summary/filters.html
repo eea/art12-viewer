@@ -1,0 +1,16 @@
+<form id="filterform" class="form box box-small inline-block" name="filterform"
+      method="get">
+
+  <div class="box-col width-180">
+    <label>{{ filter_form.period.label }}</label>
+    {{ filter_form.period }}
+  </div>
+
+  <div class="box-col width-240">
+    <label>{{ filter_form.subject.label }}</label>
+    {{ filter_form.subject(**{'data-href': subjects_url}) }}
+  </div>
+
+  <button type="submit" class="btn-blue offset_top_label">Filter</button>
+
+</form>

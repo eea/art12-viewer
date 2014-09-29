@@ -3,6 +3,7 @@ from flask.ext.script import Manager
 from art12.assets import assets_env
 from art12.models import db, db_manager
 from art12.urls import views
+from art12.common import common
 from eea_integration.layout import layout
 
 
@@ -12,6 +13,7 @@ def create_app():
 
     db.init_app(app)
     assets_env.init_app(app)
+    app.register_blueprint(common)
     app.register_blueprint(views)
     app.register_blueprint(layout)
 

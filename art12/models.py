@@ -4,16 +4,16 @@ from flask.ext.script import Manager
 from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Float, Integer, Numeric, String, Text, text, \
     ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+from art12.definitions import SEASON_FIELDS
 
 alembic_ignore_tables = []
 
-Base = declarative_base()
-metadata = Base.metadata
-
 db = SQLAlchemy()
 db_manager = Manager()
+
+Base = db.Model
+metadata = Base.metadata
 
 
 class Dataset(Base):
@@ -143,6 +143,18 @@ class EtcDataBird(Base):
                         primary_key=True, nullable=False,
                         server_default=text("'0'"))
     dataset = relationship(Dataset)
+
+    def _season(self, season):
+        return {field: getattr(self, field + season, None) for field in
+                SEASON_FIELDS}
+
+    @property
+    def bs(self):
+        return self._season('_bs')
+
+    @property
+    def ws(self):
+        return self._season('_ws')
 
 
 @db_manager.option('alembic_args', nargs=argparse.REMAINDER)

@@ -1,0 +1,84 @@
+{% macro size_unit_head(objects, season) %}
+  <div class="popout-wrapper hover">
+    <div class="popout size_unit_th right caret">
+      <table class="popout-table">
+        <tr>
+          <th>Agreed units</th>
+          <th>Other units</th>
+        </tr>
+        {% for row in objects %}
+          {% set data=row._season(season) %}
+          <tr>
+            <td>{{ data.population_units_agreed }}</td>
+            <td>{{ data.population_units_other }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+    Size&amp;Unit
+  </div>
+{% endmacro %}
+
+
+<tbody class="thead">
+
+<tr class="section-header">
+  <th class="table-title" colspan="{{ colspan_all }}">
+    Data from Member States reports
+  </th>
+</tr>
+
+<tr>
+  <th rowspan="2" title="Member states">MS</th>
+  <th colspan="8">Breeding Population</th>
+  <th colspan="8">Breeding Range</th>
+  <th colspan="8">Winter Population</th>
+  <th colspan="4">Areas from gridded maps (km<sup>2</sup>)</th>
+</tr>
+
+<tr>
+  {#  Breeding Population #}
+  <th>
+    {{ size_unit_head(objects, '_bs') }}
+  </th>
+  <th></th>
+  <th title="Percentage of area of the Breeding Population per MS">% MS</th>
+  <th>Period</th>
+  <th title="Short term trend {{ TREND_TOOLTIP }}">ST Trend</th>
+  <th>Period</th>
+  <th title="Long term trend {{ TREND_TOOLTIP }}">LT Trend</th>
+  <th></th>
+
+  {# Breeding Range #}
+  <th>Area</th>
+  <th></th>
+  <th title="Percentage of area of the Range per MS">% MS</th>
+  <th>Period</th>
+  <th title="Short term trend {{ TREND_TOOLTIP }}">ST Trend</th>
+  <th>Period</th>
+  <th title="Long term trend {{ TREND_TOOLTIP }}">LT Trend</th>
+  <th></th>
+
+  {# Winter Population #}
+  <th>
+   {{ size_unit_head(objects, '_ws') }}
+  </th>
+  <th></th>
+  <th title="Percentage of area of the Winter Population per MS">% MS</th>
+  <th>Period</th>
+  <th title="Short term trend {{ TREND_TOOLTIP }}">ST Trend</th>
+  <th>Period</th>
+  <th title="Long term trend {{ TREND_TOOLTIP }}">LT Trend</th>
+  <th></th>
+
+  {# Areas from gridded maps #}
+  <th title="Distribution">Distrib.</th>
+  <th title="Percentage of the surface of the Distribution Map, which has been gridded per MS">
+    % MS
+  </th>
+  <th title="Range">Range</th>
+  <th title="Percentage of the surface of the Range Map, which has been gridded per MS">
+    % MS
+  </th>
+</tr>
+</tbody>
