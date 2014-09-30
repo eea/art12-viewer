@@ -7,6 +7,7 @@ BUNDLE_JS = (
     'js/lib/ajax_memory_cache.js',
     'js/lib/jquery.formalize.min.js',
     'js/lib/jquery.powertip.min.js',
+    'js/main.js',
 )
 
 BUNDLE_CSS = (
