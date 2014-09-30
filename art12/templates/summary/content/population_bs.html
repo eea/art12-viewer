@@ -1,11 +1,11 @@
-<td class="number border_left">
+<td class="center number border_left">
   {{ population_size_unit(row.bs) }}
 </td>
 
-<td>{# additional info #}</td>
-<td>{# mean size #}</td>
-<td>{# period st #}</td>
-<td>{# st trend #}</td>
-<td>{# period lt #}</td>
-<td>{# lt trend #}</td>
-<td>{# additional info record #}</td>
+<td class="center">{{ row.population_additional_info_record_bs }}</td>
+<td class="center">{{ row.percentage_population_mean_size_bs|float }}</td>
+<td class="center">{{ row.population_trend_period_bs }}</td>
+<td class="center">{{ row.population_trend_bs}} ({{ row.population_trend_magnitude_min_bs|float }} – {{ row.population_trend_magnitude_max_bs|float }})</td>
+<td class="center">{{ row.population_trend_long_period_bs }}</td>
+<td class="center">{{ row.population_trend_long_bs }} ({{ row.population_trend_long_magnitude_min_bs|float }} – {{ row.population_trend_long_magnitude_max_bs|float }})</td>
+<td class="center">{{ row.population_trend_additional_info_record_bs }}</td>
