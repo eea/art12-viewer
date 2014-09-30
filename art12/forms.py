@@ -53,3 +53,19 @@ class ProgressFilterForm(CommonFilterForm):
 
         conc_name = dict(self.CONCLUSION_TYPE).get(conclusion)
         return super(ProgressFilterForm, self).get_selection() + [conc_name]
+
+
+class ReportsFilterForm(SpeciesMixin, CommonFilterForm):
+    country = SelectField('Country...', default='')
+
+    def __init__(self, *args, **kwargs):
+        super(ReportsFilterForm, self).__init__(*args, **kwargs)
+        self.country.choices = self.get_countries(self.dataset)
+
+
+    def get_selection(self):
+        country_name = dict(self.country.choices).get(self.country.data)
+        if not country_name:
+            return []
+
+        return super(ReportsFilterForm, self).get_selection() + [country_name]

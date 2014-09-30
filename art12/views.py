@@ -2,7 +2,9 @@ from flask import request
 from flask.views import MethodView
 from art12.common import TemplateView
 from art12.definitions import EU_COUNTRY
-from art12.forms import SummaryFilterForm, ProgressFilterForm
+from art12.forms import (
+    SummaryFilterForm, ProgressFilterForm, ReportsFilterForm,
+)
 from art12.mixins import SpeciesMixin
 
 
@@ -73,5 +75,25 @@ class Progress(SpeciesMixin, TemplateView):
         }
 
 
-class Report(MethodView):
-    pass
+class Reports(SpeciesMixin, TemplateView):
+    template_name = 'reports/species.html'
+
+    def get_context_data(self, **kwargs):
+        filter_form = ReportsFilterForm(request.args)
+
+        country = filter_form.country.data
+        if country:
+            objects = (
+                self.model_cls.query
+                .filter_by(country_isocode=country)
+                .order_by(self.model_cls.speciesname)
+            )
+        else:
+            objects = []
+
+        return {
+            'filter_form': filter_form,
+            'current_selection': filter_form.get_selection(),
+            'objects': objects,
+            'dataset': filter_form.dataset,
+        }
