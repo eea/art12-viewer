@@ -69,6 +69,7 @@ class Progress(SpeciesMixin, TemplateView):
             'filter_form': filter_form,
             'conclusions': conclusions,
             'current_selection': filter_form.get_selection(),
+            'dataset': filter_form.dataset,
         }
 
 

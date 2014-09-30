@@ -16,12 +16,8 @@ class CommonFilterForm(Form):
         dataset_id = request.args.get('period', get_default_period())
         self.dataset = Dataset.query.get_or_404(dataset_id)
 
-    def get_period(self):
-        return Dataset.query.get_or_404(self.period.data)
-
     def get_selection(self):
-        dataset = self.get_period()
-        return [dataset.name]
+        return [self.dataset.name]
 
 
 class SummaryFilterForm(SpeciesMixin, CommonFilterForm):
@@ -48,7 +44,7 @@ class ProgressFilterForm(CommonFilterForm):
         ('ws', 'Winter Population'),
     )
     conclusion = SelectField('Conclusion type...', choices=CONCLUSION_TYPE,
-                             default='')
+                             default='bs')
 
     def get_selection(self):
         conclusion = self.conclusion.data

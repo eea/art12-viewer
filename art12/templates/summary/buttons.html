@@ -1,0 +1,15 @@
+<div>
+  <button type="button" id="wikibutton" class="disabled" href="#">
+    View data sheet info
+    {% if wiki_unread %}({{ wiki_unread }} unread comments){% endif %}
+  </button>
+
+  <button type="button" id="wikibutton"
+          href="#" class="disabled">
+    Audit trail
+  </button>
+
+  {% if map_url %}
+    <button type="button" id="show-map" data-url="{{ map_url }}">Map</button>
+  {% endif %}
+</div>
