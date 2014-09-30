@@ -1,6 +1,6 @@
 from flask import Blueprint, url_for, render_template
 from flask.views import MethodView
-from art12.definitions import TREND_OPTIONS, EU_COUNTRY
+from art12.definitions import TREND_OPTIONS, EU_COUNTRY, TREND_CLASSES
 from art12.utils import str2num
 
 common = Blueprint('common', __name__)
@@ -17,6 +17,7 @@ def inject_globals():
         'APP_BREADCRUMBS': [('Article 12', url_for(HOMEPAGE_VIEW_NAME))],
         'EU_COUNTRY': EU_COUNTRY,
         'TREND_TOOLTIP': make_tooltip(TREND_OPTIONS),
+        'TREND_CLASSES': TREND_CLASSES,
         'population_size_unit': population_size_unit,
     }
 

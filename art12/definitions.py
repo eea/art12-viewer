@@ -2,11 +2,19 @@ EU_COUNTRY = 'EU27'
 
 TREND_OPTIONS = [
     ('x', 'unknown'),
-    ('0', 'stable'),
+    ('=', 'stable'),
     ('+', 'increase'),
     ('-', 'decrease'),
     ('N/A', 'not reported'),
 ]
+
+TREND_CLASSES = {
+    '+': 'inc',
+    '-': 'dec',
+    '=': 'eq',
+    'x': 'xx',
+    'F': 'f',
+}
 
 SEASON_FIELDS = [
     'filled_population',

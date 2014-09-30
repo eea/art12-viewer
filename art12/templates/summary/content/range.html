@@ -1,1 +1,12 @@
-<td colspan="8"></td>
+<td class="border_left"></td>
+<td></td>
+<td></td>
+<td>{{ row.range_trend_period_bs }}</td>
+<td class="trend-{{ TREND_CLASSES.get(row.range_trend_bs) }}">
+  <span class="conclusion">{{ row.range_trend_bs }}</span>
+</td>
+<td>{{ row.range_trend_long_period_bs }}</td>
+<td class="trend-{{ TREND_CLASSES.get(row.range_trend_long_bs) }}">
+  <span class="conclusion">{{ row.range_trend_long_bs }}</span>
+</td>
+<td></td>
