@@ -1,0 +1,9 @@
+instance
+gen
+.webassets-cache
+sandbox
+*~
+*.pyc
+__pycache__
+env.ini
+env

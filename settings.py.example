@@ -1,0 +1,5 @@
+SQLALCHEMY_DATABASE_URI = 'mysql://root@ubuntu.local/art12'
+
+DEBUG = True
+
+SECRET_KEY = 'secret is secret'
