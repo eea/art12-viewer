@@ -1,1 +1,8 @@
-<td colspan="8" class="border_left"></td>
+<td class="center border_left">{{ row.population_minimum_size_ws|float }} - {{ row.population_maximum_size_ws|float }} {{ row.population_size_unit_ws }}</td>
+<td class="center">{{ row.population_additional_info_record_ws }}</td>
+<td class="center">{{ row.percentage_population_mean_size_ws|float }}</td>
+<td class="center">{{ row.population_trend_period_ws }}</td>
+<td class="center">{{ row.population_trend_ws }} ({{ row.population_trend_magnitude_min_ws|float }} – {{ row.population_trend_magnitude_max_ws|float }})</td>
+<td class="center">{{ row.population_trend_long_period_ws }}</td>
+<td class="center">{{ row.population_trend_long_ws }} ({{ row.population_trend_long_magnitude_min_ws|float }} – {{ row.population_trend_long_magnitude_max_ws|float }})</td>
+<td class="center">{{ row.population_trend_additional_info_record_ws }}</td>
