@@ -1,12 +1,12 @@
-<td class="border_left"></td>
-<td></td>
-<td></td>
-<td>{{ row.range_trend_period_bs }}</td>
-<td class="trend-{{ TREND_CLASSES.get(row.range_trend_bs) }}">
-  <span class="conclusion">{{ row.range_trend_bs }}</span>
+<td class="center border_left">{{ row.range_surface_area_bs|float }}</td>
+<td class="center">{{ row.range_additional_info_record_bs }}</td>
+<td class="center">{{ row.percentage_range_surface_area_bs }}</td>
+<td class="center">{{ row.range_trend_period_bs }}</td>
+<td class="center trend-{{ TREND_CLASSES.get(row.range_trend_bs) }}">
+  <span class="center conclusion">{{ row.range_trend_bs }}</span>
 </td>
-<td>{{ row.range_trend_long_period_bs }}</td>
-<td class="trend-{{ TREND_CLASSES.get(row.range_trend_long_bs) }}">
-  <span class="conclusion">{{ row.range_trend_long_bs }}</span>
+<td class="center">{{ row.range_trend_long_period_bs }}</td>
+<td class="center trend-{{ TREND_CLASSES.get(row.range_trend_long_bs) }}">
+  <span class="center conclusion">{{ row.range_trend_long_bs }}</span>
 </td>
-<td></td>
+<td class="center"></td>
