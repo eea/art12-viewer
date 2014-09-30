@@ -1,0 +1,39 @@
+/* Trend TYPES */
+.conclusion, .conclusion:hover {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+.trend-inc .conclusion,
+.trend-inc.conclusion {
+  color: #000;
+  border-color: #639500;
+  background-color: #9aca3b;
+}
+
+.trend-dec .conclusion,
+.trend-dec.conclusion {
+  color: #000;
+  border-color: #742c2c;
+  background-color: #eb6847;
+}
+
+.trend-xx .conclusion,
+.trend-xx.conclusion {
+  color: #000;
+  border-color: #888;
+  background-color: #b4b4b4;
+}
+
+.trend-eq .conclusion,
+.trend-eq.conclusion {
+  color: #000;
+  border-color: #4774c7;
+  background-color: #78bbee;
+}
+
+.trend-f .conclusion,
+.trend-f.conclusion {
+  color: #000;
+  border-color: #7a005c;
+  background-color: #aa26f9;
+}

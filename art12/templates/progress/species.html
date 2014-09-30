@@ -18,13 +18,11 @@
   {% include 'progress/filters.html' %}
 
   {% if current_selection %}
-    {# {% include 'common/table_legend.html' %} #}
+    {% include 'common/legend.html' %}
     <table class="complex_datatable">
       <caption>
         <b>Current selection</b>:
         {{ current_selection|join(', ') }}.
-        {#          {% set show_all_url=url_for(progress_endpoint,#}
-        {#          <a href="{{ show_all_url }}">Show all {{ group }}</a>#}
       </caption>
 
       <tbody class="thead">
