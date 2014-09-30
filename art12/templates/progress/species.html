@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+
+{% block breadcrumbs %}
+  {% from 'common/_macros.html' import breadcrumbs %}
+  {{ breadcrumbs(APP_BREADCRUMBS + [
+      ('Species progress', None),
+    ]) }}
+{% endblock %}
+
+
+{% block content %}
+  <h1>Species assessments at EU biogeographical level</h1>
+
+  <p>
+    Choose a period and a conclusion type.
+  </p>
+
+  {% include 'progress/filters.html' %}
+
+  {% if current_selection %}
+    {# {% include 'common/table_legend.html' %} #}
+    <table class="complex_datatable">
+      <caption>
+        <b>Current selection</b>:
+        {{ current_selection|join(', ') }}.
+        {#          {% set show_all_url=url_for(progress_endpoint,#}
+        {#          <a href="{{ show_all_url }}">Show all {{ group }}</a>#}
+      </caption>
+
+      <tbody class="thead">
+      <tr>
+        <th>Species</th>
+        <th>Conclusion</th>
+      </tr>
+      </tbody>
+
+      <tbody>
+      {% for code,name,conclusion in conclusions %}
+        <tr class="stripe_row">
+          <td class="th">{{ name }}</td>
+          <td class="{{ conclusion }}">{{ conclusion }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+
+    </table>
+  {% else %}
+    <p><b>Please select a period and a conclusion type.</b></p>
+  {% endif %}
+{% endblock %}
