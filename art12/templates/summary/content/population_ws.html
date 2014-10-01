@@ -1,18 +1,18 @@
 <td class="center number border_left">
 	{{ population_size_unit(row.ws) }}
 </td>
-<td class="center">{{ row.population_additional_info_record_ws }}</td>
-<td class="center">{{ row.percentage_population_mean_size_ws|float }}</td>
-<td class="center">{{ row.population_trend_period_ws }}</td>
+<td class="center">{{ row.population_additional_info_record_ws or '' }}</td>
+<td class="center">{{ row.percentage_population_mean_size_ws|float or ''}}</td>
+<td class="center">{{ row.population_trend_period_ws or '' }}</td>
 <td class="center trend-{{ TREND_CLASSES.get(row.population_trend_ws) }}">
   <span class="center conclusion">
-		{{ row.population_trend_ws }} ({{ row.population_trend_magnitude_min_ws|float }} – {{ row.population_trend_magnitude_max_ws|float }})
+		{{ population_trend(row.ws) }}
 	</span>
 </td>
-<td class="center">{{ row.population_trend_long_period_ws }}</td>
+<td class="center">{{ row.population_trend_long_period_ws or ''}}</td>
 <td class="center trend-{{ TREND_CLASSES.get(row.population_trend_long_ws) }}">
   <span class="center conclusion">
-  	{{ row.population_trend_long_ws }} ({{ row.population_trend_long_magnitude_min_ws|float }} – {{ row.population_trend_long_magnitude_max_ws|float }})
+  	{{ population_trend_long(row.ws) }}
   </span>
 </td>
-<td class="center">{{ row.population_trend_additional_info_record_ws }}</td>
+<td class="center">{{ row.population_trend_additional_info_record_ws or '' }}</td>

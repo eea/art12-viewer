@@ -19,6 +19,10 @@ def inject_globals():
         'TREND_TOOLTIP': make_tooltip(TREND_OPTIONS),
         'TREND_CLASSES': TREND_CLASSES,
         'population_size_unit': population_size_unit,
+        'population_trend': population_trend,
+        'population_trend_long': population_trend_long,
+        'range_trend': range_trend,
+        'range_trend_long': range_trend_long,
     }
 
 
@@ -52,3 +56,69 @@ def population_size_unit(season):
         size_unit_value = 'N/A'
 
     return '%s %s' % (str2num(size_unit_value), size_unit)
+
+
+def population_trend(season):
+    min_size = season['population_trend_magnitude_min'] or ''
+    max_size = season['population_trend_magnitude_max'] or ''
+    trend = season['population_trend'] or 'N/A'
+
+    if trend in list(set(TREND_CLASSES.keys()) - {'+', '-'}):
+        return trend
+
+    if min_size or max_size:
+        trend_values = '(%s - %s)' % (str2num(min_size), str2num(max_size))
+    else:
+        trend_values = 'N/A'
+
+    return '%s %s' % (trend, trend_values)
+
+
+def population_trend_long(season):
+    min_size = season['population_trend_long_magnitude_min'] or ''
+    max_size = season['population_trend_long_magnitude_max'] or ''
+    trend = season['population_trend_long'] or 'N/A'
+
+    if trend in list(set(TREND_CLASSES.keys()) - {'+', '-'}):
+        return trend
+
+    if min_size or max_size:
+        trend_values = '(%s - %s)' % (str2num(min_size), str2num(max_size))
+    else:
+        trend_values = 'N/A'
+
+    return '%s %s' % (trend, trend_values)
+
+
+def range_trend(range_trend_bs, range_trend_magnitude_min_bs,
+                range_trend_magnitude_max_bs):
+    mag_min = range_trend_magnitude_min_bs
+    mag_max = range_trend_magnitude_max_bs
+    trend = range_trend_bs or 'N/A'
+
+    if trend in list(set(TREND_CLASSES.keys()) - {'+', '-'}):
+        return trend
+
+    if mag_min or mag_max:
+        magnitude_values = '(%s - %s)' % (str2num(mag_min), str2num(mag_max))
+    else:
+        magnitude_values = 'N/A'
+
+    return '%s %s' % (trend, magnitude_values)
+
+
+def range_trend_long(range_trend_long_bs, range_trend_long_magnitude_min_bs,
+                     range_trend_long_magnitude_max_bs):
+    mag_min = range_trend_long_magnitude_min_bs
+    mag_max = range_trend_long_magnitude_max_bs
+    trend_long = range_trend_long_bs or 'N/A'
+
+    if trend_long in list(set(TREND_CLASSES.keys()) - {'+', '-'}):
+        return trend_long
+
+    if mag_min or mag_max:
+        magnitude_values = '(%s - %s)' % (str2num(mag_min), str2num(mag_max))
+    else:
+        magnitude_values = 'N/A'
+
+    return '%s %s' % (trend_long, magnitude_values)
