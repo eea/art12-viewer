@@ -19,6 +19,7 @@
 -- Table structure for table `etc_data_birds`
 --
 
+DROP TABLE IF EXISTS `etc_data_birds`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `etc_data_birds` (
@@ -101,6 +102,8 @@ CREATE TABLE `etc_data_birds` (
   `filled_population_ws` varchar(3) DEFAULT NULL,
   `population_size_unit_ws` varchar(10) DEFAULT NULL,
   `percentage_population_mean_size_ws` double DEFAULT NULL,
+  `population_additional_info_record_ws` varchar(1) DEFAULT NULL,
+  `population_additional_info_ws` text,
   `population_trend_period_ws` varchar(30) DEFAULT NULL,
   `population_trend_ws` varchar(2) DEFAULT NULL,
   `population_trend_magnitude_min_ws` decimal(18,5) DEFAULT NULL,
@@ -109,6 +112,7 @@ CREATE TABLE `etc_data_birds` (
   `population_trend_long_ws` varchar(2) DEFAULT NULL,
   `population_trend_long_magnitude_min_ws` decimal(18,5) DEFAULT NULL,
   `population_trend_long_magnitude_max_ws` decimal(18,5) DEFAULT NULL,
+  `population_trend_additional_info_record_ws` varchar(1) DEFAULT NULL,
   `population_trend_additional_info_ws` text,
   `future_prospects` varchar(4) DEFAULT NULL,
   `conclusion_range_bs` varchar(4) DEFAULT NULL,
@@ -139,15 +143,3 @@ CREATE TABLE `etc_data_birds` (
   KEY `group` (`group`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2014-09-26 13:37:51
