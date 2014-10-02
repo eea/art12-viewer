@@ -34,12 +34,13 @@
 				</tbody>
 
 				<tbody>
-				{% for code,name,conclusion in conclusions %}
+				{% for code,name in species %}
 					<tr class="stripe_row">
 						<td class="th">
 							{% set summary_url = url_for('views.summary', period=dataset.id, subject=code) %}
 							<a href="{{ summary_url }}">{{ name }}</a>
 						</td>
+            {% set conclusion = get_conclusion(conclusions, code) %}
 						<td class="{{ conclusion }}">{{ conclusion }}</td>
 					</tr>
 				{% endfor %}

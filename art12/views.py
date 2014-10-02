@@ -70,11 +70,13 @@ class Progress(SpeciesMixin, TemplateView):
             conclusions = self.get_conclusion_qs(conclusion_type)
         else:
             conclusions = []
+        dataset = filter_form.dataset
         return {
             'filter_form': filter_form,
             'conclusions': conclusions,
+            'species': self.get_subjects(dataset),
             'current_selection': filter_form.get_selection(),
-            'dataset': filter_form.dataset,
+            'dataset': dataset,
         }
 
 

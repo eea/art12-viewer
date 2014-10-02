@@ -23,6 +23,7 @@ def inject_globals():
         'population_trend_long': population_trend_long,
         'range_trend': range_trend,
         'range_trend_long': range_trend_long,
+        'get_conclusion': get_conclusion,
     }
 
 
@@ -135,3 +136,12 @@ def range_trend_long(range_trend_long_bs, range_trend_long_magnitude_min_bs,
 
     return 'N/A' if _double_na(trend_long, magnitude_values) \
         else '%s %s' % (trend_long, magnitude_values)
+
+
+def get_conclusion(conclusions, species_code):
+    if not conclusions:
+        return None
+    for conclusion in conclusions:
+        if conclusion.code == species_code:
+            return conclusion[2]
+    return None
