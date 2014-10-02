@@ -39,12 +39,13 @@ class SummaryFilterForm(SpeciesMixin, CommonFilterForm):
 
 class ProgressFilterForm(CommonFilterForm):
     CONCLUSION_TYPE = (
+        ('', '-'),
         ('bs', 'Breeding Population'),
         ('rg', 'Breeding Range'),
         ('ws', 'Winter Population'),
     )
     conclusion = SelectField('Conclusion type...', choices=CONCLUSION_TYPE,
-                             default='bs')
+                             default='')
 
     def get_selection(self):
         conclusion = self.conclusion.data
@@ -60,11 +61,10 @@ class ReportsFilterForm(SpeciesMixin, CommonFilterForm):
 
     def __init__(self, *args, **kwargs):
         super(ReportsFilterForm, self).__init__(*args, **kwargs)
-        self.country.choices = self.get_countries(self.dataset)
-
+        self.country.choices = [('', '-')] + self.get_countries(self.dataset)
 
     def get_selection(self):
-        country_name = dict(self.country.choices).get(self.country.data)
+        country_name = self.country.data
         if not country_name:
             return []
 

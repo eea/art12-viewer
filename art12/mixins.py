@@ -25,4 +25,5 @@ class SpeciesMixin(object):
                           self.model_cls.country)
             .distinct()
             .order_by(self.model_cls.country)
+            .all()
         )
