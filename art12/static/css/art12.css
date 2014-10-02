@@ -1,3 +1,7 @@
+body #workarea {
+    margin-left: 0;
+}
+
 /* Trend TYPES */
 .conclusion, .conclusion:hover {
     padding-left: 4px;
