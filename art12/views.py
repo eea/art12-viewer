@@ -1,11 +1,14 @@
+import json
+
 from flask import request
-from flask.views import MethodView
+from flask.views import View
 from art12.common import TemplateView
 from art12.definitions import EU_COUNTRY
 from art12.forms import (
     SummaryFilterForm, ProgressFilterForm, ReportsFilterForm,
 )
 from art12.mixins import SpeciesMixin
+from art12.models import Dataset
 
 
 class Homepage(TemplateView):
@@ -97,3 +100,14 @@ class Reports(SpeciesMixin, TemplateView):
             'objects': objects,
             'dataset': filter_form.dataset,
         }
+
+
+class ConnectedSelectBoxes(View, SpeciesMixin):
+    methods = ['GET']
+
+    def dispatch_request(self):
+        dataset_id = request.args.get('dataset_id', 1)
+        dataset = Dataset.query.get_or_404(dataset_id)
+        options = self.get_subjects(dataset).all()
+        return json.dumps(options)
+

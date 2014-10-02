@@ -52,3 +52,33 @@ $(document).ready(function () {
         }
     });
 });
+
+$(document).ready(function () {
+    $('#period').on('change', function () {
+        var option = $(this).find(':selected');
+        var value = option.val();
+        var data = {'dataset_id': value};
+        var url = '/summary/filter_form';
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: data,
+            dataType: 'html',
+            success: function(resp) {
+                var data = JSON.parse(resp);
+                $('#subject').empty();
+                $.each(data, function(index, element) {
+                    console.log(element);
+                    $('#subject').append(
+                        $("<option></option>")
+                            .text(element[1])
+                            .val(element[0])
+                    );
+                });
+            },
+            error: function(resp) {
+                alert('Error on selection')
+            }
+        });
+    });
+});
