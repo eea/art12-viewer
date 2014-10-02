@@ -81,4 +81,22 @@ $(document).ready(function () {
             }
         });
     });
+
+    $('.copy-disabled').bind('contextmenu', function(e){
+        return false;
+    });
+
+    var ctrlDown = false;
+    var ctrlKey = 17, aKey=65, cKey = 67, vKey = 86;
+
+    $(document).keydown(function(e){
+        if (e.keyCode == ctrlKey) ctrlDown = true;
+    }).keyup(function(e){
+        if (e.keyCode == ctrlKey) ctrlDown = false;
+    });
+
+    $('.copy-disabled').bind('keydown', (function(e) {
+        if (ctrlDown && (e.keyCode == vKey || e.keyCode == cKey || e.keyCode == aKey))
+            return false;
+    }));
 });
