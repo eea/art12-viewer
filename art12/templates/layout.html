@@ -14,3 +14,10 @@
   <link href="http://fonts.googleapis.com/css?family=Roboto+Condensed"
         rel="stylesheet" type="text/css">
 {% endblock %}
+
+{% block breadcrumbs %}
+  {% from 'common/_macros.html' import breadcrumbs %}
+  {{ breadcrumbs(APP_BREADCRUMBS + [
+      ('Article 12', None),
+    ]) }}
+{% endblock %}
