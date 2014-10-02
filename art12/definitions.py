@@ -11,7 +11,7 @@ TREND_OPTIONS = [
 TREND_CLASSES = {
     '+': 'inc',
     '-': 'dec',
-    '=': 'eq',
+    '0': 'eq',
     'x': 'xx',
     'F': 'f',
 }

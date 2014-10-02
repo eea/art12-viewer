@@ -50,8 +50,12 @@ def population_size_unit(season):
     if filled == 'Max':
         max_size = '(%s)' % max_size
 
-    if min_size or max_size:
+    if min_size and max_size:
         size_unit_value = '%s - %s' % (min_size, max_size)
+    elif min_size:
+        size_unit_value = '%s' % min_size
+    elif max_size:
+        size_unit_value = '%s' % max_size
     else:
         size_unit_value = 'N/A'
 
