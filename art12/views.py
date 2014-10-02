@@ -108,6 +108,6 @@ class ConnectedSelectBoxes(View, SpeciesMixin):
     def dispatch_request(self):
         dataset_id = request.args.get('dataset_id', 1)
         dataset = Dataset.query.get_or_404(dataset_id)
-        options = self.get_subjects(dataset).all()
+        options = [('', '-')] + self.get_subjects(dataset)
         return json.dumps(options)
 

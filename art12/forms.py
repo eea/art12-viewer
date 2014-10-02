@@ -25,7 +25,7 @@ class SummaryFilterForm(SpeciesMixin, CommonFilterForm):
 
     def __init__(self, *args, **kwargs):
         super(SummaryFilterForm, self).__init__(*args, **kwargs)
-        self.subject.choices = self.get_subjects(self.dataset)
+        self.subject.choices = [('', '-')] + self.get_subjects(self.dataset)
 
     def get_selection(self):
         subject = self.subject.data

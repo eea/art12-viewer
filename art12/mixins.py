@@ -13,6 +13,7 @@ class SpeciesMixin(object):
                            self.model_cls.speciesname)
             .distinct()
             .order_by(self.model_cls.speciesname)
+            .all()
         )
 
     def get_countries(self, dataset):
