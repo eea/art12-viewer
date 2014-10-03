@@ -7,6 +7,8 @@ common = Blueprint('common', __name__)
 
 HOMEPAGE_VIEW_NAME = 'views.homepage'
 
+EMPTY = ''
+
 
 @common.app_context_processor
 def inject_globals():
@@ -41,14 +43,14 @@ def get_default_period():
 
 
 def _double_na(field1, field2):
-    return True if (field1, field2) == ('N/A', 'N/A') else False
+    return True if (field1, field2) == (EMPTY, EMPTY) else False
 
 
 def population_size_unit(season):
     min_size = season['population_minimum_size'] or ''
     max_size = season['population_maximum_size'] or ''
-    filled = season['filled_population'] or 'N/A'
-    size_unit = season['population_size_unit'] or 'N/A'
+    filled = season['filled_population'] or EMPTY
+    size_unit = season['population_size_unit'] or EMPTY
 
     if filled == 'Min':
         min_size = '(%s)' % min_size
@@ -62,16 +64,16 @@ def population_size_unit(season):
     elif max_size:
         size_unit_value = '%s' % max_size
     else:
-        size_unit_value = 'N/A'
+        size_unit_value = EMPTY
 
-    return 'N/A' if _double_na(size_unit_value, size_unit) \
+    return EMPTY if _double_na(size_unit_value, size_unit) \
         else '%s %s' % (str2num(size_unit_value), size_unit)
 
 
 def population_trend(season):
     min_size = season['population_trend_magnitude_min'] or ''
     max_size = season['population_trend_magnitude_max'] or ''
-    trend = season['population_trend'] or 'N/A'
+    trend = season['population_trend'] or EMPTY
 
     if trend in list(set(TREND_CLASSES.keys()) - {'+', '-'}):
         return trend
@@ -79,16 +81,16 @@ def population_trend(season):
     if min_size or max_size:
         trend_values = '(%s - %s)' % (str2num(min_size), str2num(max_size))
     else:
-        trend_values = 'N/A'
+        trend_values = EMPTY
 
-    return 'N/A' if _double_na(trend, trend_values) \
+    return EMPTY if _double_na(trend, trend_values) \
         else '%s %s' % (trend, trend_values)
 
 
 def population_trend_long(season):
     min_size = season['population_trend_long_magnitude_min'] or ''
     max_size = season['population_trend_long_magnitude_max'] or ''
-    trend = season['population_trend_long'] or 'N/A'
+    trend = season['population_trend_long'] or EMPTY
 
     if trend in list(set(TREND_CLASSES.keys()) - {'+', '-'}):
         return trend
@@ -96,9 +98,9 @@ def population_trend_long(season):
     if min_size or max_size:
         trend_values = '(%s - %s)' % (str2num(min_size), str2num(max_size))
     else:
-        trend_values = 'N/A'
+        trend_values = EMPTY
 
-    return 'N/A' if _double_na(trend, trend_values) \
+    return EMPTY if _double_na(trend, trend_values) \
         else '%s %s' % (trend, trend_values)
 
 
@@ -106,7 +108,7 @@ def range_trend(range_trend_bs, range_trend_magnitude_min_bs,
                 range_trend_magnitude_max_bs):
     mag_min = range_trend_magnitude_min_bs
     mag_max = range_trend_magnitude_max_bs
-    trend = range_trend_bs or 'N/A'
+    trend = range_trend_bs or EMPTY
 
     if trend in list(set(TREND_CLASSES.keys()) - {'+', '-'}):
         return trend
@@ -114,9 +116,9 @@ def range_trend(range_trend_bs, range_trend_magnitude_min_bs,
     if mag_min or mag_max:
         magnitude_values = '(%s - %s)' % (str2num(mag_min), str2num(mag_max))
     else:
-        magnitude_values = 'N/A'
+        magnitude_values = EMPTY
 
-    return 'N/A' if _double_na(trend, magnitude_values) \
+    return EMPTY if _double_na(trend, magnitude_values) \
         else '%s %s' % (trend, magnitude_values)
 
 
@@ -124,7 +126,7 @@ def range_trend_long(range_trend_long_bs, range_trend_long_magnitude_min_bs,
                      range_trend_long_magnitude_max_bs):
     mag_min = range_trend_long_magnitude_min_bs
     mag_max = range_trend_long_magnitude_max_bs
-    trend_long = range_trend_long_bs or 'N/A'
+    trend_long = range_trend_long_bs or EMPTY
 
     if trend_long in list(set(TREND_CLASSES.keys()) - {'+', '-'}):
         return trend_long
@@ -132,9 +134,9 @@ def range_trend_long(range_trend_long_bs, range_trend_long_magnitude_min_bs,
     if mag_min or mag_max:
         magnitude_values = '(%s - %s)' % (str2num(mag_min), str2num(mag_max))
     else:
-        magnitude_values = 'N/A'
+        magnitude_values = EMPTY
 
-    return 'N/A' if _double_na(trend_long, magnitude_values) \
+    return EMPTY if _double_na(trend_long, magnitude_values) \
         else '%s %s' % (trend_long, magnitude_values)
 
 
