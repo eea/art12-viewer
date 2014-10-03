@@ -160,6 +160,17 @@ class EtcDataBird(Base):
         return self._season('_ws')
 
 
+class LuDataBird(Base):
+    __tablename__ = 'lu_birds_name'
+
+    speciescode = Column(String(10), primary_key=True, nullable=False,
+                         server_default=text("''"))
+    speciesname = Column(String(128))
+    dataset_id = Column('ext_dataset_id', ForeignKey('datasets.id'),
+                        primary_key=True, nullable=False,
+                        server_default=text("'0'"))
+
+
 @db_manager.option('alembic_args', nargs=argparse.REMAINDER)
 def alembic(alembic_args):
     from alembic.config import CommandLine
