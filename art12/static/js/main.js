@@ -82,12 +82,14 @@ $(document).ready(function () {
         });
     });
 
+    var copy_alert = 'Copying the data is not allowed';
     $('.copy-disabled').bind('contextmenu', function(e){
+        alert(copy_alert);
         return false;
     });
 
     var ctrlDown = false;
-    var ctrlKey = 17, aKey=65, cKey = 67, vKey = 86;
+    var ctrlKey = 17, aKey=65, cKey = 67;
 
     $(document).keydown(function(e){
         if (e.keyCode == ctrlKey) ctrlDown = true;
@@ -96,7 +98,9 @@ $(document).ready(function () {
     });
 
     $('.copy-disabled').bind('keydown', (function(e) {
-        if (ctrlDown && (e.keyCode == vKey || e.keyCode == cKey || e.keyCode == aKey))
+        if (ctrlDown && (e.keyCode == cKey || e.keyCode == aKey)){
+            alert(copy_alert);
             return false;
+        }
     }));
 });
