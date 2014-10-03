@@ -11,35 +11,35 @@ body #workarea {
 .trend-inc.conclusion {
   color: #000;
   border-color: #639500;
-  background-color: #9aca3b;
+  background-color: #76923c;
 }
 
 .trend-dec .conclusion,
 .trend-dec.conclusion {
   color: #000;
   border-color: #742c2c;
-  background-color: #eb6847;
+  background-color: #cc0000;
 }
 
 .trend-xx .conclusion,
 .trend-xx.conclusion {
   color: #000;
   border-color: #888;
-  background-color: #b4b4b4;
+  background-color: #808080;
 }
 
 .trend-eq .conclusion,
 .trend-eq.conclusion {
   color: #000;
   border-color: #4774c7;
-  background-color: #78bbee;
+  background-color: #365f91;
 }
 
 .trend-f .conclusion,
 .trend-f.conclusion {
   color: #000;
   border-color: #7a005c;
-  background-color: #aa26f9;
+  background-color: #5f497a;
 }
 
 .copy-disabled {
