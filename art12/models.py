@@ -169,6 +169,7 @@ class LuDataBird(Base):
     dataset_id = Column('ext_dataset_id', ForeignKey('datasets.id'),
                         primary_key=True, nullable=False,
                         server_default=text("'0'"))
+    dataset = relationship(Dataset)
 
 
 @db_manager.option('alembic_args', nargs=argparse.REMAINDER)
