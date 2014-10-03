@@ -1,7 +1,11 @@
-<td class="default-td border_left">
+<td class="default-td border_left"
+		title="{{ row.population_quality_bs }}">
 	{{ population_size_unit(row.bs) }}
 </td>
-<td class="default-td">
+<td class="default-td"
+		{% if row.population_additional_info_record_bs == 'Y' %}
+		  title="{{ row.population_additional_info_bs|wordwrap }}"
+	  {% endif %}>
 	{{ row.population_additional_info_record_bs }}
 </td>
 <td class="center">
@@ -10,7 +14,8 @@
 <td class="default-td">
 	{{ row.population_trend_period_bs or '' }}
 </td>
-<td class="trend-{{ TREND_CLASSES.get(row.population_trend_bs) }}">
+<td class="trend-{{ TREND_CLASSES.get(row.population_trend_bs) }}"
+		title="{{ row.population_trend_quality_bs }}">
   <span class="conclusion">
 		{{ population_trend(row.bs) }}
 	</span>
@@ -18,11 +23,15 @@
 <td class="default-td">
 	{{ row.population_trend_long_period_bs or '' }}
 </td>
-<td class="trend-{{ TREND_CLASSES.get(row.population_trend_long_bs) }}">
+<td class="trend-{{ TREND_CLASSES.get(row.population_trend_long_bs) }}"
+		title="{{ row.population_trend_long_quality_bs }}">
 	<span class="conclusion">
 		{{ population_trend_long(row.bs) }}
   </span>
 </td>
-<td class="default-td">
+<td class="default-td"
+		{% if row.population_trend_additional_info_record_bs == 'Y' %}
+		  title="{{ row.population_trend_additional_info_bs|wordwrap }}"
+    {% endif %}>
 	{{ row.population_trend_additional_info_record_bs }}
 </td>
