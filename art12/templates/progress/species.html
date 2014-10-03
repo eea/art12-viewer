@@ -41,7 +41,7 @@
 							<a href="{{ summary_url }}">{{ name }}</a>
 						</td>
             {% set conclusion = get_conclusion(conclusions, code) %}
-						<td class="{{ conclusion }}">{{ conclusion }}</td>
+						<td class="{{ conclusion }}">{{ conclusion or '' }}</td>
 					</tr>
 				{% endfor %}
 				</tbody>
