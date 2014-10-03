@@ -1,19 +1,28 @@
-<td class="center number border_left">
-  {{ population_size_unit(row.bs) }}
+<td class="default-td border_left">
+	{{ population_size_unit(row.bs) }}
 </td>
-
-<td class="center">{{ row.population_additional_info_record_bs }}</td>
-<td class="center">{{ row.percentage_population_mean_size_bs|float or 'N/A' }}</td>
-<td class="center">{{ row.population_trend_period_bs or '' }}</td>
-<td class="center trend-{{ TREND_CLASSES.get(row.population_trend_bs) }}">
-  <span class="center conclusion">
+<td class="default-td">
+	{{ row.population_additional_info_record_bs }}
+</td>
+<td class="center">
+	{{ row.percentage_population_mean_size_bs|float or 'N/A' }}
+</td>
+<td class="default-td">
+	{{ row.population_trend_period_bs or '' }}
+</td>
+<td class="trend-{{ TREND_CLASSES.get(row.population_trend_bs) }}">
+  <span class="conclusion">
 		{{ population_trend(row.bs) }}
 	</span>
 </td>
-<td class="center">{{ row.population_trend_long_period_bs or '' }}</td>
-<td class="center trend-{{ TREND_CLASSES.get(row.population_trend_long_bs) }}">
-	<span class="center conclusion">
+<td class="default-td">
+	{{ row.population_trend_long_period_bs or '' }}
+</td>
+<td class="trend-{{ TREND_CLASSES.get(row.population_trend_long_bs) }}">
+	<span class="conclusion">
 		{{ population_trend_long(row.bs) }}
   </span>
 </td>
-<td class="center">{{ row.population_trend_additional_info_record_bs }}</td>
+<td class="default-td">
+	{{ row.population_trend_additional_info_record_bs }}
+</td>

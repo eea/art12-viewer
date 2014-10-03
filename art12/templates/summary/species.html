@@ -36,7 +36,9 @@
 				<tbody>
 				{% for row in objects %}
 					<tr class="stripe_row">
-						<td>{{ row.country_isocode }}</td>
+						<td class="default-td">
+							{{ row.country_isocode }}
+						</td>
 
 						{% include 'summary/content/population_bs.html' with context %}
 						{% include 'summary/content/range.html' with context %}

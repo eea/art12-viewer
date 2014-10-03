@@ -1,16 +1,30 @@
-<td class="center border_left">{{ row.range_surface_area_bs|int }}</td>
-<td class="center">{{ row.range_additional_info_record_bs }}</td>
-<td class="center">{{ row.percentage_range_surface_area_bs|float or 'N/A' }}</td>
-<td class="center">{{ row.range_trend_period_bs or '' }}</td>
-<td class="center trend-{{ TREND_CLASSES.get(row.range_trend_bs) }}">
-  <span class="center conclusion">
+<td class="default-td border_left">
+	<span class="conclusion">
+    {{ row.range_surface_area_bs|int }}
+	</span>
+</td>
+<td class="default-td">
+	{{ row.range_additional_info_record_bs }}
+</td>
+<td class="center">
+	{{ row.percentage_range_surface_area_bs|float or 'N/A' }}
+</td>
+<td class="default-td">
+	{{ row.range_trend_period_bs or '' }}
+</td>
+<td class="trend-{{ TREND_CLASSES.get(row.range_trend_bs) }}">
+  <span class="conclusion">
 		{{ range_trend(row.range_trend_bs, row.range_trend_magnitude_min_bs, row.range_trend_magnitude_max_bs) }}
 	</span>
 </td>
-<td class="center">{{ row.range_trend_long_period_bs or '' }}</td>
-<td class="center trend-{{ TREND_CLASSES.get(row.range_trend_long_bs) }}">
-  <span class="center conclusion">
+<td class="default-td">
+	{{ row.range_trend_long_period_bs or '' }}
+</td>
+<td class="trend-{{ TREND_CLASSES.get(row.range_trend_long_bs) }}">
+  <span class="conclusion">
 		{{ range_trend_long(row.range_trend_long_bs, row.range_trend_long_magnitude_min_bs, row.range_trend_long_magnitude_max_bs) }}
 	</span>
 </td>
-<td class="center">{{ row.range_trend_additional_info_record_bs }}</td>
+<td class="default-td">
+	{{ row.range_trend_additional_info_record_bs }}
+</td>

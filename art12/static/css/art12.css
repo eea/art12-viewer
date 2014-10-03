@@ -43,5 +43,10 @@ body #workarea {
 }
 
 .copy-disabled {
-    outline: none;
+  outline: none;
+}
+
+.default-td {
+  color: #000;
+  text-align: center;
 }
