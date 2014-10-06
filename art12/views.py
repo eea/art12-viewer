@@ -2,7 +2,7 @@ import json
 
 from flask import request
 from flask.views import View
-from art12.common import TemplateView
+from art12.common import TemplateView, generate_map_url
 from art12.definitions import EU_COUNTRY
 from art12.forms import (
     SummaryFilterForm, ProgressFilterForm, ReportsFilterForm,
@@ -19,6 +19,7 @@ class Summary(SpeciesMixin, TemplateView):
     template_name = 'summary/species.html'
 
     def get_context_data(self, **kwargs):
+        map_url = ''
         filter_form = SummaryFilterForm(request.args)
         filter_args = {}
         subject = filter_form.subject.data
@@ -31,14 +32,23 @@ class Summary(SpeciesMixin, TemplateView):
                 self.model_cls.country_isocode != EU_COUNTRY)
             eu_objects = qs.filter(
                 self.model_cls.country_isocode == EU_COUNTRY)
+
+            sensitive = False
+
+            map_url = generate_map_url(
+                subject=subject,
+                sensitive=sensitive,
+            )
         else:
             content_objects = []
             eu_objects = []
+
         return {
             'filter_form': filter_form,
             'objects': content_objects, 'eu_objects': eu_objects,
             'current_selection': filter_form.get_selection(),
             'dataset': filter_form.data,
+            'map_url': map_url,
         }
 
 
@@ -77,7 +87,7 @@ class Progress(SpeciesMixin, TemplateView):
             'species': self.get_subjects(dataset),
             'current_selection': filter_form.get_selection(),
             'dataset': dataset,
-        }
+            }
 
 
 class Reports(SpeciesMixin, TemplateView):
@@ -101,7 +111,7 @@ class Reports(SpeciesMixin, TemplateView):
             'current_selection': filter_form.get_selection(),
             'objects': objects,
             'dataset': filter_form.dataset,
-        }
+            }
 
 
 class ConnectedSelectBoxes(View, SpeciesMixin):

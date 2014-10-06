@@ -2,6 +2,7 @@ from flask import Blueprint, url_for, render_template
 from flask.views import MethodView
 from art12.definitions import TREND_OPTIONS, EU_COUNTRY, TREND_CLASSES
 from art12.utils import str2num
+from art12.models import Config
 
 common = Blueprint('common', __name__)
 
@@ -26,7 +27,7 @@ def inject_globals():
         'range_trend': range_trend,
         'range_trend_long': range_trend_long,
         'get_conclusion': get_conclusion,
-    }
+        }
 
 
 class TemplateView(MethodView):
@@ -147,3 +148,24 @@ def get_conclusion(conclusions, species_code):
         if conclusion.code == species_code:
             return conclusion[2]
     return None
+
+
+def get_config():
+    rows = Config.query.all()
+    if len(rows) != 1:
+        raise RuntimeError("There should be exactly one config row")
+    return rows[0]
+
+
+def generate_map_url(subject, sensitive=False):
+    config = get_config()
+
+    if sensitive:
+        map_href = config.sensitive_species_map_url
+    else:
+        map_href = config.species_map_url
+
+    if not map_href:
+        return ''
+
+    return map_href + '&CCode=' + subject
