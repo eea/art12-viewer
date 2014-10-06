@@ -172,6 +172,15 @@ class LuDataBird(Base):
     dataset = relationship(Dataset)
 
 
+class Config(Base):
+    __tablename__ = 'config'
+
+    id = Column(Integer, primary_key=True)
+    default_dataset_id = Column(Integer, default=1)
+    species_map_url = Column(db.String(255))
+    sensitive_species_map_url = Column(db.String(255))
+
+
 @db_manager.option('alembic_args', nargs=argparse.REMAINDER)
 def alembic(alembic_args):
     from alembic.config import CommandLine
