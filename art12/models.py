@@ -222,6 +222,46 @@ class WikiChange(Base):
     )
 
 
+class WikiTrail(Base):
+    __tablename__ = 'wiki_trail'
+
+    id = Column(Integer, primary_key=True)
+    speciescode = Column(String(10))
+    dataset_id = Column(
+        'ext_dataset_id',
+        ForeignKey('datasets.id'),
+    )
+
+    @hybrid_property
+    def subject(self):
+        return self.speciescode
+
+
+class WikiTrailChange(Base):
+    __tablename__ = 'wiki_trail_changes'
+
+    id = Column(Integer, primary_key=True)
+    wiki_id = Column(ForeignKey('wiki_trail.id'), nullable=False)
+    body = Column(String(6000), nullable=False)
+    editor = Column(String(60), nullable=False)
+    changed = Column(DateTime, nullable=False,
+                     server_default=u'CURRENT_TIMESTAMP')
+    active = Column(Integer, default=0)
+    dataset_id = Column(
+        'ext_dataset_id',
+        ForeignKey('datasets.id'),
+    )
+    dataset = relationship(Dataset)
+    wiki = relationship(
+        u'WikiTrail',
+        primaryjoin="and_(WikiTrailChange.wiki_id==WikiTrail.id,"
+        "WikiTrailChange.dataset_id==WikiTrail.dataset_id)",
+        foreign_keys=[wiki_id, dataset_id],
+        backref='changes',
+    )
+
+
+
 @db_manager.option('alembic_args', nargs=argparse.REMAINDER)
 def alembic(alembic_args):
     from alembic.config import CommandLine

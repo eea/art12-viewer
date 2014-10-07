@@ -1,13 +1,13 @@
 <div>
-  <button type="button" id="wikibutton" class="disabled" href="#">
-    View data sheet info
-    {% if wiki_unread %}({{ wiki_unread }} unread comments){% endif %}
-  </button>
+  {% set datasheet_url=url_for('wiki.datasheet', period=dataset.id, subject=subject) %}
 
-  <button type="button" id="wikibutton"
-          href="#" class="disabled">
-    Audit trail
-  </button>
+	<button type="button" id="wikibutton" href="{{ datasheet_url }}">
+		View data sheet info
+	</button>
+
+    <button type="button" id="wikibutton" href="{{ audittrail_url }}">
+        Audit trail
+		</button>
 
   {% if map_url %}
     <button type="button" id="show-map" data-url="{{ map_url }}">Map</button>

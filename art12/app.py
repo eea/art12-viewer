@@ -4,6 +4,7 @@ from art12.assets import assets_env
 from art12.models import db, db_manager
 from art12.urls import views
 from art12.common import common
+from art12.wiki import wiki
 from eea_integration.layout import layout
 
 
@@ -16,6 +17,7 @@ def create_app():
     app.register_blueprint(common)
     app.register_blueprint(views)
     app.register_blueprint(layout)
+    app.register_blueprint(wiki)
 
     url_prefix = app.config.get('URL_PREFIX')
     if url_prefix:

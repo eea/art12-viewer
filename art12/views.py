@@ -1,6 +1,6 @@
 import json
 
-from flask import request
+from flask import request, url_for
 from flask.views import View
 from art12.common import TemplateView, generate_map_url
 from art12.definitions import EU_COUNTRY
@@ -23,10 +23,12 @@ class Summary(SpeciesMixin, TemplateView):
         filter_form = SummaryFilterForm(request.args)
         filter_args = {}
         subject = filter_form.subject.data
+
         if subject:
             filter_args['speciescode'] = subject
         if filter_args:
             filter_args['dataset'] = filter_form.dataset
+            period = filter_args['dataset'].id
             qs = self.model_cls.query.filter_by(**filter_args)
             content_objects = qs.filter(
                 self.model_cls.country_isocode != EU_COUNTRY)
@@ -42,12 +44,18 @@ class Summary(SpeciesMixin, TemplateView):
         else:
             content_objects = []
             eu_objects = []
+            period = 0
+
+        url_kwargs = dict(period=period, subject=subject)
 
         return {
             'filter_form': filter_form,
             'objects': content_objects, 'eu_objects': eu_objects,
             'current_selection': filter_form.get_selection(),
-            'dataset': filter_form.data,
+            'dataset': filter_form.dataset,
+            'subject': subject,
+            'datasheet_url': url_for('wiki.datasheet', **url_kwargs),
+            'audittrail_url': url_for('wiki.audittrail', **url_kwargs),
             'map_url': map_url,
         }
 
@@ -111,7 +119,7 @@ class Reports(SpeciesMixin, TemplateView):
             'current_selection': filter_form.get_selection(),
             'objects': objects,
             'dataset': filter_form.dataset,
-            }
+        }
 
 
 class ConnectedSelectBoxes(View, SpeciesMixin):
@@ -122,4 +130,3 @@ class ConnectedSelectBoxes(View, SpeciesMixin):
         dataset = Dataset.query.get_or_404(dataset_id)
         options = [('', '-')] + self.get_subjects(dataset)
         return json.dumps(options)
-
