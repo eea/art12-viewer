@@ -1,8 +1,10 @@
-from flask import Blueprint, url_for, render_template
+from flask import (
+    Blueprint, url_for, render_template, flash, redirect, request,
+)
 from flask.views import MethodView
 from art12.definitions import TREND_OPTIONS, EU_COUNTRY, TREND_CLASSES
 from art12.utils import str2num
-from art12.models import Config
+from art12.models import Config, db
 
 common = Blueprint('common', __name__)
 
@@ -169,3 +171,19 @@ def generate_map_url(subject, sensitive=False):
         return ''
 
     return map_href + '&CCode=' + subject
+
+
+@common.route('/config', methods=['GET', 'POST'])
+def config():
+    from art12.forms import ConfigForm
+    ### TO DO
+    ### admin_perm.test()
+    row = get_config()
+
+    form = ConfigForm(request.form, row)
+    if form.validate_on_submit():
+        form.populate_obj(row)
+        db.session.commit()
+        return redirect(url_for('.config'))
+
+    return render_template('config.html', form=form)
