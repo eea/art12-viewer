@@ -1,0 +1,74 @@
+{% extends 'auth/auth_base.html' %}
+
+
+{% block content %}
+
+  {% from 'auth/_bits.html' import render_field_with_errors %}
+  <h1>Register with Eionet account</h1>
+
+  {%- if already_registered %}
+    <p>
+      You have already registered your account:
+      <tt>{{ user_id }}</tt>.
+    </p>
+  {%- else %}
+    <form class="box inline-block form" method="POST" name="user">
+
+    <div class="clearfix">
+      <div class="box-col separated width-300">
+          <p>
+            Register the account named:
+            <b><tt>{{ user_id }}</tt></b>
+          </p>
+          <p>
+            Name:
+            <b>{{ register_user_form.name.data }}</b>
+          </p>
+          <p>
+            Email:
+            <a href="mailto:{{ register_user_form.email.data }}">{{ register_user_form.email.data }}</a>
+          </p>
+
+
+          {{ register_user_form.hidden_tag() }}
+          {{ register_user_form.MS() }}
+
+          <!-- INSTITUTION -->
+          <div class="form-group clearfix">
+            <div class="pull-left" style="width: 75%;">
+              {{ render_field_with_errors(register_user_form.institution) }}
+            </div>
+            <div class="pull-left" style="width: 25%;">
+              {{ render_field_with_errors(register_user_form.abbrev, maxlength='4') }}
+            </div>
+          </div>
+          <!-- MEMBER STATE -->
+          <div class="form-group">
+            {{ render_field_with_errors(register_user_form.country_options) }}
+          </div>
+          <!-- ??? -->
+          <div class="form-group" id="other_country_container">
+            {{ render_field_with_errors(register_user_form.other_country) }}
+          </div>
+
+          <!-- QUALIFICATION -->
+          <div class="form-group">
+            {{ render_field_with_errors(register_user_form.qualification) }}
+          </div>
+      </div>
+    </div>
+
+    <input type="hidden" name="user_id" value="{{ user_id }}">
+    <hr>
+    <div class="text-right">
+      <input id="submit" class="btn-blue" type="submit" value="Register user" name="submit"></input>
+    </div>
+    <span>fields marked with asterisk (*) are required</span>
+    </form>
+  {%- endif %}
+{% endblock content %}
+
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/auth_register.js') }}"></script>
+{% endblock %}

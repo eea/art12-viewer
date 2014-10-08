@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+
+{% block breadcrumbs %}
+  {% from 'common/_macros.html' import breadcrumbs %}
+  {{ breadcrumbs(APP_BREADCRUMBS + [
+      ('users list', url_for('.users')),
+      ('registration (eionet)', None),
+    ]) }}
+{% endblock %}
+
+
+{% block content %}
+  <h1>Register an existing Eionet account</h1>
+
+  <form method="post">
+    <label>
+      Eionet username:
+      <input name="user_id">
+    </label>
+    <br>
+    <input type="hidden" name="_fields_from_ldap" value="on">
+    <button type="submit">Search</button>
+  </form>
+{% endblock content %}
+
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/auth_register.js') }}"></script>
+{% endblock %}

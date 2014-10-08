@@ -1,16 +1,32 @@
 import flask
+from flask.ext.mail import Mail
 from flask.ext.script import Manager
+from flask.ext.security import Security
 from art12.assets import assets_env
+from art12 import models
 from art12.models import db, db_manager
 from art12.urls import views
-from art12.common import common
 from art12.wiki import wiki
+from art12.common import common, HOMEPAGE_VIEW_NAME
 from eea_integration.layout import layout
+from eea_integration.auth import UserDatastore, Auth
+
+security_ext = Security(
+    datastore=UserDatastore(
+        models.db,
+        models.RegisteredUser,
+        models.Role,
+    ),
+)
 
 
-def create_app():
+def create_app(config={}, testing=False):
     app = flask.Flask(__name__, instance_relative_config=True)
-    app.config.from_pyfile('settings.py', silent=True)
+    if testing:
+        app.testing = True
+    else:
+        app.config.from_pyfile('settings.py', silent=True)
+    app.config.update(config)
 
     db.init_app(app)
     assets_env.init_app(app)
@@ -18,6 +34,11 @@ def create_app():
     app.register_blueprint(views)
     app.register_blueprint(layout)
     app.register_blueprint(wiki)
+    if not app.testing:
+        auth_ext = Auth(models=models, security_ext=security_ext,
+                        homepage=HOMEPAGE_VIEW_NAME)
+        auth_ext.init_app(app)
+    Mail().init_app(app)
 
     url_prefix = app.config.get('URL_PREFIX')
     if url_prefix:

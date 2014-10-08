@@ -1,0 +1,90 @@
+{% extends 'layout.html' %}
+
+
+{% block breadcrumbs %}
+  {% from 'common/_macros.html' import breadcrumbs %}
+  {{ breadcrumbs(APP_BREADCRUMBS + [
+      ('users list', url_for('.users')),
+      (user.id, None),
+    ]) }}
+{% endblock %}
+
+
+{% block content %}
+  {% from 'auth/_bits.html' import render_field_with_errors %}
+  <h1>User administration: <em>{{ user.id }}</em></h1>
+
+  <form class="box inline-block form" method="post">
+    <div class="form-group">
+      <label>
+        {{ user_form.active }}
+        {{ user_form.active.label.text }}
+      </label>
+      <p class="no-margins italic small">{{ user_form.active.description }}</p>
+    </div>
+    <hr>
+    <div class="form-group">
+        <label for="admin_user-roles">Assigned Roles</label>
+        <select name="roles" multiple id="admin_user-roles">
+        {% for role, role_name in all_roles.items() %}
+          <option value="{{ role }}"
+              {%- if role in current_user_roles %}selected{% endif %}>
+              {{ role_name }}
+          </option>
+        {% endfor %}
+        </select>
+    </div>
+
+    <div class="clearfix">
+
+          {{ user_form.hidden_tag() }}
+          {{ user_form.MS() }}
+
+          <!-- NAME -->
+          <div class="form-group">
+            {{ render_field_with_errors(user_form.name) }}
+          </div>
+          <!-- EMAIL -->
+          <div class="form-group">
+            {{ render_field_with_errors(user_form.email) }}
+          </div>
+          <!-- INSTITUTION -->
+          <div class="form-group clearfix">
+            <div class="pull-left" style="width: 75%;">
+              {{ render_field_with_errors(user_form.institution) }}
+            </div>
+            <div class="pull-left" style="width: 25%;">
+              {{ render_field_with_errors(user_form.abbrev, maxlength='4') }}
+            </div>
+          </div>
+          <!-- MEMBER STATE -->
+          <div class="form-group">
+            {{ render_field_with_errors(user_form.country_options) }}
+          </div>
+          <!-- ??? -->
+          <div class="form-group" id="other_country_container">
+            {{ render_field_with_errors(user_form.other_country) }}
+          </div>
+          <!-- QUALIFICATION -->
+          <div class="form-group">
+            {{ render_field_with_errors(user_form.qualification) }}
+          </div>
+    </div>
+    <div class="form-group">
+      <label for="admin_user-notify_user">
+        <input type="checkbox" name="notify_user" id="admin_user-notify_user">
+        Notify user about role changes
+      </label>
+    </div>
+    <hr />
+    <div class="btn-toolbar no-bottom">
+      <button class="btn-blue" type="submit" name="btn" value="save">Save</button>
+      <button class="btn-red" type="submit" name="btn" value="delete">Delete</button>
+    </div>
+  </form>
+{% endblock content %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/auth_admin_register.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/delete_button.js') }}"></script>
+{% endblock %}

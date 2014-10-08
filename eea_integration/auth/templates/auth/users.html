@@ -1,0 +1,85 @@
+{% extends 'layout.html' %}
+
+
+{% block breadcrumbs %}
+  {% from 'common/_macros.html' import breadcrumbs %}
+  {{ breadcrumbs(APP_BREADCRUMBS + [
+      ('users list', None),
+    ]) }}
+{% endblock %}
+
+
+{% block content %}
+  <h1>Users</h1>
+
+  <p>
+    {%- set ldap_url = url_for('.admin_create_ldap') %}
+    {%- set local_url = url_for('.admin_create_local') %}
+    Create user:
+    <a href="{{ ldap_url }}">use existing Eionet account</a> or
+    <a href="{{ local_url }}">create local account</a>
+  </p>
+
+  <table class="table-list">
+    <thead>
+      <tr>
+        <th rowspan="2">Username</th>
+        <th rowspan="2">Credentials</th>
+        <th rowspan="2">Qualification</th>
+        <th rowspan="2">Country</th>
+        <th colspan="4" class="text-center">Roles</th>
+      </tr>
+      <tr>
+        <th class="text-center">Administrator</th>
+        <th class="text-center">ETC Expert</th>
+        <th class="text-center">NAT Expert</th>
+        <th class="text-center">Stakeholder</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for user in user_list %}
+      {% set each_roles = role_map.get(user.id, []) %}
+      <tr>
+        <td class="no-break">
+          {% if user.is_ldap %}
+            <i class="fa fa-user" title="EIONET account"></i>
+          {% endif %}
+          {% if user.active %}
+            <i class="fa fa-check-circle" title="Active account"></i>
+          {% endif %}
+          <a href="{{ url_for('.admin_user', user_id=user.id) }}">
+            {{ user.id }}
+          </a>
+        </td>
+        <td>
+          <div>{{ user.name or '' }}</div>
+          <div>{{ user.institution or '' }}</div>
+          <div><a href="mailto:{{ user.email }}">{{ user.email }}</a></div>
+        </td>
+        <td>{{ user.qualification or '' }}</td>
+        <td>{{ countries[user.MS] or user.MS }}</td>
+        <td class="text-center">
+          {% if 'admin' in each_roles %}
+          <i class="fa fa-check"></i>
+          {% endif %}
+        </td>
+        <td class="text-center">
+          {% if 'etc' in each_roles %}
+          <i class="fa fa-check"></i>
+          {% endif %}
+        </td>
+        <td class="text-center">
+          {% if 'nat' in each_roles %}
+          <i class="fa fa-check"></i>
+          {% endif %}
+        </td>
+        <td class="text-center">
+          {% if 'stakeholder' in each_roles %}
+          <i class="fa fa-check"></i>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock content %}
