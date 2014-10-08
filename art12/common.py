@@ -1,3 +1,4 @@
+from urlparse import urlparse
 from flask import (
     Blueprint, url_for, render_template, flash, redirect, request,
 )
@@ -29,7 +30,10 @@ def inject_globals():
         'range_trend': range_trend,
         'range_trend_long': range_trend_long,
         'get_conclusion': get_conclusion,
-        }
+        # summary functions
+        'generate_original_url': generate_original_url,
+        'get_title_for_country': get_title_for_species_country,
+    }
 
 
 class TemplateView(MethodView):
@@ -171,6 +175,35 @@ def generate_map_url(subject, sensitive=False):
         return ''
 
     return map_href + '&CCode=' + subject
+
+
+def generate_original_url(row):
+    CONVERTER_URL = (
+        '{scheme}://{host}/Converters/run_conversion?'
+        'file={path}/{filename}&conv=343&source=remote#{subject}_B'
+    )
+    url_format = CONVERTER_URL
+    info = urlparse(row.envelope)
+    return url_format.format(
+        scheme=info.scheme, host=info.netloc, path=info.path,
+        filename=row.filename,
+        subject=row.speciescode,
+    )
+
+
+def get_title_for_species_country(row):
+    s_name, s_info, s_type = '', '', ''
+    if row.speciesname != row.assesment_speciesname:
+        s_name = row.speciesname or row.assesment_speciesname or ''
+        s_info = ''
+    if row.species_type_asses == 0:
+        # s_type = row.species_type_details.SpeciesType \
+        #     if row.species_type_details else row.species_type
+        pass
+    if s_info:
+        s_info = 'Information provided in the field 2.8.2: ' + s_info.replace(
+            '\n', '<br/>')
+    return s_name, s_info, s_type
 
 
 @common.route('/config', methods=['GET', 'POST'])

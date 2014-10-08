@@ -36,10 +36,8 @@
         <tbody>
         {% for row in objects %}
           <tr {% if row.is_assesm %}class="assesm"{% endif %}>
-            <td class="default-td">
-              {{ row.country }}
-            </td>
 
+            {% include 'summary/content/ms.html' %}
             {% include 'summary/content/population_bs.html' with context %}
             {% include 'summary/content/range.html' with context %}
             {% include 'summary/content/population_ws.html' with context %}
