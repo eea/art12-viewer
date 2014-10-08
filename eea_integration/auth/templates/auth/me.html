@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+
+
+{% block breadcrumbs %}
+  {% from 'common/_macros.html' import breadcrumbs %}
+  {{ breadcrumbs(APP_BREADCRUMBS + [
+      ('my account', None),
+    ]) }}
+{% endblock %}
+
+
+{% block content %}
+  {%- if g.user %}
+    <h1>Logged in as {{ g.user.id }}</h1>
+
+    {% set role_list = g.user.roles %}
+    {% if role_list %}
+      <p>
+        Roles:
+        {% for role in role_list %}
+          {{ role.description }}
+          {%- if not loop.last %}, {% endif %}
+        {% endfor %}
+      </p>
+    {% else %}
+      <p>no roles</p>
+    {% endif %}
+
+    <a href="{{ url_for('auth.change_password') }}">
+      Change password ({{ g.user.id }})
+    </a>
+
+  {%- else %}
+    <h1>Not logged in</h1>
+  {%- endif %}
+
+{% endblock content %}

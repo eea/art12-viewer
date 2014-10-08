@@ -1,0 +1,12 @@
+{% extends 'auth/auth_base.html' %}
+
+
+{% block content %}
+  <h2>You already have an account</h2>
+
+  <p>
+    There is no need to create a new account since you can
+    use the current one. If you need additional roles please
+    send an email to <a href="mailto:{{ admin_email }}">{{ admin_email}}</a>
+  </p>
+{% endblock content %}

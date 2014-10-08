@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+
+
+{% block breadcrumbs %}
+  {% from 'common/_macros.html' import breadcrumbs %}
+  {{ breadcrumbs(APP_BREADCRUMBS + [
+      ('message', None),
+    ]) }}
+{% endblock %}
+
+
+{% block content %}
+  <p>{{ message }}</p>
+{% endblock content %}

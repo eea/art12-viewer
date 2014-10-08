@@ -1,9 +1,10 @@
 # coding: utf-8
 import argparse
 from flask.ext.script import Manager
+from flask.ext.security import UserMixin, RoleMixin
 from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Float, Integer, Numeric, String, Text, text, \
-    ForeignKey
+    ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from art12.definitions import SEASON_FIELDS
 
@@ -179,6 +180,48 @@ class Config(Base):
     default_dataset_id = Column(Integer, default=1)
     species_map_url = Column(db.String(255))
     sensitive_species_map_url = Column(db.String(255))
+
+
+roles_users = db.Table(
+    'roles_users',
+    db.Column('registered_users_user', db.String(50),
+              db.ForeignKey('registered_users.user')),
+    db.Column('role_id', db.Integer(), db.ForeignKey('roles.id')),
+)
+
+
+class RegisteredUser(Base, UserMixin):
+    __tablename__ = 'registered_users'
+
+    id = Column('user', String(50), primary_key=True)
+    name = Column(String(255))
+    institution = Column(String(45))
+    abbrev = Column(String(10))
+    MS = Column(String(255))
+    email = Column(String(255))
+    qualification = Column(String(255))
+    account_date = Column(String(16), nullable=False)
+    show_assessment = Column(Integer, nullable=False, default=1)
+    active = Column(Boolean)
+    confirmed_at = db.Column(db.DateTime())
+    is_ldap = db.Column(Boolean, nullable=False, default=False)
+    roles = db.relationship(
+        'Role',
+        secondary=roles_users,
+        backref=db.backref('users', lazy='dynamic'),
+    )
+    password = db.Column(String(60))
+
+    def has_role(self, role):
+        return role in [r.name for r in self.roles]
+
+
+class Role(Base, RoleMixin):
+    __tablename__ = 'roles'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False, unique=True)
+    description = db.Column(db.String(255), nullable=False, unique=True)
 
 
 @db_manager.option('alembic_args', nargs=argparse.REMAINDER)

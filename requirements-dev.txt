@@ -1,1 +1,8 @@
 -r requirements.txt
+Flask-WebTest==0.0.7
+Factory==1.2
+WebTest==2.0.16
+factory-boy==2.4.1
+mock==1.0.1
+pytest==2.6.3
+path.py==7.0
