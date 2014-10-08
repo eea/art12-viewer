@@ -20,7 +20,15 @@ from .common import (
     set_user_active,
     activate_and_notify_admin,
     add_default_role,
+    admin_perm,
 )
+
+
+@auth.app_context_processor
+def inject_variables():
+    return {
+        'admin_perm': admin_perm,
+    }
 
 
 @auth.app_errorhandler(PermissionDenied)
@@ -199,8 +207,10 @@ def change_password():
 @auth.route('/auth/users')
 @require_admin
 def users():
-    user_query = auth.models.RegisteredUser.query.order_by(auth.models.RegisteredUser.id)
-    dataset = (auth.models.Dataset.query.order_by(auth.models.Dataset.id.desc()).first())
+    user_query = auth.models.RegisteredUser.query.order_by(
+        auth.models.RegisteredUser.id)
+    dataset = (
+    auth.models.Dataset.query.order_by(auth.models.Dataset.id.desc()).first())
     # countries = (
     #     auth.models.DicCountryCode.query
     #     .with_entities(

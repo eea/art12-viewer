@@ -6,6 +6,7 @@ from flask.views import MethodView
 from art12.definitions import TREND_OPTIONS, EU_COUNTRY, TREND_CLASSES
 from art12.utils import str2num
 from art12.models import Config, db
+from eea_integration.auth.common import admin_perm
 
 common = Blueprint('common', __name__)
 
@@ -209,8 +210,7 @@ def get_title_for_species_country(row):
 @common.route('/config', methods=['GET', 'POST'])
 def config():
     from art12.forms import ConfigForm
-    ### TO DO
-    ### admin_perm.test()
+    admin_perm.test()
     row = get_config()
 
     form = ConfigForm(request.form, row)
