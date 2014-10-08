@@ -121,14 +121,26 @@ $(function() {
       popup.focus();
     });
 
-    $('body').on('click', '#wikibutton', function(evt) {
-      evt.preventDefault();
-      var button = $(this);
-      var url = button.attr('href');
-      var name = ''
-      var params = 'height=600,width=600,screenX=300,screenY=100,scrollbars=1';
-      var popup = window.open(url, name, params);
-      popup.focus();
+
+    $('body').on('click', '#show-eu-map', function (evt) {
+        var url = $(this).data('url');
+        if (url != "") {
+            title = "EU map of population trend";
+            var params = "left=400,top=100,width=700,height=420," +
+                "toolbar=0,resizable=0,scrollbars=0";
+            window.open(url, title, params).focus();
+        }
+    });
+
+    $('body').on('click', '#wikibutton', function (evt) {
+        evt.preventDefault();
+        var button = $(this);
+        var url = button.attr('href');
+        var name = '';
+        var params = 'height=600,width=600,screenX=300,screenY=100,scrollbars=1';
+        var popup = window.open(url, name, params);
+        popup.focus();
+
     });
 
     $('body').on('click', '#show-map', function(evt) {

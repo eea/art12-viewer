@@ -178,6 +178,17 @@ def generate_map_url(subject, sensitive=False):
     return map_href + '&CCode=' + subject
 
 
+def generate_eu_map_url(subject, sensitive=False):
+
+    map_href = ''
+    ### TO DO
+
+    if not map_href:
+        return ''
+
+    return map_href + '&CCode=' + subject
+
+
 def generate_original_url(row):
     CONVERTER_URL = (
         '{scheme}://{host}/Converters/run_conversion?'
