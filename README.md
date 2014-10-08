@@ -12,7 +12,7 @@ These packages should be installed as superuser (root).
 Install these before setting up an environment:
 
     apt-get install python-setuptools python-dev libmysqlclient-dev \
-    libldap2-dev python-virtualenv mysql-server git
+    libldap2-dev libsasl2-dev python-virtualenv mysql-server git
 
 ### RHEL based systems ###
 Install Python2.7 with PUIAS: https://gist.github.com/nico4/9616638
@@ -23,7 +23,8 @@ Run these commands:
 
     pip2.7 install virtualenv
 
-    yum install mysql-server mysql git openldap-devel mysql-devel
+    yum install mysql-server mysql git openldap-devel cyrus-sasl-devel \
+    mysql-devel
 
 
 Install dependencies
