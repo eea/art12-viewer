@@ -163,6 +163,11 @@ class EtcDataBird(Base):
     def ws(self):
         return self._season('_ws')
 
+    @property
+    def is_assesm(self):
+        return self.species_type_asses == 0
+
+
 
 class LuDataBird(Base):
     __tablename__ = 'lu_birds_name'

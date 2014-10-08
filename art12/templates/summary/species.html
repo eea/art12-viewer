@@ -1,71 +1,71 @@
 {% extends 'layout.html' %}
 
 {% block breadcrumbs %}
-	{% from 'common/_macros.html' import breadcrumbs %}
-	{{ breadcrumbs(APP_BREADCRUMBS + [
+  {% from 'common/_macros.html' import breadcrumbs %}
+  {{ breadcrumbs(APP_BREADCRUMBS + [
       ('Species summary', None),
     ]) }}
 {% endblock %}
 
 
 {% block content %}
-	<div class="copy-disabled" tabindex="1">
-		<h1>Species assessments at EU biogeographical level</h1>
+  <div class="copy-disabled" tabindex="1">
+    <h1>Species assessments at EU biogeographical level</h1>
 
-		<p>
-			Choose a period and a species.
-		</p>
+    <p>
+      Choose a period and a species.
+    </p>
 
-		{% include 'summary/filters.html' %}
+    {% include 'summary/filters.html' %}
 
-		{% set colspan_all=30 %}
+    {% set colspan_all=30 %}
 
-		{% if current_selection %}
-			{% include 'summary/buttons.html' with context %}
-			{% include 'common/legend.html' %}
-			<table class="complex_datatable">
-				<caption>
-					<b>Current selection</b>:
-					{{ current_selection|join(', ') }}.
-					{% set show_all_url=url_for('views.progress') %}
-					<a href="{{ show_all_url }}">Show all</a>
-				</caption>
+    {% if current_selection %}
+      {% include 'summary/buttons.html' with context %}
+      {% include 'common/legend.html' %}
+      <table class="complex_datatable">
+        <caption>
+          <b>Current selection</b>:
+          {{ current_selection|join(', ') }}.
+          {% set show_all_url=url_for('views.progress') %}
+          <a href="{{ show_all_url }}">Show all</a>
+        </caption>
 
-				{% include "common/species_table_header.html" with context %}
+        {% include "common/species_table_header.html" with context %}
 
-				<tbody>
-				{% for row in objects %}
-					<tr class="stripe_row">
-						<td class="default-td">
-							{{ row.country }}
-						</td>
+        <tbody>
+        {% for row in objects %}
+          <tr {% if row.is_assesm %}class="assesm"{% endif %}>
+            <td class="default-td">
+              {{ row.country }}
+            </td>
 
-						{% include 'summary/content/population_bs.html' with context %}
-						{% include 'summary/content/range.html' with context %}
-						{% include 'summary/content/population_ws.html' with context %}
-						{% include 'summary/content/gridded_maps.html' with context %}
+            {% include 'summary/content/population_bs.html' with context %}
+            {% include 'summary/content/range.html' with context %}
+            {% include 'summary/content/population_ws.html' with context %}
+            {% include 'summary/content/gridded_maps.html' with context %}
 
-					</tr>
-				{% endfor %}
-				</tbody>
+          </tr>
+        {% endfor %}
+        </tbody>
 
-				{# EU assessments #}
-				{% include 'common/species_table_eu_header.html' with context %}
-				<tbody>
-				{% for row in eu_objects %}
-					<tr class="stripe_row">
-						<td>{{ EU_COUNTRY }}</td>
-						{% include 'summary/eu/population_bs.html' with context %}
-						{% include 'summary/eu/range.html' with context %}
-						{% include 'summary/eu/population_ws.html' with context %}
-						{% include 'summary/eu/status.html' with context %}
-						{% include 'summary/eu/contrib.html' with context %}
-					</tr>
-				{% endfor %}
-				</tbody>
-			</table>
-		{% else %}
-			<p><b>Please select a species.</b></p>
-		{% endif %}
-	</div>
+        {# EU assessments #}
+        {% include 'common/species_table_eu_header.html' with context %}
+        <tbody>
+        {% for row in eu_objects %}
+          <tr class="stripe_row">
+            <td>{{ EU_COUNTRY }}</td>
+            {% include 'summary/eu/population_bs.html' with context %}
+            {% include 'summary/eu/range.html' with context %}
+            {% include 'summary/eu/population_ws.html' with context %}
+            {% include 'summary/eu/status.html' with context %}
+            {% include 'summary/eu/contrib.html' with context %}
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p><b>Please select a species.</b></p>
+    {% endif %}
+  </div>
 {% endblock %}

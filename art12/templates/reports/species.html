@@ -31,9 +31,9 @@
 				{% set is_reports = true %}
 				{% include "common/species_table_header.html" with context %}
 
-				<tbody>
+				<tbody class="stripe_3rd">
 				{% for row in objects %}
-					<tr class="stripe_row">
+					<tr {% if row.is_assesm %}class="assesm"{% endif %}>
 						<td class="default-td">{{ row.speciesname }}</td>
 
 						{% include 'summary/content/population_bs.html' with context %}
