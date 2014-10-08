@@ -8,6 +8,7 @@ from art12.models import db, db_manager
 from art12.urls import views
 from art12.wiki import wiki
 from art12.common import common, HOMEPAGE_VIEW_NAME
+from eea_integration.auth.script import user_manager, role_manager
 from eea_integration.layout import layout
 from eea_integration.auth import UserDatastore, Auth
 
@@ -66,4 +67,6 @@ def create_url_prefix_middleware(wsgi_app, url_prefix):
 def create_manager(app):
     manager = Manager(app)
     manager.add_command('db', db_manager)
+    manager.add_command('user', user_manager)
+    manager.add_command('role', role_manager)
     return manager
