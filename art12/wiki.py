@@ -4,7 +4,9 @@ from flask import (
     render_template,
     request,
     url_for,
-    redirect)
+    redirect,
+    abort,
+)
 
 from art12.models import (
     Dataset,
@@ -20,19 +22,19 @@ wiki = Blueprint('wiki', __name__)
 
 class CommonSection(object):
 
-    subject_field = 'speciescode'
-
     def get_req_args(self):
         return {arg: request.args.get(arg, '') for arg in ['subject', 'period']}
 
     def get_wiki(self):
         r = self.get_req_args()
 
-        return (self.wiki_cls.query
-                .filter(
-                    getattr(self.wiki_cls, self.subject_field) == r['subject'],
-                    self.wiki_cls.dataset_id == r['period'])
-                .first())
+        return (
+            self.wiki_cls.query
+            .filter(
+                self.wiki_cls.subject == r['subject'],
+                self.wiki_cls.dataset_id == r['period'])
+            .first()
+        )
 
     def get_wiki_changes(self):
         return self.wiki_change_cls.query.filter_by(wiki=self.get_wiki())
@@ -44,8 +46,8 @@ class CommonSection(object):
         active_change = self.get_active_change()
 
         request_args = self.get_req_args()
-        period = request_args.get('period')
-        dataset = Dataset.query.get(period) if period else None
+        period = request_args.get('period') or abort(404)
+        dataset = Dataset.query.get(period) or abort(404)
 
         return {
             'wiki_body': [active_change.body] if active_change else [],
@@ -86,7 +88,7 @@ class AuditTrailSection(CommonSection):
     home_endpoint = '.audittrail'
 
 
-class MergedRegionsView(views.View):
+class AuditView(views.View):
     methods = ['GET']
     template_name = 'wiki/wiki.html'
 
@@ -98,9 +100,12 @@ class MergedRegionsView(views.View):
 
         wikis = (
             self.section.wiki_cls.query
-            .filter(getattr(self.section.wiki_cls, self.section.subject_field)
-                    == rq['subject'],
-                    self.section.wiki_cls.dataset_id == rq['period']).all())
+            .filter(
+                self.section.wiki_cls.subject == rq['subject'],
+                self.section.wiki_cls.dataset_id == rq['period']
+            )
+            .all()
+        )
         wiki_body = []
 
         for wiki in wikis:
@@ -124,5 +129,5 @@ wiki.add_url_rule('/summary/datasheet/',
                   .as_view('datasheet', section=DataSheetSection))
 
 wiki.add_url_rule('/summary/audittrail/',
-                  view_func=MergedRegionsView
+                  view_func=AuditView
                   .as_view('audittrail', section=AuditTrailSection))

@@ -2,8 +2,9 @@
 import argparse
 from flask.ext.script import Manager
 from flask.ext.sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Float, Integer, Numeric, String, Text, text, \
-    ForeignKey, DateTime
+from sqlalchemy import (
+    Column, Float, Integer, Numeric, String, Text, text, ForeignKey, DateTime,
+)
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
 from art12.definitions import SEASON_FIELDS
@@ -195,7 +196,7 @@ class Wiki(Base):
 
     @hybrid_property
     def subject(self):
-        return self.assesment_speciesname
+        return self.speciescode
 
 
 class WikiChange(Base):
@@ -216,7 +217,7 @@ class WikiChange(Base):
     wiki = relationship(
         u'Wiki',
         primaryjoin="and_(WikiChange.wiki_id==Wiki.id,"
-        "WikiChange.dataset_id==Wiki.dataset_id)",
+                    "WikiChange.dataset_id==Wiki.dataset_id)",
         foreign_keys=[wiki_id, dataset_id],
         backref='changes',
     )
@@ -255,7 +256,7 @@ class WikiTrailChange(Base):
     wiki = relationship(
         u'WikiTrail',
         primaryjoin="and_(WikiTrailChange.wiki_id==WikiTrail.id,"
-        "WikiTrailChange.dataset_id==WikiTrail.dataset_id)",
+                    "WikiTrailChange.dataset_id==WikiTrail.dataset_id)",
         foreign_keys=[wiki_id, dataset_id],
         backref='changes',
     )

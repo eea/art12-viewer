@@ -1,7 +1,14 @@
 <!doctype html>
 <html>
 <head>
-  {% include 'header_styles.html' %}
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	{% assets "js" %}
+		<script type="text/javascript" src="{{ ASSET_URL }}"></script>
+	{% endassets %}
+
+	{% assets "css" %}
+		<link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}"/>
+	{% endassets %}
 </head>
 
 <body class="window">

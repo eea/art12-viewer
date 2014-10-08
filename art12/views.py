@@ -1,6 +1,6 @@
 import json
 
-from flask import request, url_for
+from flask import request
 from flask.views import View
 from art12.common import TemplateView, generate_map_url
 from art12.definitions import EU_COUNTRY
@@ -28,7 +28,6 @@ class Summary(SpeciesMixin, TemplateView):
             filter_args['speciescode'] = subject
         if filter_args:
             filter_args['dataset'] = filter_form.dataset
-            period = filter_args['dataset'].id
             qs = self.model_cls.query.filter_by(**filter_args)
             content_objects = qs.filter(
                 self.model_cls.country_isocode != EU_COUNTRY)
@@ -44,9 +43,6 @@ class Summary(SpeciesMixin, TemplateView):
         else:
             content_objects = []
             eu_objects = []
-            period = 0
-
-        url_kwargs = dict(period=period, subject=subject)
 
         return {
             'filter_form': filter_form,
@@ -54,8 +50,6 @@ class Summary(SpeciesMixin, TemplateView):
             'current_selection': filter_form.get_selection(),
             'dataset': filter_form.dataset,
             'subject': subject,
-            'datasheet_url': url_for('wiki.datasheet', **url_kwargs),
-            'audittrail_url': url_for('wiki.audittrail', **url_kwargs),
             'map_url': map_url,
         }
 
@@ -95,7 +89,7 @@ class Progress(SpeciesMixin, TemplateView):
             'species': self.get_subjects(dataset),
             'current_selection': filter_form.get_selection(),
             'dataset': dataset,
-            }
+        }
 
 
 class Reports(SpeciesMixin, TemplateView):
