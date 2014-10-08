@@ -21,7 +21,7 @@
 		{% set colspan_all=30 %}
 
 		{% if current_selection %}
-			{% include 'summary/buttons.html' %}
+			{% include 'summary/buttons.html' with context %}
 			{% include 'common/legend.html' %}
 			<table class="complex_datatable">
 				<caption>

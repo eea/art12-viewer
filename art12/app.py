@@ -6,9 +6,10 @@ from art12.assets import assets_env
 from art12 import models
 from art12.models import db, db_manager
 from art12.urls import views
+from art12.wiki import wiki
 from art12.common import common, HOMEPAGE_VIEW_NAME
 from eea_integration.layout import layout
-from eea_integration.auth import auth, UserDatastore, Auth
+from eea_integration.auth import UserDatastore, Auth
 
 security_ext = Security(
     datastore=UserDatastore(
@@ -32,6 +33,7 @@ def create_app(config={}, testing=False):
     app.register_blueprint(common)
     app.register_blueprint(views)
     app.register_blueprint(layout)
+    app.register_blueprint(wiki)
     if not app.testing:
         auth_ext = Auth(models=models, security_ext=security_ext,
                         homepage=HOMEPAGE_VIEW_NAME)

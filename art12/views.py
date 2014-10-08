@@ -23,6 +23,7 @@ class Summary(SpeciesMixin, TemplateView):
         filter_form = SummaryFilterForm(request.args)
         filter_args = {}
         subject = filter_form.subject.data
+
         if subject:
             filter_args['speciescode'] = subject
         if filter_args:
@@ -47,7 +48,8 @@ class Summary(SpeciesMixin, TemplateView):
             'filter_form': filter_form,
             'objects': content_objects, 'eu_objects': eu_objects,
             'current_selection': filter_form.get_selection(),
-            'dataset': filter_form.data,
+            'dataset': filter_form.dataset,
+            'subject': subject,
             'map_url': map_url,
         }
 
@@ -87,7 +89,7 @@ class Progress(SpeciesMixin, TemplateView):
             'species': self.get_subjects(dataset),
             'current_selection': filter_form.get_selection(),
             'dataset': dataset,
-            }
+        }
 
 
 class Reports(SpeciesMixin, TemplateView):
@@ -111,7 +113,7 @@ class Reports(SpeciesMixin, TemplateView):
             'current_selection': filter_form.get_selection(),
             'objects': objects,
             'dataset': filter_form.dataset,
-            }
+        }
 
 
 class ConnectedSelectBoxes(View, SpeciesMixin):
@@ -122,4 +124,3 @@ class ConnectedSelectBoxes(View, SpeciesMixin):
         dataset = Dataset.query.get_or_404(dataset_id)
         options = [('', '-')] + self.get_subjects(dataset)
         return json.dumps(options)
-

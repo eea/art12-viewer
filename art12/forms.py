@@ -1,6 +1,7 @@
 from flask import request
 from flask.ext.wtf import Form
-from wtforms import SelectField
+from wtforms import SelectField, DateField, StringField
+from wtforms.validators import Optional
 from art12.common import get_default_period
 from art12.mixins import SpeciesMixin
 from art12.models import Dataset, EtcDataBird
@@ -69,3 +70,20 @@ class ReportsFilterForm(SpeciesMixin, CommonFilterForm):
             return []
 
         return super(ReportsFilterForm, self).get_selection() + [country_name]
+
+
+class ConfigForm(Form):
+    default_dataset_id = SelectField(label="Default period")
+
+    species_map_url = StringField(label="URL for species map",
+                                  validators=[Optional()])
+    sensitive_species_map_url = StringField(
+        label="URL for sensitive species map", validators=[Optional()])
+
+    def __init__(self, *args, **kwargs):
+        super(ConfigForm, self).__init__(*args, **kwargs)
+        dataset_qs = Dataset.query.with_entities(Dataset.id, Dataset.name).all()
+        self.default_dataset_id.choices = [
+            (str(ds_id), name) for ds_id, name in dataset_qs
+        ]
+
