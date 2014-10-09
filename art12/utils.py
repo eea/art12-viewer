@@ -10,7 +10,7 @@ valid_ref = re.compile("^\s*" + "(" + "(\d\.)?\d+\s*-\s*(\d\.)?\d+" +
 empty_str = re.compile("^\s*$")
 
 
-def str2num(s, default='N/A', number_format='%.2f'):
+def str2num(s, default='', number_format='%.2f'):
     """ Check if a string can be represented as integer"""
     if s is None:
         return default
@@ -24,7 +24,7 @@ def str2num(s, default='N/A', number_format='%.2f'):
         return default
 
 
-def str1num(s, default='N/A'):
+def str1num(s, default=''):
     return str2num(s, default=default, number_format='%.1f')
 
 
@@ -51,9 +51,3 @@ def validate_ref(s):
     if s:
         return bool(valid_ref.match(s))
     return True
-
-
-def na_if_none(s, default='N/A'):
-    if s is None:
-        return default
-    return s

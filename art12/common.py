@@ -50,10 +50,6 @@ def get_default_period():
     return 1  # FIXME
 
 
-def _double_na(field1, field2):
-    return True if (field1, field2) == (EMPTY, EMPTY) else False
-
-
 def population_size_unit(season):
     min_size = season['population_minimum_size'] or ''
     max_size = season['population_maximum_size'] or ''
@@ -74,8 +70,7 @@ def population_size_unit(season):
     else:
         size_unit_value = EMPTY
 
-    return EMPTY if _double_na(size_unit_value, size_unit) \
-        else '%s %s' % (str2num(size_unit_value), size_unit)
+    return '%s %s' % (str2num(size_unit_value), size_unit)
 
 
 def population_trend(season):
@@ -91,8 +86,7 @@ def population_trend(season):
     else:
         trend_values = EMPTY
 
-    return EMPTY if _double_na(trend, trend_values) \
-        else '%s %s' % (trend, trend_values)
+    return '%s %s' % (trend, trend_values)
 
 
 def population_trend_long(season):
@@ -108,8 +102,7 @@ def population_trend_long(season):
     else:
         trend_values = EMPTY
 
-    return EMPTY if _double_na(trend, trend_values) \
-        else '%s %s' % (trend, trend_values)
+    return '%s %s' % (trend, trend_values)
 
 
 def range_trend(range_trend_bs, range_trend_magnitude_min_bs,
@@ -126,8 +119,7 @@ def range_trend(range_trend_bs, range_trend_magnitude_min_bs,
     else:
         magnitude_values = EMPTY
 
-    return EMPTY if _double_na(trend, magnitude_values) \
-        else '%s %s' % (trend, magnitude_values)
+    return '%s %s' % (trend, magnitude_values)
 
 
 def range_trend_long(range_trend_long_bs, range_trend_long_magnitude_min_bs,
@@ -144,8 +136,7 @@ def range_trend_long(range_trend_long_bs, range_trend_long_magnitude_min_bs,
     else:
         magnitude_values = EMPTY
 
-    return EMPTY if _double_na(trend_long, magnitude_values) \
-        else '%s %s' % (trend_long, magnitude_values)
+    return '%s %s' % (trend_long, magnitude_values)
 
 
 def get_conclusion(conclusions, species_code):

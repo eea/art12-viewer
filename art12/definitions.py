@@ -2,10 +2,11 @@ EU_COUNTRY = 'EU27'
 
 TREND_OPTIONS = [
     ('x', 'unknown'),
-    ('=', 'stable'),
+    ('0', 'stable'),
     ('+', 'increase'),
     ('-', 'decrease'),
-    ('N/A', 'not reported'),
+    ('F', 'fluctuating'),
+    ('empty', 'not reported'),
 ]
 
 TREND_CLASSES = {
