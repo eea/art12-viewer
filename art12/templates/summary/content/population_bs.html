@@ -1,13 +1,12 @@
+{% from 'common/_macros.html' import additional_info %}
+
 <td class="default-td border_left"
 		title="{{ row.population_quality_bs or '' }}">
 	{{ population_size_unit(row.bs) or '' }}
 </td>
-<td class="default-td"
-		{% if row.population_additional_info_record_bs == 'Y' %}
-		  title="{{ row.population_additional_info_bs|wordwrap }}"
-	  {% endif %}>
-	{{ row.population_additional_info_record_bs or '' }}
-</td>
+
+{{ additional_info(row.population_additional_info_record_bs, row.population_additional_info_bs) }}
+
 <td class="center">
 	{{ row.percentage_population_mean_size_bs|float or '' }}
 </td>
@@ -29,9 +28,5 @@
 		{{ population_trend_long(row.bs) or '' }}
   </span>
 </td>
-<td class="default-td"
-		{% if row.population_trend_additional_info_record_bs == 'Y' %}
-		  title="{{ row.population_trend_additional_info_bs|wordwrap }}"
-    {% endif %}>
-	{{ row.population_trend_additional_info_record_bs or '' }}
-</td>
+
+{{ additional_info(row.population_trend_additional_info_record_bs, row.population_trend_additional_info_bs) }}

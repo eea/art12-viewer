@@ -1,15 +1,14 @@
+{% from 'common/_macros.html' import additional_info %}
+
 <td class="default-td border_left"
 		title="{{ row.range_quality_bs or '' }}">
 	<span class="conclusion">
     {{ row.range_surface_area_bs|int or '' }}
 	</span>
 </td>
-<td class="default-td"
-		{% if row.range_additional_info_record_bs == 'Y' %}
-      title="{{ row.range_additional_info_bs|wordwrap }}"
-		{% endif %}>
-	{{ row.range_additional_info_record_bs or '' }}
-</td>
+
+{{ additional_info(row.range_additional_info_record_bs, row.range_additional_info_bs) }}
+
 <td class="center">
 	{{ row.percentage_range_surface_area_bs|float or '' }}
 </td>
@@ -31,9 +30,6 @@
 		{{ range_trend_long(row.range_trend_long_bs, row.range_trend_long_magnitude_min_bs, row.range_trend_long_magnitude_max_bs) }}
 	</span>
 </td>
-<td class="default-td"
-		{% if row.range_trend_additional_info_record_bs == 'Y' %}
-		  title="{{ row.range_trend_additional_info_bs|wordwrap }}"
-	  {% endif %}>
-	{{ row.range_trend_additional_info_record_bs or '' }}
-</td>
+
+{{ additional_info(row.range_trend_additional_info_record_bs, row.range_trend_additional_info_bs) }}
+

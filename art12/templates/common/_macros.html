@@ -24,3 +24,12 @@
     {% endfor %}
   {% endif %}
 {% endmacro %}
+
+{% macro additional_info(bool, value) %}
+  <td class="default-td"
+      {% if bool == 'Y' %}
+        title="{{ value|wordwrap }}"
+      {% endif %}>
+    {% if bool == 'Y' %}&#35;{% endif %}
+  </td>
+{% endmacro %}
