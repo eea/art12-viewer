@@ -26,7 +26,7 @@
 <td class="trend-{{ TREND_CLASSES.get(row.population_trend_long_ws) }}"
 		title="{{ row.population_trend_long_quality_ws }}">
   <span class="conclusion">
-  	{{ population_trend_long(row.ws) }}
+  	{{ population_trend_long(row.ws) or '' }}
   </span>
 </td>
 <td class="default-td"
