@@ -4,9 +4,9 @@
   <h1>Welcome to Article 12</h1>
 
   <ul>
-    <li><a href="{{ url_for('.summary') }}">EU Assessments</a></li>
+    <li><a href="{{ url_for('.summary') }}">EU population status assessments</a></li>
     <li><a href="{{ url_for('.progress') }}">Summary of EU Assessments</a></li>
-    <li><a href="{{ url_for('.report') }}">MS Data</a></li>
+    <li><a href="{{ url_for('.report') }}">Member States data</a></li>
   </ul>
 
   {% if admin_perm.can() %}
