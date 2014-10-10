@@ -181,6 +181,8 @@ def generate_eu_map_url(subject, sensitive=False):
 
 
 def generate_original_url(row):
+    if not row.envelope:
+        return ''
     CONVERTER_URL = (
         '{scheme}://{host}/Converters/run_conversion?'
         'file={path}/{filename}&conv=343&source=remote#{subject}_B'
