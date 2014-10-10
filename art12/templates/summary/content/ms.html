@@ -1,34 +1,38 @@
-{% set s_name, s_info, s_type = get_title_for_country(row) %}
-{% set original_url = generate_original_url(row) %}
-<td class="border" data-tooltip="html">
-  <div class="tooltip-html hidden">
-    <div class="extra-padding">
-      <p class="br width-600 margin-small">
-        {% if s_name %}
-          Scientific name used in original MS report if different than
-          recommended: "{{ s_name|safe }}"<br/>
-        {% endif %}
-        {% if s_info %}
-          {{ s_info|safe }}<br/>
-        {% endif %}
-        {% if s_type %}
-          <br/>
-          Presence status in the reported check-list: {{ s_type|safe }}
-        {% endif %}
-      </p>
-      {% if not row.is_assesm %}
-        <p class="margin-small">
-          <a href="{{ original_url }}">Open Original Report</a>
-          &nbsp;
+{% if row.envelope and row.filename %}
+  {% set s_name, s_info, s_type = get_title_for_country(row) %}
+  {% set original_url = generate_original_url(row) %}
+  <td class="border" data-tooltip="html">
+    <div class="tooltip-html hidden">
+      <div class="extra-padding">
+        <p class="br width-600 margin-small">
+          {% if s_name %}
+            Scientific name used in original MS report if different than
+            recommended: "{{ s_name|safe }}"<br/>
+          {% endif %}
+          {% if s_info %}
+            {{ s_info|safe }}<br/>
+          {% endif %}
+          {% if s_type %}
+            <br/>
+            Presence status in the reported check-list: {{ s_type|safe }}
+          {% endif %}
+        </p>
+        {% if not row.is_assesm %}
+          <p class="margin-small">
+            <a href="{{ original_url }}">Open Original Report</a>
+            &nbsp;
           <span class="muted large">
             <i class="fa fa-external-link"></i>
           </span>
-        </p>
-      {% endif %}
+          </p>
+        {% endif %}
+      </div>
     </div>
-  </div>
-  <a class="clipped popup-btn block"
-     data-title="Factsheet" href="{{ original_url }}">
-    {{ row.country }}
-  </a>
-</td>
+    <a class="clipped popup-btn block"
+       data-title="Factsheet" href="{{ original_url }}">
+      {{ row.country }}
+    </a>
+  </td>
+{% else %}
+  <td class="border">{{ row.country }}</td>
+{% endif %}
