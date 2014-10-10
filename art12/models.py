@@ -150,6 +150,8 @@ class EtcDataBird(Base):
                         primary_key=True, nullable=False,
                         server_default=text("'0'"))
     dataset = relationship(Dataset)
+    presence_bs = Column(String(30))
+    presence_ws = Column(String(30))
 
     def _season(self, season):
         return {field: getattr(self, field + season, None) for field in
