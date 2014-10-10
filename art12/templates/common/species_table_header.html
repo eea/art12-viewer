@@ -1,25 +1,3 @@
-{% macro size_unit_head(objects, season) %}
-  <div class="popout-wrapper hover">
-    <div class="popout size_unit_th right caret">
-      <table class="popout-table">
-        <tr>
-          <th>Agreed units</th>
-          <th>Other units</th>
-        </tr>
-        {% for row in objects %}
-          {% set data=row._season(season) %}
-          <tr>
-            <td>{{ data.population_units_agreed }}</td>
-            <td>{{ data.population_units_other }}</td>
-          </tr>
-        {% endfor %}
-      </table>
-    </div>
-    Size&amp;Unit
-  </div>
-{% endmacro %}
-
-
 <tbody class="thead">
 
 <tr class="section-header">
@@ -42,9 +20,7 @@
 
 <tr>
   {#  Breeding Population #}
-  <th>
-    {{ size_unit_head(objects, '_bs') }}
-  </th>
+  <th>Size&amp;Unit</th>
   <th>&#8505;</th>
   <th title="Percentage of area of the Breeding Population per MS">% MS</th>
   <th>Period</th>
@@ -64,9 +40,7 @@
   <th>&#8505;</th>
 
   {# Winter Population #}
-  <th>
-   {{ size_unit_head(objects, '_ws') }}
-  </th>
+  <th>Size&amp;Unit</th>
   <th>&#8505;</th>
   <th title="Percentage of area of the Winter Population per MS">% MS</th>
   <th>Period</th>

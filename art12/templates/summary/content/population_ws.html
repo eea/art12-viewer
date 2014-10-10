@@ -1,6 +1,6 @@
 {% from 'common/_macros.html' import additional_info %}
 
-<td class="default-td border_left">
+<td class="default-td border_left" title="{{ row.population_quality_ws or '' }}">
 	<div class="first-subcolumn">{{ population_size_unit(row.ws) or '' }}</div>
 </td>
 
