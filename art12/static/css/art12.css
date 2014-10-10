@@ -50,3 +50,7 @@ body #workarea {
   color: #000;
   text-align: center;
 }
+
+.first-subcolumn {
+    font-weight: 600;
+}

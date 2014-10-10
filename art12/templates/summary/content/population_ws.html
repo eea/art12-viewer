@@ -1,7 +1,7 @@
 {% from 'common/_macros.html' import additional_info %}
 
 <td class="default-td border_left">
-	{{ population_size_unit(row.ws) or '' }}
+	<div class="first-subcolumn">{{ population_size_unit(row.ws) or '' }}</div>
 </td>
 
 {{ additional_info(row.population_additional_info_record_ws, row.population_additional_info_ws) }}
