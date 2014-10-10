@@ -8,7 +8,7 @@ from art12.forms import (
     SummaryFilterForm, ProgressFilterForm, ReportsFilterForm,
 )
 from art12.mixins import SpeciesMixin
-from art12.models import Dataset
+from art12.models import Dataset, LuRestrictedDataBird
 
 
 class Homepage(TemplateView):
@@ -24,19 +24,23 @@ class Summary(SpeciesMixin, TemplateView):
         filter_form = SummaryFilterForm(request.args)
         filter_args = {}
         subject = filter_form.subject.data
+        dataset = filter_form.dataset
 
         if subject:
             filter_args['speciescode'] = subject
         if filter_args:
-            filter_args['dataset'] = filter_form.dataset
+            filter_args['dataset'] = dataset
             qs = self.model_cls.query.filter_by(**filter_args)
             content_objects = qs.filter(
                 self.model_cls.country_isocode != EU_COUNTRY)
             eu_objects = qs.filter(
                 self.model_cls.country_isocode == EU_COUNTRY)
 
-            sensitive = False
-
+            sensitive = (
+                LuRestrictedDataBird.query
+                .filter_by(speciescode=subject, dataset=dataset)
+                .count() > 0
+            )
             map_url = generate_map_url(
                 subject=subject,
                 sensitive=sensitive,
@@ -53,7 +57,7 @@ class Summary(SpeciesMixin, TemplateView):
             'filter_form': filter_form,
             'objects': content_objects, 'eu_objects': eu_objects,
             'current_selection': filter_form.get_selection(),
-            'dataset': filter_form.dataset,
+            'dataset': dataset,
             'subject': subject,
             'map_url': map_url,
             'eu_map_url': eu_map_url,
