@@ -4,8 +4,8 @@ from flask.ext.script import Manager
 from flask.ext.security import UserMixin, RoleMixin
 from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy import (
-    Column, Float, Integer, Numeric, String, Text, text, ForeignKey, DateTime,
-    text, Boolean,
+    Column, Float, Integer, Numeric, String, Text, ForeignKey, DateTime, text,
+    Boolean, SmallInteger,
 )
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
@@ -168,7 +168,6 @@ class EtcDataBird(Base):
         return self.species_type_asses == 0
 
 
-
 class LuDataBird(Base):
     __tablename__ = 'lu_birds_name'
 
@@ -181,10 +180,23 @@ class LuDataBird(Base):
     dataset = relationship(Dataset)
 
 
+class LuRestrictedDataBird(Base):
+    __tablename__ = 'lu_restricted_birds'
+
+    id = Column(Integer, primary_key=True)
+    speciescode = Column(String(10), nullable=False)
+    country = Column(String(8), nullable=False)
+    show_data = Column(SmallInteger(), nullable=False)
+    dataset_id = Column('ext_dataset_id', ForeignKey('datasets.id'),
+                        primary_key=True, nullable=False,
+                        server_default=text("'0'"))
+    dataset = relationship(Dataset)
+
+
 class Config(Base):
     __tablename__ = 'config'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     default_dataset_id = Column(Integer, default=1)
     species_map_url = Column(db.String(255))
     sensitive_species_map_url = Column(db.String(255))
@@ -200,6 +212,7 @@ class Wiki(Base):
         'ext_dataset_id',
         ForeignKey('datasets.id'),
     )
+    dataset = relationship(Dataset)
 
     @hybrid_property
     def subject(self):
@@ -239,6 +252,7 @@ class WikiTrail(Base):
         'ext_dataset_id',
         ForeignKey('datasets.id'),
     )
+    dataset = relationship(Dataset)
 
     @hybrid_property
     def subject(self):
