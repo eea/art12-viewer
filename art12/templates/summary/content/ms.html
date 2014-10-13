@@ -16,6 +16,14 @@
             <br/>
             Presence status in the reported check-list: {{ s_type|safe }}
           {% endif %}
+          {% if row.presence_bs %}
+            <br/>
+            Breeding population presence: {{ row.presence_bs }}
+          {% endif %}
+          {% if row.presence_ws %}
+            <br/>
+            Wintering population presence: {{ row.presence_ws }}
+          {% endif %}
         </p>
         {% if not row.is_assesm %}
           <p class="margin-small">
