@@ -32,8 +32,9 @@ class SummaryFilterForm(SpeciesMixin, CommonFilterForm):
         subject = self.subject.data
         if not subject:
             return []
-        subject_name = self.model_cls.query.filter_by(
-            speciescode=subject).first().speciesname
+
+        choices_dict = dict(self.subject.choices)
+        subject_name = choices_dict.get(subject, subject)
 
         return super(SummaryFilterForm, self).get_selection() + [subject_name]
 
@@ -69,6 +70,8 @@ class ReportsFilterForm(SpeciesMixin, CommonFilterForm):
         if not country_name:
             return []
 
+        choices_dict = dict(self.country.choices)
+        country_name = choices_dict.get(country_name, country_name)
         return super(ReportsFilterForm, self).get_selection() + [country_name]
 
 
