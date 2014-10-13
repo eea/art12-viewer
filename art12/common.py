@@ -189,14 +189,19 @@ def generate_original_url(row):
         return ''
     CONVERTER_URL = (
         '{scheme}://{host}/Converters/run_conversion?'
-        'file={path}/{filename}&conv=343&source=remote#{subject}_B'
+        'file={path}/{filename}&conv={convertor}&source=remote#{subject}_B'
     )
     url_format = CONVERTER_URL
     info = urlparse(row.envelope)
+    convertor = 343
+    if row.country == 'CZ':
+        convertor = 345
+
     return url_format.format(
         scheme=info.scheme, host=info.netloc, path=info.path,
         filename=row.filename,
         subject=row.speciescode,
+        convertor=convertor,
     )
 
 
