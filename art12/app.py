@@ -20,9 +20,14 @@ security_ext = Security(
     ),
 )
 
+DEFAULT_CONFIG = {
+    'WTF_CSRF_ENABLED': False,
+}
+
 
 def create_app(config={}, testing=False):
     app = flask.Flask(__name__, instance_relative_config=True)
+    app.config.update(DEFAULT_CONFIG)
     if testing:
         app.testing = True
     else:
