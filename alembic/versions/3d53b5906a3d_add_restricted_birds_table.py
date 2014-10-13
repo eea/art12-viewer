@@ -16,14 +16,12 @@ import sqlalchemy as sa
 
 def upgrade():
     op.create_table('lu_restricted_birds',
-        sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('speciescode', sa.String(length=10), nullable=False),
         sa.Column('country', sa.String(length=8), nullable=False),
         sa.Column('show_data', sa.SmallInteger(), nullable=False),
         sa.Column('ext_dataset_id', sa.Integer(), server_default='0',
                   nullable=False),
         sa.ForeignKeyConstraint(['ext_dataset_id'], ['datasets.id'], ),
-        sa.PrimaryKeyConstraint('id', 'ext_dataset_id')
     )
 
 
