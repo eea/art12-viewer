@@ -38,7 +38,7 @@ class Summary(SpeciesMixin, TemplateView):
 
             sensitive = (
                 LuRestrictedDataBird.query
-                .filter_by(speciescode=subject, dataset=dataset)
+                .filter_by(speciescode=subject, dataset=dataset, show_data=0)
                 .count() > 0
             )
             map_url = generate_map_url(
