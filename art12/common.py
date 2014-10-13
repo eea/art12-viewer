@@ -170,14 +170,17 @@ def generate_map_url(subject, sensitive=False):
 
 
 def generate_eu_map_url(subject, sensitive=False):
+    config = get_config()
 
-    map_href = ''
-    ### TO DO
+    if sensitive:
+        eu_map_href = config.eu_sensitive_species_map_url
+    else:
+        eu_map_href = config.eu_species_map_url
 
-    if not map_href:
+    if not eu_map_href:
         return ''
 
-    return map_href + '&CCode=' + subject
+    return eu_map_href + '&CCode=' + subject
 
 
 def generate_original_url(row):
