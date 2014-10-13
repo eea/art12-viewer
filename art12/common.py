@@ -6,6 +6,7 @@ from flask.views import MethodView
 from art12.definitions import TREND_OPTIONS, EU_COUNTRY, TREND_CLASSES
 from art12.utils import str2num
 from art12.models import Config, db
+from eea_integration.auth import current_user
 from eea_integration.auth.common import admin_perm
 
 common = Blueprint('common', __name__)
@@ -158,7 +159,7 @@ def get_config():
 def generate_map_url(subject, sensitive=False):
     config = get_config()
 
-    if sensitive:
+    if sensitive and current_user.is_authenticated():
         map_href = config.sensitive_species_map_url
     else:
         map_href = config.species_map_url
