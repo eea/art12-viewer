@@ -14,6 +14,14 @@ from art12.models import Dataset, LuRestrictedDataBird
 class Homepage(TemplateView):
     template_name = 'homepage.html'
 
+    def get_context_data(self, **kwargs):
+        from eea_integration.auth.security import current_user
+        context = super(Homepage, self).get_context_data(**kwargs)
+        context.update({
+            'current_user': current_user,
+        })
+        return context
+
 
 class Summary(SpeciesMixin, TemplateView):
     template_name = 'summary/species.html'
