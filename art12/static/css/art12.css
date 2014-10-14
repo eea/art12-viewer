@@ -54,3 +54,7 @@ body #workarea {
 .first-subcolumn {
     /*font-weight: 600;*/
 }
+
+th.gray-cell {
+    color: #666 !important;
+}
