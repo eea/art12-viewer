@@ -9,13 +9,13 @@ from art12.forms import (
 )
 from art12.mixins import SpeciesMixin
 from art12.models import Dataset, LuRestrictedDataBird
+from eea_integration.auth.security import current_user
 
 
 class Homepage(TemplateView):
     template_name = 'homepage.html'
 
     def get_context_data(self, **kwargs):
-        from eea_integration.auth.security import current_user
         context = super(Homepage, self).get_context_data(**kwargs)
         context.update({
             'current_user': current_user,
@@ -28,6 +28,7 @@ class Summary(SpeciesMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         map_url = ''
+        map_warning = ''
         eu_map_url = ''
         filter_form = SummaryFilterForm(request.args)
         filter_args = {}
@@ -44,11 +45,19 @@ class Summary(SpeciesMixin, TemplateView):
             eu_objects = qs.filter(
                 self.model_cls.country_isocode == EU_COUNTRY)
 
-            sensitive = (
+            sensitive = False
+            sensitive_records = (
                 LuRestrictedDataBird.query
                 .filter_by(speciescode=subject, dataset=dataset, show_data=0)
-                .count() > 0
             )
+            if sensitive_records:
+                if current_user.is_anonymous():
+                    map_warning = ', '.join(
+                        [s.country for s in sensitive_records]
+                    )
+                else:
+                    sensitive = True
+
             map_url = generate_map_url(
                 subject=subject,
                 sensitive=sensitive,
@@ -68,6 +77,7 @@ class Summary(SpeciesMixin, TemplateView):
             'dataset': dataset,
             'subject': subject,
             'map_url': map_url,
+            'map_warning': map_warning,
             'eu_map_url': eu_map_url,
         }
 
