@@ -132,3 +132,7 @@ def send_welcome_email(user, plaintext_password=None):
         'home_url': flask.url_for(auth.HOMEPAGE, _external=True),
     })
     safe_send_mail(app, msg)
+
+
+def ugly_fix(value):
+    return value.replace('art12.eionet', 'bd.eionet')

@@ -6,6 +6,7 @@ auth = flask.Blueprint('auth', __name__, template_folder='templates')
 from .security import UserDatastore, current_user
 from .providers import DebugAuthProvider, ZopeAuthProvider
 from .forms import EeaForgotPasswordForm
+from .common import ugly_fix
 
 
 class Auth(object):
@@ -53,6 +54,7 @@ class Auth(object):
 
         app.register_blueprint(auth)
         app.jinja_env.globals['AUTH_BLUEPRINT_INSTALLED'] = True
+        app.jinja_env.filters['ugly_fix'] = ugly_fix
         auth.models = self.models
         auth.HOMEPAGE = self.homepage
 

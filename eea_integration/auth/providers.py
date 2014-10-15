@@ -101,6 +101,7 @@ def _get_initial_ldap_data(user_id):
         'email': ldap_user_info.get('email'),
     }
 
+
 def get_ldap_user_info(user_id):
     ldap_server = flask.current_app.config.get('EEA_LDAP_SERVER', '')
     users_db = UsersDB(ldap_server=ldap_server)
