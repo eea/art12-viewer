@@ -170,18 +170,32 @@ def generate_map_url(subject, sensitive=False):
     return map_href + '&CCode=' + subject
 
 
-def generate_eu_map_url(subject, sensitive=False):
+def generate_eu_map_breeding_url(subject, sensitive=False):
     config = get_config()
 
     if sensitive:
-        eu_map_href = config.eu_sensitive_species_map_url
+        eu_map_breeding_href = config.eu_sensitive_species_map_breeding_url
     else:
-        eu_map_href = config.eu_species_map_url
+        eu_map_breeding_href = config.eu_species_map_breeding_url
 
-    if not eu_map_href:
+    if not eu_map_breeding_href:
         return ''
 
-    return eu_map_href + '&CCode=' + subject
+    return eu_map_breeding_href + '&CCode=' + subject
+
+
+def generate_eu_map_winter_url(subject, sensitive=False):
+    config = get_config()
+
+    if sensitive:
+        eu_map_winter_href = config.eu_sensitive_species_map_winter_url
+    else:
+        eu_map_winter_href = config.eu_species_map_winter_url
+
+    if not eu_map_winter_href:
+        return ''
+
+    return eu_map_winter_href + '&CCode=' + subject
 
 
 def generate_original_url(row):

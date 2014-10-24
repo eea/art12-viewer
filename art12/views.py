@@ -2,7 +2,10 @@ import json
 
 from flask import request
 from flask.views import View
-from art12.common import TemplateView, generate_map_url, generate_eu_map_url
+from art12.common import (
+    TemplateView, generate_map_url, generate_eu_map_breeding_url,
+    generate_eu_map_winter_url,
+)
 from art12.definitions import EU_COUNTRY
 from art12.forms import (
     SummaryFilterForm, ProgressFilterForm, ReportsFilterForm,
@@ -29,7 +32,7 @@ class Summary(SpeciesMixin, TemplateView):
     def get_context_data(self, **kwargs):
         map_url = ''
         map_warning = ''
-        eu_map_url = ''
+        eu_map_breeding_url, eu_map_winter_url = '', ''
         filter_form = SummaryFilterForm(request.args)
         filter_args = {}
         subject = filter_form.subject.data
@@ -62,7 +65,11 @@ class Summary(SpeciesMixin, TemplateView):
                 subject=subject,
                 sensitive=sensitive,
             )
-            eu_map_url = generate_eu_map_url(
+            eu_map_breeding_url = generate_eu_map_breeding_url(
+                subject=subject,
+                sensitive=sensitive,
+            )
+            eu_map_winter_url = generate_eu_map_winter_url(
                 subject=subject,
                 sensitive=sensitive,
             )
@@ -78,7 +85,8 @@ class Summary(SpeciesMixin, TemplateView):
             'subject': subject,
             'map_url': map_url,
             'map_warning': map_warning,
-            'eu_map_url': eu_map_url,
+            'eu_map_breeding_url': eu_map_breeding_url,
+            'eu_map_winter_url': eu_map_winter_url,
         }
 
 

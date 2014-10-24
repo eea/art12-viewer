@@ -201,8 +201,10 @@ class Config(Base):
     default_dataset_id = Column(Integer, default=1)
     species_map_url = Column(db.String(255))
     sensitive_species_map_url = Column(db.String(255))
-    eu_species_map_url = Column(db.String(255))
-    eu_sensitive_species_map_url = Column(db.String(255))
+    eu_species_map_breeding_url = Column(db.String(255))
+    eu_sensitive_species_map_breeding_url = Column(db.String(255))
+    eu_species_map_winter_url = Column(db.String(255))
+    eu_sensitive_species_map_winter_url = Column(db.String(255))
 
 
 class Wiki(Base):
