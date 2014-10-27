@@ -9,19 +9,11 @@
             Scientific name used in original MS report if different than
             recommended: "{{ s_name|safe }}"<br/>
           {% endif %}
-          {% if s_info %}
-            {{ s_info|safe }}<br/>
-          {% endif %}
-          {% if s_type %}
-            <br/>
-            Presence status in the reported check-list: {{ s_type|safe }}
-          {% endif %}
           {% if row.presence_bs %}
-            <br/>
             Breeding population presence: {{ row.presence_bs }}
+            <br/>
           {% endif %}
           {% if row.presence_ws %}
-            <br/>
             Winter population presence: {{ row.presence_ws }}
           {% endif %}
         </p>
