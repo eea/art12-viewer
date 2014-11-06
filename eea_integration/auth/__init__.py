@@ -45,6 +45,8 @@ class Auth(object):
             ),
             'SECURITY_FORGOT_PASSWORD_TEMPLATE': 'auth/forgot_password.html',
             'SECURITY_RESET_PASSWORD_TEMPLATE': 'auth/reset_password.html',
+            'SECURITY_EMAIL_SUBJECT_PASSWORD_RESET':
+            '[article12] password reset instructions',
             'SECURITY_PASSWORD_SCHEMES': ['ldap_salted_sha1'],
         })
         Security.init_app(self.security_ext, app)
