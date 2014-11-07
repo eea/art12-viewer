@@ -1,6 +1,6 @@
 from urlparse import urlparse
 from flask import (
-    Blueprint, url_for, render_template, flash, redirect, request,
+    Blueprint, url_for, render_template, redirect, request,
 )
 from flask.views import MethodView
 from art12.definitions import TREND_OPTIONS, EU_COUNTRY, TREND_CLASSES
@@ -247,3 +247,21 @@ def config():
         return redirect(url_for('.config'))
 
     return render_template('config.html', form=form)
+
+
+@common.route('/auth/details', methods=['GET', 'POST'])
+def change_details():
+    if current_user.is_anonymous():
+        return redirect(url_for(HOMEPAGE_VIEW_NAME))
+    from art12.forms import ChangeDetailsForm
+    message = ''
+    form = ChangeDetailsForm(request.form, current_user)
+    if form.validate_on_submit():
+        message = 'Details updated successfully!'
+        form.populate_obj(current_user)
+        db.session.commit()
+
+    return render_template('change_details.html', **{
+        'form': form,
+        'message': '' or message,
+    })
