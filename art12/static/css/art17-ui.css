@@ -15,7 +15,7 @@ table.no-border th {
 }
 .simple_table td,
 .simple_table th {
-  padding: 3px 2px;  
+  padding: 3px 2px;
 }
 .simple_table tbody td,
 .simple_table tbody th {
@@ -1082,7 +1082,7 @@ li.select-list {
 .btn-gray:hover {
   background-color: #ddd;
   background-image: none;
-} 
+}
 /* BTN GREEN */
 .button.btn-green,
 .btn-green {
@@ -1187,7 +1187,7 @@ li.select-list {
 .button.btn-blue:active,
 .btn-red:hover,
 .button.btn-red:hover,
-.btn-red:active, 
+.btn-red:active,
 .button.btn-red:active {
   color: #fff;
 }
@@ -1610,42 +1610,6 @@ td.form-error-td .select:hover {
 .offset_top_label {
   float: left;
   margin-top: 22px;
-}
-
-/* FLASH MESSAGES */
-.flashes {
-  margin: 0;
-  padding: 0;
-  top: 0;
-  width: 100%;
-  text-align: center;
-  position: fixed;
-  z-index: 5000;
-}
-.flashes > li {
-  -webkit-transition: all 360ms ease-in-out;
-  -moz-transition: all 360ms ease-in-out;
-  -ms-transition: all 360ms ease-in-out;
-  -o-transition: all 360ms ease-in-out;
-  transition: all 360ms ease-in-out;
-
-  -webkit-box-shadow: 0 8px 4px -6px rgba(0,0,0,0.25);
-  box-shadow: 0 8px 4px -6px rgba(0,0,0,0.25);
-
-  opacity: 0;
-  margin-top: -50px;
-}
-
-.flashes > li.show {
-  opacity: 1;
-  margin-top: 12px;
-}
-.flashmessage {
-  display: inline-block;
-  padding: 3px 8px;
-  background: #f9de62;
-  border: #eebb20;
-  border-radius: 3px;
 }
 
 /* TABLE ROW HIGHLIGHTS HIGHLIGHTS */
