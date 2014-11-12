@@ -41,11 +41,11 @@ def delete(user):
 
 def edit(user_id, passwd):
     url, key = _get_config()
-    if not url or not key:
+    if not all([url, key]):
         return
     resp = requests.post(
         url + '/edit_user',
-        data = {
+        data={
             'username': user_id,
             'password': passwd,
             'api_key': key,
