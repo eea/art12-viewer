@@ -313,7 +313,7 @@ def admin_user_reset_password(user_id):
     if form.validate_on_submit():
         change_user_password(user, form.password.data)
         auth.models.db.session.commit()
-        msg = "Password successfully reseted."
+        msg = "Your password has been reset successfully"
         flask.flash(msg, 'success')
         zope_acl_manager.edit(user.id, form.password.data)
 
