@@ -82,10 +82,18 @@ class ConfigForm(Form):
                                   validators=[Optional()])
     sensitive_species_map_url = StringField(
         label="URL for sensitive species map", validators=[Optional()])
-    eu_species_map_url = StringField(
-        label="URL for EU species map", validators=[Optional()])
-    eu_sensitive_species_map_url = StringField(
-        label="URL for EU sensitive species map", validators=[Optional()])
+    eu_species_map_breeding_url = StringField(
+        label="URL for EU species map of Breeding population trend",
+        validators=[Optional()])
+    eu_sensitive_species_map_breeding_url = StringField(
+        label="URL for EU sensitive species map of Breeding population trend",
+        validators=[Optional()])
+    eu_species_map_winter_url = StringField(
+        label="URL for EU species map of Winter population trend",
+        validators=[Optional()])
+    eu_sensitive_species_map_winter_url = StringField(
+        label="URL for EU sensitive species map of Winter population trend",
+        validators=[Optional()])
 
     def __init__(self, *args, **kwargs):
         super(ConfigForm, self).__init__(*args, **kwargs)

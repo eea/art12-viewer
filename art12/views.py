@@ -52,6 +52,7 @@ class Summary(SpeciesMixin, TemplateView):
             sensitive_records = (
                 LuRestrictedDataBird.query
                 .filter_by(speciescode=subject, dataset=dataset, show_data=0)
+                .all()
             )
             if sensitive_records:
                 if current_user.is_anonymous():
