@@ -5,8 +5,8 @@ import flask
 def _get_config():
     app = flask.current_app
     return (
-        app.config['AUTH_ZOPE_ACL_MANAGER_URL'],
-        app.config['AUTH_ZOPE_ACL_MANAGER_KEY'],
+        app.config.get('AUTH_ZOPE_ACL_MANAGER_URL'),
+        app.config.get('AUTH_ZOPE_ACL_MANAGER_KEY'),
     )
 
 
@@ -41,9 +41,11 @@ def delete(user):
 
 def edit(user_id, passwd):
     url, key = _get_config()
+    if not all([url, key]):
+        return
     resp = requests.post(
         url + '/edit_user',
-        data = {
+        data={
             'username': user_id,
             'password': passwd,
             'api_key': key,

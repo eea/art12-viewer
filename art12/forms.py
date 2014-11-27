@@ -1,6 +1,6 @@
 from flask import request
 from flask.ext.wtf import Form
-from wtforms import SelectField, DateField, StringField
+from wtforms import SelectField, StringField
 from wtforms.validators import Optional
 from art12.common import get_default_period
 from art12.mixins import SpeciesMixin
@@ -102,3 +102,9 @@ class ConfigForm(Form):
             (str(ds_id), name) for ds_id, name in dataset_qs
         ]
 
+
+class ChangeDetailsForm(Form):
+    institution = StringField(label="Institution", validators=[Optional()])
+    abbrev = StringField(label="Abbreviation", validators=[Optional()])
+    MS = StringField(label="MS", validators=[Optional()])
+    qualification = StringField(label="Qualification", validators=[Optional()])
