@@ -51,9 +51,15 @@ def get_default_period():
     return 1  # FIXME
 
 
+def get_zero(value):
+    if value in ('', None):
+        return EMPTY
+    return int(0 + value)
+
+
 def population_size_unit(season):
-    min_size = season['population_minimum_size'] or ''
-    max_size = season['population_maximum_size'] or ''
+    min_size = get_zero(season['population_minimum_size'])
+    max_size = get_zero(season['population_maximum_size'])
     filled = season['filled_population'] or EMPTY
     size_unit = season['population_size_unit'] or EMPTY
 
@@ -62,11 +68,11 @@ def population_size_unit(season):
     if filled == 'Max':
         max_size = '(%s)' % max_size
 
-    if min_size and max_size:
+    if min_size != '' and max_size != '':
         size_unit_value = '%s - %s' % (min_size, max_size)
-    elif min_size:
+    elif min_size != '':
         size_unit_value = '%s' % min_size
-    elif max_size:
+    elif max_size != '':
         size_unit_value = '%s' % max_size
     else:
         size_unit_value = EMPTY
@@ -237,6 +243,7 @@ def get_title_for_species_country(row):
 @common.route('/config', methods=['GET', 'POST'])
 def config():
     from art12.forms import ConfigForm
+
     admin_perm.test()
     row = get_config()
 
@@ -257,6 +264,7 @@ def change_details():
         return redirect(url_for(HOMEPAGE_VIEW_NAME))
     else:
         from art12.forms import ChangeDetailsForm
+
         form = ChangeDetailsForm(request.form, current_user)
         if form.validate_on_submit():
             flash('Details updated successfully!', 'success')
