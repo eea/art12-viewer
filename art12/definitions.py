@@ -9,12 +9,19 @@ TREND_OPTIONS = [
     ('empty', 'not reported'),
 ]
 
+TREND_OPTIONS_EU = TREND_OPTIONS[:-1] + [
+    ('u', 'uncertain'),
+    ('n', 'not applicable'),
+]
+
 TREND_CLASSES = {
     '+': 'inc',
     '-': 'dec',
     '0': 'eq',
     'x': 'xx',
     'F': 'f',
+    'n': 'n',
+    'u': 'u',
 }
 
 SEASON_FIELDS = [
@@ -44,4 +51,11 @@ SEASON_FIELDS = [
     'population_trend_long_quality',
 
     'conclusion_population',
+]
+
+CONTRIB_OPTIONS = [
+    ('A','Secure population status'),
+    ('B', 'Improving'),
+    ('C', 'Not improving'),
+    ('E', 'Unknown population status'),
 ]

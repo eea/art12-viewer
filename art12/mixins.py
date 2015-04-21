@@ -1,9 +1,10 @@
 from art12.definitions import EU_COUNTRY
-from art12.models import EtcDataBird, LuDataBird
+from art12.models import EtcDataBird, LuDataBird, EtcBirdsEu
 
 
 class SpeciesMixin(object):
     model_cls = EtcDataBird
+    model_eu_cls = EtcBirdsEu
 
     def get_subjects(self, dataset):
         model = LuDataBird

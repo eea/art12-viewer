@@ -45,8 +45,7 @@ class Summary(SpeciesMixin, TemplateView):
             qs = self.model_cls.query.filter_by(**filter_args)
             content_objects = qs.filter(
                 self.model_cls.country_isocode != EU_COUNTRY)
-            eu_objects = qs.filter(
-                self.model_cls.country_isocode == EU_COUNTRY)
+            eu_objects = self.model_eu_cls.query.filter_by(**filter_args)
 
             sensitive = False
             sensitive_records = (

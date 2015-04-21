@@ -1,1 +1,15 @@
-<td colspan="2"></td>
+<td class="center border_left">
+  {{ row.conclusion_status_label }}
+</td>
+<td class="center">
+  {{ row.contribution_target1_label }}
+</td>
+<td class="center">
+  {{ row.conclusion_status_br_wi }}
+</td>
+<td class="center" title="{{ row.conclusion_status_level1 }}">
+  {{ row.conclusion_status_level1_record or '' }}
+</td>
+<td class="center" title="{{ row.conclusion_status_level2 }}">
+  {{ row.conclusion_status_level2_record or '' }}
+</td>

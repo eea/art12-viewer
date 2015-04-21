@@ -13,24 +13,32 @@
   <th colspan="8">Breeding Population</th>
   <th colspan="8">Breeding Range</th>
   <th colspan="8">Winter Population</th>
-  <th colspan="2" rowspan="2">Bird Status</th>
-  <th colspan="2" rowspan="2">Contribution to target 1</th>
+  <th rowspan="2" title="EU population status">Bird Status</th>
+  <th rowspan="2" title="{{ CONTRIB_OPTIONS }}">Contribution<br/>to target 1</th>
+  <th rowspan="2" title="The population status was assessed based on data from:
+W: winter season
+B: breeding season">Season</th>
+  <th colspan="2">Subspecies /<br/>subspecific units</th>
 </tr>
 
 <tr>
   {# Breeding Population #}
   <th colspan="3" title="Population size (minimum-maximum) and unit">Size &amp; Unit</th>
-  <th colspan="2" title="Short-term population trend (c.2001–2012), direction and magnitude, if available {{ TREND_TOOLTIP }}">ST Trend</th>
-  <th colspan="3" title="Long-term population trend (c.1980–2012), direction and magnitude, if available {{ TREND_TOOLTIP }}">LT Trend</th>
+  <th colspan="2" title="Short-term population trend (c.2001–2012), direction and magnitude, if available {{ TREND_TOOLTIP_EU }}">ST Trend</th>
+  <th colspan="3" title="Long-term population trend (c.1980–2012), direction and magnitude, if available {{ TREND_TOOLTIP_EU }}">LT Trend</th>
 
   {# Breeding Range #}
   <th colspan="3" title="Surface area of breeding range (km<sup>2</sup>)">Area</th>
-  <th colspan="2" title="Short-term range trend (c.2001–2012), direction and magnitude, if available {{ TREND_TOOLTIP }}">ST Trend</th>
-  <th colspan="3" title="Long-term range trend (c.1980–2012), direction and magnitude, if available {{ TREND_TOOLTIP }}">LT Trend</th>
+  <th colspan="2" title="Short-term range trend (c.2001–2012), direction and magnitude, if available {{ TREND_TOOLTIP_EU }}">ST Trend</th>
+  <th colspan="3" title="Long-term range trend (c.1980–2012), direction and magnitude, if available {{ TREND_TOOLTIP_EU }}">LT Trend</th>
 
   {# Winter Population #}
   <th colspan="3" title="Population size (minimum-maximum) and unit">Size &amp; Unit</th>
-  <th colspan="2" title="Short-term population trend (c.2001–2012), direction and magnitude, if available {{ TREND_TOOLTIP }}">ST Trend</th>
-  <th colspan="3" title="Long-term population trend (c.1980–2012), direction and magnitude, if available {{ TREND_TOOLTIP }}">LT Trend</th>
+  <th colspan="2" title="Short-term population trend (c.2001–2012), direction and magnitude, if available {{ TREND_TOOLTIP_EU }}">ST Trend</th>
+  <th colspan="3" title="Long-term population trend (c.1980–2012), direction and magnitude, if available {{ TREND_TOOLTIP_EU }}">LT Trend</th>
+
+  {# Status #}
+  <th title="The EU population status assessment was carried out at the species level. The EU status assessment can cover several subspecies/subspecific units.">Trends</th>
+  <th title="The EU trends were assessed at the subspecies level. The EU trends can cover several subspecific units.">Status</th>
 </tr>
 </tbody>

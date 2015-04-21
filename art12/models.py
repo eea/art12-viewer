@@ -170,6 +170,65 @@ class EtcDataBird(Base):
         return self.species_type_asses == 0
 
 
+class EtcBirdsEu(Base):
+    __tablename__ = 'etc_birds_eu_view'
+
+    id = Column('ID', Integer, primary_key=True, autoincrement=True)
+    speciescode = Column(String(10), nullable=False, server_default=text("''"))
+    speciesname = Column(String(255))
+    speciesname_subpopulation = Column(String(255))
+    assessment_speciesname = Column(String(255))
+    assessment_subpopulation = Column(String(255))
+    euringcode = Column(String(30))
+    non_native = Column(String(8))
+    br_range_surface_area = Column(String(35))
+    br_range_surface_area_downrounded = Column(String(35))
+    br_range_trend = Column(String(25))
+    br_range_trend_long = Column(String(25))
+    br_population_size = Column(String(35))
+    br_population_minimum_size = Column(Numeric(18, 5))
+    br_population_minimum_size_downrounded = Column(Numeric(18, 5))
+    br_population_maximum_size = Column(Numeric(18, 5))
+    br_population_maximum_size_uprounded = Column(Numeric(18, 5))
+    br_population_size_unit = Column(String(10))
+    br_population_trend = Column(String(25))
+    br_population_trend_long = Column(String(25))
+    wi_population_size = Column(String(35))
+    wi_population_minimum_size = Column(Numeric(18, 5))
+    wi_population_minimum_size_downrounded = Column(Numeric(18, 5))
+    wi_population_maximum_size = Column(Numeric(18, 5))
+    wi_population_maximum_size_uprounded = Column(Numeric(18, 5))
+    wi_population_size_unit = Column(String(10))
+    wi_population_trend = Column(String(25))
+    wi_population_trend_long = Column(String(25))
+    conclusion_status_label = Column(String(25))
+    conclusion_status_improving = Column(String(4))
+    conclusion_status_br_wi = Column(String(3))
+    conclusion_status_level1_record = Column(String(1))
+    conclusion_status_level1 = Column(String(512))
+    conclusion_status_level2_record = Column(String(1))
+    conclusion_status_level2 = Column(String(512))
+    conclusion_population_size_unit = Column(String(10))
+    conclusion_population_minimum_size = Column(Numeric(18, 5))
+    conclusion_population_minimum_size_downrounded = Column(Numeric(18, 5))
+    conclusion_population_maximum_size = Column(Numeric(18, 5))
+    conclusion_population_maximum_size_uprounded = Column(Numeric(18, 5))
+    conclusion_population_trend = Column(String(25))
+    conclusion_population_trend_long = Column(String(25))
+    contribution_target1 = Column(String(3))
+    contribution_target1_label = Column(String(25))
+    user = Column(String(50))
+    last_update = Column(String(16))
+    deleted_record = Column(Integer)
+    decision = Column(String(3))
+    user_decision = Column(String(50))
+    last_update_decision = Column(String(50))
+    dataset_id = Column('ext_dataset_id', ForeignKey('datasets.id'),
+                        primary_key=True, nullable=False,
+                        server_default=text("'0'"))
+    dataset = relationship(Dataset)
+
+
 class LuDataBird(Base):
     __tablename__ = 'lu_birds_name'
 

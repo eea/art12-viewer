@@ -42,6 +42,20 @@ body #workarea {
   background-color: #7d60a0;
 }
 
+.trend-u .conclusion,
+.trend-u.conclusion {
+  color: #000;
+  border-color: #6b6b6b;
+  background-color: #808080;
+}
+
+.trend-n .conclusion,
+.trend-n.conclusion {
+  color: #000;
+  border-color: #343434;
+  background-color: transparent;
+}
+
 .copy-disabled {
   outline: none;
 }

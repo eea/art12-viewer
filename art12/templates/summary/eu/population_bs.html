@@ -1,1 +1,17 @@
-<td colspan="8" class="border_left"></td>
+<td colspan="3" class="default-td border_left">
+  {{ row.br_population_size }} {{ row.br_population_size_unit }}
+</td>
+
+<td colspan="2"
+    class="trend-{{ TREND_CLASSES.get(row.br_population_trend) }}">
+  <span class="conclusion">
+		{{ row.br_population_trend or '' }}
+	</span>
+</td>
+
+<td colspan="3"
+    class="trend-{{ TREND_CLASSES.get(row.br_population_trend_long) }}">
+  <span class="conclusion">
+		{{ row.br_population_trend_long or '' }}
+	</span>
+</td>

@@ -3,7 +3,10 @@ from flask import (
     Blueprint, url_for, render_template, redirect, request, flash
 )
 from flask.views import MethodView
-from art12.definitions import TREND_OPTIONS, EU_COUNTRY, TREND_CLASSES
+from art12.definitions import (
+    TREND_OPTIONS, EU_COUNTRY, TREND_CLASSES, TREND_OPTIONS_EU,
+    CONTRIB_OPTIONS,
+)
 from art12.utils import str2num
 from art12.models import Config, db
 from eea_integration.auth import current_user
@@ -25,6 +28,8 @@ def inject_globals():
         'APP_BREADCRUMBS': [('Article 12', url_for(HOMEPAGE_VIEW_NAME))],
         'EU_COUNTRY': EU_COUNTRY,
         'TREND_TOOLTIP': make_tooltip(TREND_OPTIONS),
+        'TREND_TOOLTIP_EU': make_tooltip(TREND_OPTIONS_EU),
+        'CONTRIB_OPTIONS': make_tooltip(CONTRIB_OPTIONS)[1:],
         'TREND_CLASSES': TREND_CLASSES,
         'population_size_unit': population_size_unit,
         'population_trend': population_trend,
