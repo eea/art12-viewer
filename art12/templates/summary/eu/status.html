@@ -1,5 +1,7 @@
-<td class="center border_left">
+<td class="center border_left status-{{ STATUS_CLASSES.get(row.conclusion_status_label) }} text-center">
+  <span class="conclusion">
   {{ row.conclusion_status_label }}
+  </span>
 </td>
 <td class="center">
   {{ row.contribution_target1_label }}
@@ -7,9 +9,9 @@
 <td class="center">
   {{ row.conclusion_status_br_wi }}
 </td>
-<td class="center" title="{{ row.conclusion_status_level1 }}">
-  {{ row.conclusion_status_level1_record or '' }}
-</td>
 <td class="center" title="{{ row.conclusion_status_level2 }}">
   {{ row.conclusion_status_level2_record or '' }}
+</td>
+<td class="center" title="{{ row.conclusion_status_level1 }}">
+  {{ row.conclusion_status_level1_record or '' }}
 </td>

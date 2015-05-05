@@ -5,7 +5,7 @@ from flask import (
 from flask.views import MethodView
 from art12.definitions import (
     TREND_OPTIONS, EU_COUNTRY, TREND_CLASSES, TREND_OPTIONS_EU,
-    CONTRIB_OPTIONS,
+    CONTRIB_OPTIONS, STATUS_CLASSES,
 )
 from art12.utils import str2num
 from art12.models import Config, db
@@ -31,6 +31,7 @@ def inject_globals():
         'TREND_TOOLTIP_EU': make_tooltip(TREND_OPTIONS_EU),
         'CONTRIB_OPTIONS': make_tooltip(CONTRIB_OPTIONS)[1:],
         'TREND_CLASSES': TREND_CLASSES,
+        'STATUS_CLASSES': STATUS_CLASSES,
         'population_size_unit': population_size_unit,
         'population_trend': population_trend,
         'population_trend_long': population_trend_long,

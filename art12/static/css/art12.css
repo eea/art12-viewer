@@ -56,6 +56,48 @@ body #workarea {
   background-color: transparent;
 }
 
+.status-secure .conclusion,
+.status-secure.conclusion {
+  color: #000;
+  border-color: #343434;
+  background-color: #b1c748;
+}
+
+.status-threat .conclusion,
+.status-threat.conclusion {
+  color: #000;
+  border-color: #343434;
+  background-color: #e94050;
+}
+
+.status-near .conclusion,
+.status-near.conclusion {
+  color: #000;
+  border-color: #343434;
+  background-color: #ffd600;
+}
+
+.status-declining .conclusion,
+.status-declining.conclusion {
+  color: #000;
+  border-color: #343434;
+  background-color: #ffd600;
+}
+
+.status-depleted .conclusion,
+.status-depleted.conclusion {
+  color: #000;
+  border-color: #343434;
+  background-color: #ffd600;
+}
+
+.status-unknown .conclusion,
+.status-unknown.conclusion {
+  color: #000;
+  border-color: #343434;
+  background-color: #bbbdc0;
+}
+
 .copy-disabled {
   outline: none;
 }

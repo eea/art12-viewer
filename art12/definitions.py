@@ -54,8 +54,17 @@ SEASON_FIELDS = [
 ]
 
 CONTRIB_OPTIONS = [
-    ('A','Secure population status'),
+    ('A', 'Secure population status'),
     ('B', 'Improving'),
     ('C', 'Not improving'),
     ('E', 'Unknown population status'),
 ]
+
+STATUS_CLASSES = {
+    'Secure': 'secure',
+    'Threatened': 'threat',
+    'Near Threatened': 'near',
+    'Declining': 'declining',
+    'Depleted': 'depleted',
+    'Unknown': 'unknown',
+}

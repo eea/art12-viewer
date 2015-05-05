@@ -281,7 +281,8 @@ a.conclusion:hover {
   color: #000;
 }
 td .conclusion {
-  min-width: 100%;
+  max-width: 50px;
+  width: 100%;
 }
 a.conclusion:hover {
   border-color: blue;
