@@ -1,5 +1,6 @@
 -f http://eggshop.eaudeweb.ro
-eea.usersdb==1.3.9
+colander==0.9.9
+https://github.com/eea/eea.usersdb/archive/v1.3.9.zip
 Flask==0.10.1
 Flask-Assets==0.10
 Flask-Login==0.2.11
