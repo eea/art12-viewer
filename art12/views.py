@@ -92,39 +92,57 @@ class Summary(SpeciesMixin, TemplateView):
 
 class Progress(SpeciesMixin, TemplateView):
     template_name = 'progress/species.html'
+    TREND_LABEL = 'trend'
+    STATUS_LABEL = 'status'
 
-    def get_conclusion_qs(self, conclusion_type):
-        if conclusion_type == 'bs':
-            field = self.model_cls.conclusion_population_bs
-        elif conclusion_type == 'ws':
-            field = self.model_cls.conclusion_population_ws
-        elif conclusion_type == 'rg':
-            field = self.model_cls.conclusion_range_bs
-        else:
-            raise ValueError('Unknown conclusion type')
+    def get_conclusion_qs(self, dataset, conclusion_value, status_level):
         return (
-            self.model_cls.query
-            .filter(self.model_cls.country_isocode == EU_COUNTRY)
-            .with_entities(self.model_cls.speciescode,
-                           self.model_cls.speciesname, field)
-            .order_by(self.model_cls.speciesname)
+            self.model_eu_cls.query
+                .filter_by(dataset=dataset)
+                .filter(conclusion_value != None)
+                .with_entities(self.model_eu_cls.speciescode,
+                               conclusion_value,
+                               status_level)
+                .order_by(self.model_eu_cls.speciesname)
+                .all()
         )
 
     def get_context_data(self, **kwargs):
         filter_form = ProgressFilterForm(request.args)
 
         conclusion_type = filter_form.conclusion.data
+        dataset = filter_form.dataset
+        status_level = self.model_eu_cls.conclusion_status_level2
+        label_type = self.TREND_LABEL
         if conclusion_type:
-            conclusions = self.get_conclusion_qs(conclusion_type)
+            if conclusion_type == 'bs':
+                status_level = self.model_eu_cls.conclusion_status_level1
+                conclusion_value = self.model_eu_cls.conclusion_status_label
+                label_type = self.STATUS_LABEL
+            elif conclusion_type == 'stbp':
+                conclusion_value = self.model_eu_cls.br_population_trend
+            elif conclusion_type == 'ltbp':
+                conclusion_value = self.model_eu_cls.br_population_trend_long
+            elif conclusion_type == 'stwp':
+                conclusion_value = self.model_eu_cls.wi_population_trend
+            elif conclusion_type == 'ltwp':
+                conclusion_value = self.model_eu_cls.wi_population_trend_long
+            else:
+                raise ValueError('Unknown conclusion type')
+            conclusions = self.get_conclusion_qs(dataset,
+                                                 conclusion_value,
+                                                 status_level)
         else:
             conclusions = []
-        dataset = filter_form.dataset
+
         return {
             'filter_form': filter_form,
-            'conclusions': conclusions,
+            'conclusions': dict((c[0], c[1]) for c in conclusions),
+            'titles': dict((c[0], c[2]) for c in conclusions if c[2] != None),
             'species': self.get_subjects(dataset),
             'current_selection': filter_form.get_selection(),
             'dataset': dataset,
+            'label_type': label_type,
         }
 
 
