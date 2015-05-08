@@ -42,11 +42,13 @@ class SummaryFilterForm(SpeciesMixin, CommonFilterForm):
 class ProgressFilterForm(CommonFilterForm):
     CONCLUSION_TYPE = (
         ('', '-'),
-        ('bs', 'Breeding Population'),
-        ('rg', 'Breeding Range'),
-        ('ws', 'Winter Population'),
+        ('bs', 'Bird Status'),
+        ('stbp', 'Short-term breeding population trend'),
+        ('ltbp', 'Long-term breeding population trend'),
+        ('stwp', 'Short-term winter population trend'),
+        ('ltwp', 'Long-term winter population trend')
     )
-    conclusion = SelectField('Conclusion type...', choices=CONCLUSION_TYPE,
+    conclusion = SelectField('Assessment type...', choices=CONCLUSION_TYPE,
                              default='')
 
     def get_selection(self):

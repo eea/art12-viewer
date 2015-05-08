@@ -13,7 +13,7 @@
 		<h1>EU population status assessments</h1>
 
 		<p>
-			Choose a period and a conclusion type.
+			Choose a period and an assessment type.
 		</p>
 
 		{% include 'progress/filters.html' %}
@@ -29,26 +29,35 @@
 				<tbody class="thead">
 				<tr>
 					<th>Species</th>
-					<th>Conclusion</th>
+					<th>Assessment</th>
 				</tr>
 				</tbody>
 
 				<tbody>
-				{% for code,name in species %}
+				{% for code, name in species %}
 					<tr class="stripe_row">
 						<td class="th">
 							{% set summary_url = url_for('views.summary', period=dataset.id, subject=code) %}
 							<a href="{{ summary_url }}">{{ name }}</a>
 						</td>
-            {% set conclusion = get_conclusion(conclusions, code) %}
-						<td class="{{ conclusion }}">{{ conclusion or '' }}</td>
+            {% set conclusion = conclusions.get(code, '') %}
+            {% set title = titles.get(code, '') %}
+            {% if label_type == 'status' %}
+              <td class="center border_left status-{{ STATUS_CLASSES.get(conclusion) }} text-center" title={{ title }}>
+            {% else %}
+              <td class="border_left trend-{{ TREND_CLASSES.get(conclusion) }} text-center" title={{ title }}>
+            {% endif %}
+              <span class="conclusion">
+                {{ conclusion or ''}}
+              </span>
+            </td>
 					</tr>
 				{% endfor %}
 				</tbody>
 
 			</table>
 		{% else %}
-			<p><b>Please select a period and a conclusion type.</b></p>
+			<p><b>Please select a period and an assessment type.</b></p>
 		{% endif %}
 	</div>
 {% endblock %}
