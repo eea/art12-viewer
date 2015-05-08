@@ -45,7 +45,7 @@
             {% if label_type == 'status' %}
               <td class="center border_left status-{{ STATUS_CLASSES.get(conclusion) }} text-center" title={{ title }}>
             {% else %}
-              <td class="trend-{{ TREND_CLASSES.get(conclusion) }} text-center" title={{ title }}>
+              <td class="border_left trend-{{ TREND_CLASSES.get(conclusion) }} text-center" title={{ title }}>
             {% endif %}
               <span class="conclusion">
                 {{ conclusion or ''}}
