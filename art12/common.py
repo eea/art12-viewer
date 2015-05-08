@@ -1,6 +1,7 @@
+import os.path
 from urlparse import urlparse
 from flask import (
-    Blueprint, url_for, render_template, redirect, request, flash
+    Blueprint, url_for, render_template, redirect, request, flash, current_app
 )
 from flask.views import MethodView
 from art12.definitions import (
@@ -191,7 +192,7 @@ def generate_eu_map_breeding_url(subject, sensitive=False):
         eu_map_breeding_href = config.eu_species_map_breeding_url
 
     if not eu_map_breeding_href:
-        return ''
+        return url_for('views.eu_map', speciescode=subject, suffix='_breeding')
 
     return eu_map_breeding_href + '&CCode=' + subject
 
@@ -205,7 +206,7 @@ def generate_eu_map_winter_url(subject, sensitive=False):
         eu_map_winter_href = config.eu_species_map_winter_url
 
     if not eu_map_winter_href:
-        return ''
+        return url_for('views.eu_map', speciescode=subject, suffix='_winter')
 
     return eu_map_winter_href + '&CCode=' + subject
 
@@ -280,3 +281,10 @@ def change_details():
     return render_template('change_details.html', **{
         'form': form,
     })
+
+
+def check_map_exists(speciescode, suffix):
+    map_fname = "{}{}{}{}".format(current_app.config['MAPS_PATH'],
+                                  speciescode, suffix,
+                                  current_app.config['MAPS_EXTENSION'])
+    return os.path.isfile(map_fname)
