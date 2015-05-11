@@ -61,6 +61,8 @@ be run as an unprivileged user in the product directory:
     cp settings.py.example instance/settings.py
 
     # Follow instructions in settings.py.example to adapt it to your needs.
+    # MAPS_PATH and MAPS_URI should be filled in according to your local deployment
+    # e.g: MAPS_PATH = '/Users/foo/art12/art12/static/maps/' MAPS_URI = '/static/maps/'
 
 5.Set up the MySQL database:
 

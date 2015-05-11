@@ -5,3 +5,7 @@ DEBUG = True
 SECRET_KEY = 'secret is secret'
 
 GOOGLE_ANALYTICS = True
+
+MAPS_PATH = 'absolute path to the maps directory'
+MAPS_URI = 'server URI for the maps directory'
+MAPS_EXTENSION = '.png'

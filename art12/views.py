@@ -1,10 +1,10 @@
 import json
 
-from flask import request
+from flask import request, current_app
 from flask.views import View
 from art12.common import (
     TemplateView, generate_map_url, generate_eu_map_breeding_url,
-    generate_eu_map_winter_url,
+    generate_eu_map_winter_url, check_map_exists
 )
 from art12.definitions import EU_COUNTRY
 from art12.forms import (
@@ -178,3 +178,23 @@ class ConnectedSelectBoxes(View, SpeciesMixin):
         dataset = Dataset.query.get_or_404(dataset_id)
         options = [('', '-')] + self.get_subjects(dataset)
         return json.dumps(options)
+
+
+class EuMap(TemplateView):
+    template_name = 'summary/eu_map.html'
+
+    def get_context_data(self, **kwargs):
+        speciescode = request.args['speciescode']
+        suffix = request.args['suffix']
+
+        if (check_map_exists(speciescode, suffix)):
+            map_uri = "{}{}{}{}".format(
+                current_app.config['MAPS_URI'],
+                speciescode,
+                suffix,
+                current_app.config['MAPS_EXTENSION']
+            )
+            return {'map_uri': map_uri}
+
+        return {}
+

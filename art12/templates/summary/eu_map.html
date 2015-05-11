@@ -1,0 +1,11 @@
+{% block content %}
+  <body>
+    {% if map_uri %}
+      <img src="{{ map_uri }}" height="780">
+    {% else %}
+      <p>
+        There is no map available for the selected species.
+      </p>
+    {% endif %}
+  </body>
+{% endblock %}
