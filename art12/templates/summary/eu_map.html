@@ -1,9 +1,11 @@
 {% block content %}
   <body>
-    {% if map_exists %}
-      <img src="{{ MAPS_URI }}{{ speciescode }}{{ suffix }}.png" height="780">
+    {% if map_uri %}
+      <img src="{{ map_uri }}" height="780">
     {% else %}
-      There is no map available for the selected species.
+      <p>
+        There is no map available for the selected species.
+      </p>
     {% endif %}
   </body>
 {% endblock %}

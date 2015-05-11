@@ -186,11 +186,15 @@ class EuMap(TemplateView):
     def get_context_data(self, **kwargs):
         speciescode = request.args['speciescode']
         suffix = request.args['suffix']
-        map_exists = check_map_exists(speciescode, suffix)
 
-        return {
-            'speciescode': speciescode,
-            'suffix': suffix,
-            'MAPS_URI': current_app.config['MAPS_URI'],
-            'map_exists': map_exists,
-        }
+        if (check_map_exists(speciescode, suffix)):
+            map_uri = "{}{}{}{}".format(
+                current_app.config['MAPS_URI'],
+                speciescode,
+                suffix,
+                current_app.config['MAPS_EXTENSION']
+            )
+            return {'map_uri': map_uri}
+
+        return {}
+
