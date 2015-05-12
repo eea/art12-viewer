@@ -9,7 +9,7 @@
 
 
 {% block content %}
-	<div class="copy-disabled" tabindex="1">
+	<div tabindex="1">
 		<h1>EU population status and trends</h1>
 
 		<p>
@@ -19,7 +19,8 @@
 		{% include 'progress/filters.html' %}
 
 		{% if current_selection %}
-			{% include 'common/legend.html' %}
+      {% set page_type='progress' %}
+			{% include 'common/legend.html' with context %}
 			<table class="complex_datatable">
 				<caption>
 					<b>Current selection</b>:
@@ -35,23 +36,32 @@
 
 				<tbody>
 				{% for code, name in species %}
-					<tr class="stripe_row">
-						<td class="th">
-							{% set summary_url = url_for('views.summary', period=dataset.id, subject=code) %}
-							<a href="{{ summary_url }}">{{ name }}</a>
-						</td>
-            {% set conclusion = conclusions.get(code, '') %}
-            {% set title = titles.get(code, '') %}
-            {% if label_type == 'status' %}
-              <td class="center border_left status-{{ STATUS_CLASSES.get(conclusion) }} text-center" title={{ title }}>
-            {% else %}
-              <td class="border_left trend-{{ TREND_CLASSES.get(conclusion) }} text-center" title={{ title }}>
-            {% endif %}
-              <span class="conclusion">
-                {{ conclusion or ''}}
-              </span>
-            </td>
-					</tr>
+          {% if code not in conclusions.keys() %}
+            <tr class="stripe_row">
+              <td class="th">
+                {% set summary_url = url_for('views.summary', period=dataset.id, subject=code) %}
+                <a href="{{ summary_url }}">{{ name }}</a>
+              </td>
+              <td class="th"></td>
+            </tr>
+          {% endif %}
+          {% for conclusion, title in conclusions.get(code, '') %}
+            <tr class="stripe_row">
+              <td class="th">
+                {% set summary_url = url_for('views.summary', period=dataset.id, subject=code) %}
+                <a href="{{ summary_url }}">{{ name }}</a>
+              </td>
+              {% if label_type == 'status' %}
+              <td class="center border_left status-{{ STATUS_CLASSES.get(conclusion) }} text-center" title="{{ title }}">
+              {% else %}
+              <td class="center border_left trend-{{ TREND_CLASSES.get(conclusion) }} text-center" title="{{ title }}">
+              {% endif %}
+                <span class="conclusion">
+                  {{ conclusion or ''}}
+                </span>
+              </td>
+            </tr>
+          {% endfor %}
 				{% endfor %}
 				</tbody>
 

@@ -135,10 +135,14 @@ class Progress(SpeciesMixin, TemplateView):
         else:
             conclusions = []
 
+        conclusions_data = {}
+        for c in conclusions:
+            conclusions_data.setdefault(c[0], [])
+            conclusions_data[c[0]].append((c[1], c[2] if c[2] != None else ''))
+
         return {
             'filter_form': filter_form,
-            'conclusions': dict((c[0], c[1]) for c in conclusions),
-            'titles': dict((c[0], c[2]) for c in conclusions if c[2] != None),
+            'conclusions': conclusions_data,
             'species': self.get_subjects(dataset),
             'current_selection': filter_form.get_selection(),
             'dataset': dataset,

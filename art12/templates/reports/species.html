@@ -9,7 +9,7 @@
 
 
 {% block content %}
-  <div class="copy-disabled" tabindex="1">
+  <div tabindex="1">
     <h1>Species trends at the Member State level</h1>
 
     <p>
@@ -21,7 +21,8 @@
     {% set colspan_all=30 %}
 
     {% if current_selection %}
-      {% include 'common/legend.html' %}
+      {% set page_type='report' %}
+      {% include 'common/legend.html' with context %}
       <table class="complex_datatable">
         <caption>
           <b>Current selection</b>:
