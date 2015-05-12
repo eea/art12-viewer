@@ -36,6 +36,15 @@
 
 				<tbody>
 				{% for code, name in species %}
+          {% if code not in conclusions.keys() %}
+            <tr class="stripe_row">
+              <td class="th">
+                {% set summary_url = url_for('views.summary', period=dataset.id, subject=code) %}
+                <a href="{{ summary_url }}">{{ name }}</a>
+              </td>
+              <td class="th"></td>
+            </tr>
+          {% endif %}
           {% for conclusion, title in conclusions.get(code, '') %}
             <tr class="stripe_row">
               <td class="th">
