@@ -126,7 +126,7 @@ $(function() {
         var url = $(this).data('url');
         if (url != "") {
             title = "EU map of population trend";
-            var params = "left=400,top=100,width=510,height=800," +
+            var params = "left=400,top=100,width=510,height=880," +
                 "toolbar=0,resizable=0,scrollbars=0";
             window.open(url, title, params).focus();
         }
