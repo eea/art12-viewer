@@ -1,4 +1,4 @@
-SQLALCHEMY_DATABASE_URI = 'mysql://root@ubuntu.local/art12'
+SQLALCHEMY_DATABASE_URI = 'mysql://root@localhost/art12'
 
 DEBUG = True
 
