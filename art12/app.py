@@ -30,6 +30,7 @@ def create_app(config={}, testing=False):
     app.config.update(DEFAULT_CONFIG)
     if testing:
         app.testing = True
+        app.config.from_pyfile('test_settings.py', silent=True)
     else:
         app.config.from_pyfile('settings.py', silent=True)
     app.config.update(config)
