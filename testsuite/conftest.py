@@ -27,6 +27,7 @@ alembic_cfg = config.Config(alembic_cfg_path.abspath())
 
 
 def create_generic_fixtures():
+    models.db.drop_all()
     models.db.create_all()
     models.db.session.execute(
         "insert into roles(name, description) values "

@@ -1,5 +1,6 @@
 # coding: utf-8
 import argparse
+from datetime import datetime
 from flask.ext.script import Manager
 from flask.ext.security import UserMixin, RoleMixin
 from flask.ext.sqlalchemy import SQLAlchemy
@@ -291,7 +292,7 @@ class WikiChange(Base):
     body = Column(String(6000), nullable=False)
     editor = Column(String(60), nullable=False)
     changed = Column(DateTime, nullable=False,
-                     server_default='CURRENT_TIMESTAMP')
+                     default=datetime.now)
     active = Column(Integer, default=0)
     dataset_id = Column(
         'ext_dataset_id',
@@ -331,7 +332,7 @@ class WikiTrailChange(Base):
     body = Column(String(6000), nullable=False)
     editor = Column(String(60), nullable=False)
     changed = Column(DateTime, nullable=False,
-                     server_default=u'CURRENT_TIMESTAMP')
+                     default=datetime.now)
     active = Column(Integer, default=0)
     dataset_id = Column(
         'ext_dataset_id',
