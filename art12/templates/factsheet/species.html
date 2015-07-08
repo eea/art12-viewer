@@ -1,0 +1,16 @@
+{% extends 'layout_pdf.html' %}
+
+{% block content %}
+
+  <h1 class="cover-title">Species name: {{ obj.speciesname }}</h1>
+  <h2 class="cover-subtitle">{{ obj.subunit }}</h2>
+
+  <dl class="cover-summary">
+    <dt>Annex</dt>
+    <dd>{{ obj.annex }}</dd>
+    <dt>International action plan</dt>
+    <dd>{{ obj.plan }}</dd>
+  </dl>
+
+
+{% endblock %}
