@@ -8,6 +8,7 @@ from art12.models import db, db_manager
 from art12.urls import views
 from art12.wiki import wiki
 from art12.common import common, HOMEPAGE_VIEW_NAME
+from art12.utils import inject_static_file
 from eea_integration.auth.script import user_manager, role_manager
 from eea_integration.layout import layout
 from eea_integration.auth import UserDatastore, Auth
@@ -41,6 +42,9 @@ def create_app(config={}, testing=False):
     app.register_blueprint(views)
     app.register_blueprint(layout)
     app.register_blueprint(wiki)
+
+    app.add_template_global(inject_static_file)
+
     if not app.testing:
         auth_ext = Auth(models=models, security_ext=security_ext,
                         homepage=HOMEPAGE_VIEW_NAME)

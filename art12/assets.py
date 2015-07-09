@@ -18,6 +18,7 @@ BUNDLE_CSS = (
     'css/art12.css',
 )
 
+
 js = Bundle(*BUNDLE_JS, filters='jsmin', output='gen/static.js')
 css = Bundle(*BUNDLE_CSS, filters='cssmin', output='gen/static.css')
 assets_env = Environment()

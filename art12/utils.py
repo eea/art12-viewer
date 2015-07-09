@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import re
 from decimal import Decimal
+from markupsafe import Markup
+from path import path
+from flask import current_app as app
 
 patt = re.compile(r"(?<!\d)(\d+)(\.0*)?(?!\d)")
 valid_numeric = re.compile("^\s*" + "(" + "(\d\.)?\d+\s*-\s*(\d\.)?\d+" +
@@ -51,3 +54,10 @@ def validate_ref(s):
     if s:
         return bool(valid_ref.match(s))
     return True
+
+
+def inject_static_file(filepath):
+    data = None
+    with open(path(app.static_folder) / filepath, 'r') as f:
+        data = f.read()
+    return Markup(data)

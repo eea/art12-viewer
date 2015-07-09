@@ -6,6 +6,7 @@
     <title>{% block title %}{% endblock %}</title>
 
     <style type="text/css">
+      {{ inject_static_file('css/print-factsheet.css') }}
     </style>
 
     {% block head %}{% endblock %}
