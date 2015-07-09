@@ -1,7 +1,7 @@
 from flask import render_template, request, current_app as app
 from flask.views import MethodView
 
-from art12.models import db, EtcDataBird
+from art12.models import db, EtcDataBird, Wiki, WikiChange
 from art12.queries import SPECIESNAME_Q, SUBUNIT_Q, ANNEX_Q, PLAN_Q
 
 
@@ -18,12 +18,8 @@ class BirdFactsheet(MethodView):
         'plan': PLAN_Q,
     }
 
-    def get_all(self):
-        period = request.args.get('period', app.config['DEFAULT_PERIOD'])
-        return EtcDataBird.query.filter_by(dataset_id=period)
-
     def list_all(self):
-        objects = self.get_all()
+        objects = EtcDataBird.query.filter_by(dataset_id=self.period)
         return render_template('factsheet/list_all.html', objects=objects)
 
     def set_properties(self):
@@ -32,14 +28,24 @@ class BirdFactsheet(MethodView):
             value = ', '.join([row[0] for row in result if row[0]])
             setattr(self, prop_name, value)
 
+    def set_wiki(self):
+        wiki_change = WikiChange.query.join(Wiki).filter(
+            WikiChange.dataset_id == self.period,
+            Wiki.speciescode == self.subject,
+        ).first()
+        self.wiki = wiki_change.body if wiki_change else ''
+
     def get_context_data(self, **kwargs):
-        self.subject = get_arg(kwargs, 'subject')
         self.engine = db.get_engine(app, 'factsheet')
         self.set_properties()
+        self.set_wiki()
         return {'obj': self}
 
     def get(self):
-        if not request.args.get('subject'):
+        self.period = get_arg(request.args, 'period',
+                              app.config['FACTSHEET_DEFAULT_PERIOD'])
+        self.subject = get_arg(request.args, 'subject')
+        if not self.subject:
             return self.list_all()
-        context = self.get_context_data(**request.args)
+        context = self.get_context_data()
         return render_template('factsheet/species.html', **context)
