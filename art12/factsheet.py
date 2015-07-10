@@ -1,7 +1,7 @@
 from flask import render_template, request, current_app as app
 from flask.views import MethodView
 
-from art12.models import db, EtcDataBird, Wiki, WikiChange
+from art12.models import db, EtcBirdsEu, EtcDataBird, Wiki, WikiChange
 from art12.queries import SPECIESNAME_Q, SUBUNIT_Q, ANNEX_Q, PLAN_Q
 
 
@@ -35,10 +35,17 @@ class BirdFactsheet(MethodView):
         ).first()
         self.wiki = wiki_change.body if wiki_change else ''
 
+    def set_etc_birds(self):
+        self.etc_birds = EtcBirdsEu.query.filter_by(
+            speciescode=self.subject,
+            dataset_id=self.period,
+        )
+
     def get_context_data(self, **kwargs):
         self.engine = db.get_engine(app, 'factsheet')
         self.set_properties()
         self.set_wiki()
+        self.set_etc_birds()
         return {'obj': self}
 
     def get(self):

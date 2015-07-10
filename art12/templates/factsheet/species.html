@@ -14,4 +14,49 @@
 
   {{ obj.wiki | safe }}
 
+  <section>
+    <header>
+      <h2>Assessment of status at the European (EU27) level</h2>
+      <p class="subtitle">(all biogeographical and marine regions – EU27)</p>
+    </header>
+
+    <table class="complex_datatable">
+      <thead>
+        <tr>
+          <th rowspan="2">Breeding population size</th>
+          <th colspan="2">Breeding population trend</th>
+          <th rowspan="2">Range area</th>
+          <th colspan="2">Breeding range trend</th>
+          <th rowspan="2">Winter population size</th>
+          <th colspan="2">Winter population trend</th>
+          <th rowspan="2">Population status</th>
+        </tr>
+        <tr>
+          <th>Short term</th>
+          <th>Long term</th>
+          <th>Short term</th>
+          <th>Long term</th>
+          <th>Short term</th>
+          <th>Long term</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for row in obj.etc_birds %}
+        <tr class="stripe_row">
+          <td>{{ row.br_population_size }} {{ row.br_population_size_unit }}</td>
+          <td>{{ row.br_population_trend }}</td>
+          <td>{{ row.br_population_trend_long }}</td>
+          <td>{{ row.br_range_surface_area }}</td>
+          <td>{{ row.br_range_trend }}</td>
+          <td>{{ row.br_range_trend_long }}</td>
+          <td>{{ row.wi_population_size }} {{ row.wi_population_size_unit }}</td>
+          <td>{{ row.wi_population_trend }}</td>
+          <td>{{ row.wi_population_trend_long }}</td>
+          <td>{{ row.conclusion_status_label }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
 {% endblock %}
