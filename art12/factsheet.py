@@ -2,7 +2,8 @@ from flask import render_template, request, current_app as app
 from flask.views import MethodView
 
 from art12.models import db, EtcBirdsEu, EtcDataBird, Wiki, WikiChange
-from art12.queries import SPECIESNAME_Q, SUBUNIT_Q, ANNEX_Q, PLAN_Q, LISTS_Q
+from art12.queries import (
+    SPECIESNAME_Q, SUBUNIT_Q, ANNEX_Q, PLAN_Q, LISTS_Q, MS_TABLE_Q)
 
 
 def get_arg(kwargs, key, default=None):
@@ -11,7 +12,9 @@ def get_arg(kwargs, key, default=None):
 
 
 class Bird(object):
-    pass
+    def __init__(self, **kwargs):
+        for k, v in kwargs.iteritems():
+            setattr(self, k, v)
 
 
 class BirdFactsheet(MethodView):
@@ -45,6 +48,11 @@ class BirdFactsheet(MethodView):
             dataset_id=self.period,
         )
 
+    def set_ms_birds(self, obj):
+        query = MS_TABLE_Q.format(subject=self.subject, period=self.period)
+        result = self.tool_engine.execute(query)
+        obj.ms_birds = [Bird(**dict(row.items())) for row in result]
+
     def set_subpop_lists(self, obj):
         query = LISTS_Q.format(subject=self.subject, period=self.period)
         result = self.tool_engine.execute(query)
@@ -64,6 +72,7 @@ class BirdFactsheet(MethodView):
         self.set_wiki(bird_obj)
         self.set_etc_birds(bird_obj)
         self.set_subpop_lists(bird_obj)
+        self.set_ms_birds(bird_obj)
 
         return {'obj': bird_obj}
 

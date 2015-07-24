@@ -64,16 +64,65 @@
       {% endfor %}
       </tbody>
     </table>
+
+    <p>See the endnotes for more information<sup>i</sup></p>
+
+    <p>When relevant reporting guidelines requests separate reports for
+    subspecies and/or subspecific populations. The population status
+    assessments at the EU level were carried out at the species level1. The EU
+    status assessment covers following subspecies/populations:
+    {{ obj.first_list | join(', ') }}. The EU trends were assessed at the
+    subspecies level. The EU trends cover following subspecies/populations:
+    {{ obj.second_list | join(', ') }}.</p>
+
   </section>
 
-  <p>See the endnotes for more information<sup>i</sup></p>
+  <section>
+    <header>
+      <h2>Species trends at the Member State level</h2>
+    </header>
 
-  <p>When relevant reporting guidelines requests separate reports for
-  subspecies and/or subspecific populations. The population status assessments
-  at the EU level were carried out at the species level1. The EU status
-  assessment covers following subspecies/populations:
-  {{ obj.first_list | join(', ') }}. The EU trends were assessed at the
-  subspecies level. The EU trends cover following subspecies/populations:
-  {{ obj.second_list | join(', ') }}.</p>
+    <table class="complex_datatable">
+      <thead>
+        <tr>
+          <th rowspan="2">MS/Ter.</th>
+          <th rowspan="2">% in EU27</th>
+          <th rowspan="2">Breeding population size</th>
+          <th colspan="2">Breeding population trend</th>
+          <th rowspan="2">Range area</th>
+          <th colspan="2">Breeding range trend</th>
+          <th rowspan="2">Winter population size</th>
+          <th colspan="2">Winter population trend</th>
+        </tr>
+        <tr>
+          <th>Short term</th>
+          <th>Long term</th>
+          <th>Short term</th>
+          <th>Long term</th>
+          <th>Short term</th>
+          <th>Long term</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for row in obj.ms_birds %}
+        <tr class="stripe_row">
+          <td>{{ row.country }}</td>
+          <td>{{ row.percentage_distribution_grid_area or '' }}</td>
+          <td>{{ row.breeding_population_size }}</td>
+          {{ trend_td(row.population_trend_bs) }}
+          {{ trend_td(row.population_trend_long_bs) }}
+          <td>{{ row.range_surface_area_bs or '' }}</td>
+          {{ trend_td(row.range_trend_bs) }}
+          {{ trend_td(row.range_trend_long_bs) }}
+          <td>{{ row.winter_population_size }}</td>
+          {{ trend_td(row.population_trend_ws) }}
+          {{ trend_td(row.population_trend_long_ws) }}
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
+    <p>See the endnotes for more information<sup>ii</sup></p>
+  </section>
 
 {% endblock %}
