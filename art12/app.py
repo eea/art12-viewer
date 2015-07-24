@@ -4,6 +4,7 @@ from flask.ext.script import Manager
 from flask.ext.security import Security
 from art12.assets import assets_env
 from art12 import models
+from art12.definitions import TREND_CLASSES
 from art12.models import db, db_manager
 from art12.urls import views
 from art12.wiki import wiki
@@ -44,6 +45,8 @@ def create_app(config={}, testing=False):
     app.register_blueprint(wiki)
 
     app.add_template_global(inject_static_file)
+
+    app.jinja_env.globals['TREND_CLASSES'] = TREND_CLASSES
 
     if not app.testing:
         auth_ext = Auth(models=models, security_ext=security_ext,

@@ -175,87 +175,59 @@ header .subtitle {
   min-height: initial;
   text-align: left;
 }
-/* CONCLUSION TYPES */
-.FV .conclusion,
-.FV.conclusion {
-  color: #000;
-  background-color: #b1c748;
+/* Trend TYPES */
+.conclusion, .conclusion:hover {
+    padding-left: 4px;
+    padding-right: 4px;
 }
-.FVU .conclusion,
-.FVU.conclusion {
+.trend-inc .conclusion,
+.trend-inc.conclusion {
   color: #000;
-  background-color: #b1c748;
-}
-.U1 .conclusion,
-.U1.conclusion {
-  color: #000;
-  background-color: #fbaf33;
-}
-.U1U .conclusion,
-.U1U.conclusion {
-  color: #000;
-  background-color: #fbaf33;
-}
-.U1M .conclusion,
-.U1M.conclusion {
-  color: #000;
-  background-color: #fbaf33;
-}
-.U1P .conclusion,
-.U1P.conclusion {
-  color: #000;
-  background-color: #fbaf33;
-}
-.U2 .conclusion,
-.U2.conclusion {
-  color: #000;
-  background-color: #e94050;
-}
-.U2U .conclusion,
-.U2U.conclusion {
-  color: #000;
-  background-color: #e94050;
-}
-.U2M .conclusion,
-.U2M.conclusion {
-  color: #000;
-  background-color: #e94050;
-}
-.U2P .conclusion,
-.U2P.conclusion {
-  color: #000;
-  background-color: #e94050;
-}
-.XX .conclusion,
-.XX.conclusion {
-  color: #000;
-  background-color: #bbbdc0;
-}
-.XXU .conclusion,
-.XXU.conclusion {
-  color: #000;
-  background-color: #bbbdc0;
-}
-.XU .conclusion,
-.XU.conclusion {
-  color: #000;
-  background-color: #bbbdc0;
-}
-.XUU .conclusion,
-.XUU.conclusion {
-  color: #000;
-  background-color: #bbbdc0;
-}
-.NA .conclusion,
-.NA.conclusion {
-  color: #000;
-  background-color: #bbbdc0;
-}
-.assesm {
-  color: #666666 !important;
-  font-style: italic;
+  border-color: #639500;
+  background-color: #92b54b;
 }
 
+.trend-dec .conclusion,
+.trend-dec.conclusion {
+  color: #000;
+  border-color: #742c2c;
+  background-color: #e02020;
+}
+
+.trend-xx .conclusion,
+.trend-xx.conclusion {
+  color: #000;
+  border-color: #888;
+  background-color: #b0b0b0;
+}
+
+.trend-eq .conclusion,
+.trend-eq.conclusion {
+  color: #000;
+  border-color: #4774c7;
+  background-color: #467aba;
+}
+
+.trend-f .conclusion,
+.trend-f.conclusion {
+  color: #000;
+  border-color: #7a005c;
+  background-color: #7d60a0;
+}
+
+.trend-u .conclusion,
+.trend-u.conclusion {
+  color: #000;
+  border-color: #6b6b6b;
+  background-color: #808080;
+}
+
+.trend-n .conclusion,
+.trend-n.conclusion {
+  color: #000;
+  border-color: #343434;
+  background-color: transparent;
+}
 /* Table */
 .cell-code {
   font-family: monospace;

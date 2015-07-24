@@ -33,3 +33,11 @@
     {{ bool or '' }}
   </td>
 {% endmacro %}
+
+{% macro trend_td(value) %}
+<td class="trend-{{ TREND_CLASSES.get(value) }}">
+  <span class="conclusion">
+    {{ value or '' }}
+  </span>
+</td>
+{% endmacro %}

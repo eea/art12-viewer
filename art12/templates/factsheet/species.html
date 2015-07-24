@@ -1,12 +1,13 @@
 {% extends 'layout_pdf.html' %}
 
 {% block content %}
+  {% from 'common/_macros.html' import trend_td %}
 
   <h1 class="cover-title">Species name: {{ obj.speciesname }}</h1>
   <h2 class="cover-subtitle">{{ obj.subunit }}</h2>
 
   <dl class="cover-summary">
-    <dt>Annex</dt>
+    <dt>Annex I</dt>
     <dd>{{ obj.annex }}</dd>
     <dt>International action plan</dt>
     <dd>{{ obj.plan }}</dd>
@@ -43,16 +44,22 @@
       <tbody>
       {% for row in obj.etc_birds %}
         <tr class="stripe_row">
-          <td>{{ row.br_population_size }} {{ row.br_population_size_unit }}</td>
-          <td>{{ row.br_population_trend }}</td>
-          <td>{{ row.br_population_trend_long }}</td>
-          <td>{{ row.br_range_surface_area }}</td>
-          <td>{{ row.br_range_trend }}</td>
-          <td>{{ row.br_range_trend_long }}</td>
-          <td>{{ row.wi_population_size }} {{ row.wi_population_size_unit }}</td>
-          <td>{{ row.wi_population_trend }}</td>
-          <td>{{ row.wi_population_trend_long }}</td>
-          <td>{{ row.conclusion_status_label }}</td>
+          <td>
+            {{ row.br_population_size or '' }}
+            {{ row.br_population_size_unit or '' }}
+          </td>
+          {{ trend_td(row.br_population_trend) }}
+          {{ trend_td(row.br_population_trend_long) }}
+          <td>{{ row.br_range_surface_area or '' }}</td>
+          {{ trend_td(row.br_range_trend) }}
+          {{ trend_td(row.br_range_trend_long) }}
+          <td>
+            {{ row.wi_population_size or '' }}
+            {{ row.wi_population_size_unit or '' }}
+          </td>
+          {{ trend_td(row.wi_population_trend) }}
+          {{ trend_td(row.wi_population_trend_long) }}
+          <td>{{ row.conclusion_status_label or '' }}</td>
         </tr>
       {% endfor %}
       </tbody>
