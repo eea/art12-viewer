@@ -60,3 +60,73 @@ SELECT
   A.population_trend_long_ws
     FROM art12.etc_data_birds A
   WHERE (A.speciescode = '{subject}') AND (A.ext_dataset_id = {period});"""
+
+SPA_TRIGGER_Q = """
+SELECT count(*) AS count
+    FROM art12rp1_eu.data_birds_check_list
+  WHERE speciescode = '{subject}' AND spa_trigger = True;"""
+
+
+PRESS_THRE_Q = """
+SELECT rst.*
+FROM (SELECT rs1.level2_code                        AS code,
+             rs1.level2_name                        AS name,
+             Round(100 * rs1.pl2_num / rs2.pl2_tot) AS pc
+      FROM (SELECT e.level2_code,
+                   e.level2_name,
+                   Count(e.speciescode) AS pl2_num,
+                   1                    AS pl2_set
+            FROM (SELECT DISTINCT a.country,
+                                  a.speciescode,
+                                  a.season,
+                                  c.level2_code,
+                                  c.level2_name
+                  FROM ((art12rp1_eu.data_bpressures_threats t
+                         INNER JOIN art12rp1_eu.data_birds a
+                                 ON ( a.specieshash = t.specieshash ))
+                        INNER JOIN art12rp1_eu.data_birds_check_list b
+                                ON ( a.country = b.country
+                                     AND a.speciescode = b.speciescode
+                                     AND a.season = b.season ))
+                  LEFT JOIN (SELECT DISTINCT q_lu_threats.*,
+                                             t_lu_threats.name AS level2_name
+                             FROM (SELECT t.code,
+                                          Substring_index(t.code, '.', 1) AS level2_code
+                                   FROM   art12rp1_eu.lu_threats t) q_lu_threats
+                                   LEFT JOIN art12rp1_eu.lu_threats t_lu_threats
+                                          ON q_lu_threats.level2_code = t_lu_threats.code) c
+                               ON ( c.code = t.pressurecode )
+                  WHERE  a.speciescode = '{subject}'
+                         AND a.use_for_statistics = true
+                         AND b.spa_trigger = true
+                         AND NOT ( t.pressurecode ) IN ( 'U', 'X' )
+                         AND Upper(t.rankingcode) = 'H') AS e
+            GROUP BY e.level2_code,
+                     e.level2_name) AS rs1
+      INNER JOIN (SELECT Count(e.speciescode) AS pl2_tot,
+                         1                    AS pl2_set
+                  FROM (SELECT DISTINCT a.country,
+                                        a.speciescode,
+                                        a.season,
+                                        Substring_index(c.code, '.', 1) AS level2_code
+                        FROM ((art12rp1_eu.data_bpressures_threats t
+                               INNER JOIN art12rp1_eu.data_birds a
+                                       ON ( a.specieshash = t.specieshash ))
+                              INNER JOIN art12rp1_eu.data_birds_check_list b
+                                      ON (a.country = b.country
+                                          AND a.speciescode = b.speciescode
+                                          AND a.season = b.season))
+                        LEFT JOIN art12rp1_eu.lu_threats c
+                               ON ( c.code = t.pressurecode )
+                        WHERE  a.speciescode = '{subject}'
+                               AND a.use_for_statistics = true
+                               AND b.spa_trigger = true
+                               AND NOT ( t.pressurecode ) IN ( 'U', 'X' )
+                               AND Upper(t.rankingcode) = 'H') AS e)
+                  AS rs2
+      ON rs1.pl2_set = rs2.pl2_set
+      ORDER  BY Round(100 * rs1.pl2_num / rs2.pl2_tot) DESC)
+AS rst
+ORDER  BY rst.pc DESC,
+          rst.code ASC
+LIMIT 10;"""

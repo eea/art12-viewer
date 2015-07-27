@@ -3,7 +3,8 @@ from flask.views import MethodView
 
 from art12.models import db, EtcBirdsEu, EtcDataBird, Wiki, WikiChange
 from art12.queries import (
-    SPECIESNAME_Q, SUBUNIT_Q, ANNEX_Q, PLAN_Q, LISTS_Q, MS_TABLE_Q)
+    SPECIESNAME_Q, SUBUNIT_Q, ANNEX_Q, PLAN_Q, LISTS_Q, MS_TABLE_Q,
+    SPA_TRIGGER_Q, PRESS_THRE_Q)
 
 
 def get_arg(kwargs, key, default=None):
@@ -11,7 +12,7 @@ def get_arg(kwargs, key, default=None):
     return arg[0] if isinstance(arg, list) else arg or default
 
 
-class Bird(object):
+class DummyCls(object):
     def __init__(self, **kwargs):
         for k, v in kwargs.iteritems():
             setattr(self, k, v)
@@ -51,7 +52,7 @@ class BirdFactsheet(MethodView):
     def set_ms_birds(self, obj):
         query = MS_TABLE_Q.format(subject=self.subject, period=self.period)
         result = self.tool_engine.execute(query)
-        obj.ms_birds = [Bird(**dict(row.items())) for row in result]
+        obj.ms_birds = [DummyCls(**dict(row.items())) for row in result]
 
     def set_subpop_lists(self, obj):
         query = LISTS_Q.format(subject=self.subject, period=self.period)
@@ -63,16 +64,31 @@ class BirdFactsheet(MethodView):
         for key, val in d.iteritems():
             setattr(obj, key, val)
 
+    def is_spa_trigger(self):
+        query = SPA_TRIGGER_Q.format(subject=self.subject)
+        result = self.engine.execute(query)
+        row = result and result.first()
+        return row and row['count'] > 0
+
+    def set_pressures_threats(self, obj):
+        query = PRESS_THRE_Q.format(subject=self.subject)
+        result = self.engine.execute(query)
+        obj.threats = [DummyCls(**dict(row.items())) for row in result]
+
     def get_context_data(self, **kwargs):
         self.engine = db.get_engine(app, 'factsheet')
         self.tool_engine = db.get_engine(app)
 
-        bird_obj = Bird()
+        bird_obj = DummyCls()
         self.set_properties(bird_obj)
         self.set_wiki(bird_obj)
         self.set_etc_birds(bird_obj)
         self.set_subpop_lists(bird_obj)
         self.set_ms_birds(bird_obj)
+
+        if self.is_spa_trigger():
+            bird_obj.is_spa_trigger = True
+            self.set_pressures_threats(bird_obj)
 
         return {'obj': bird_obj}
 
