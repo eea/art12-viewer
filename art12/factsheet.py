@@ -70,20 +70,10 @@ class BirdFactsheet(MethodView):
         row = result and result.first()
         return row and row['count'] > 0
 
-    def set_pressures_threats(self, obj):
-        query = PRESS_THRE_Q.format(subject=self.subject)
-        result = self.engine.execute(query)
-        obj.threats = [DummyCls(**dict(row.items())) for row in result]
-
-    def set_n2k(self, obj):
-        query = N2K_Q.format(subject=self.subject)
-        result = self.engine.execute(query)
-        obj.n2k = [DummyCls(**dict(row.items())) for row in result]
-
-    def set_conservation_measures(self, obj):
-        query = CONS_MEASURES_Q.format(subject=self.subject)
-        result = self.engine.execute(query)
-        obj.cons_measures = [DummyCls(**dict(row.items())) for row in result]
+    def set_list_property(self, obj, prop_name, query):
+        result = self.engine.execute(query.format(subject=self.subject))
+        list_obj = [DummyCls(**dict(row.items())) for row in result]
+        setattr(obj, prop_name, list_obj)
 
     def get_context_data(self, **kwargs):
         self.engine = db.get_engine(app, 'factsheet')
@@ -98,9 +88,13 @@ class BirdFactsheet(MethodView):
 
         if self.is_spa_trigger():
             bird_obj.is_spa_trigger = True
-            self.set_pressures_threats(bird_obj)
-            self.set_n2k(bird_obj)
-            self.set_conservation_measures(bird_obj)
+            spa_properties = {
+                'threats': PRESS_THRE_Q,
+                'n2k': N2K_Q,
+                'cons_measures': CONS_MEASURES_Q,
+            }
+            for prop, query in spa_properties.iteritems():
+                self.set_list_property(bird_obj, prop, query)
 
         return {'obj': bird_obj}
 
