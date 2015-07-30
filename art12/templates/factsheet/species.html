@@ -178,6 +178,43 @@
 
 
     </section>
+
+    <section>
+      <header>
+        <h2>Proportion of population covered by the Natura 2000 network</h2>
+      </header>
+      <p>For the bird species triggering SPA classification Member States were
+      asked to report the size of a species population occurring within the
+      Natura 2000 network. The percentage of species population covered by the
+      network was estimated by comparing the population size within the network
+      and the total population size.</p>
+
+      <p>
+        <strong>Percentage of coverage by Natura 2000 sites</strong>
+      </p>
+
+      <table class='table-simple'>
+        <thead>
+          <tr>
+            <th>MS/territory</th>
+            <th>season</th>
+            <th>SPA trigger</th>
+            <th>% coverage</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in obj.n2k %}
+            {% set css_class = 'bold-text' if row.spa == 'YES' else '' %}
+            <tr>
+              <td class="{{ css_class }}">{{ row.reg }}</td>
+              <td class="{{ css_class }}">{{ row.wb }}</td>
+              <td class="{{ css_class }}">{{ row.spa }}</td>
+              <td class="{{ css_class }}">{{ row.pc or '' }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
   {% endif %}
 
 {% endblock %}

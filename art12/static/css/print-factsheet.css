@@ -288,3 +288,6 @@ header .subtitle {
 .important-cell {
     background-color: #eee;
 }
+.bold-text {
+  font-weight: bold;
+}

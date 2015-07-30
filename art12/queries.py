@@ -130,3 +130,51 @@ AS rst
 ORDER  BY rst.pc DESC,
           rst.code ASC
 LIMIT 10;"""
+
+N2K_Q = """
+SELECT t.country                                AS reg,
+       IF(t.season = 'W', 'winter', 'breeding') AS wb,
+       'YES'                                    AS spa,
+       IF(( ( t.spa_population_min IS NULL
+              AND t.spa_population_max IS NULL )
+             OR ( t.population_minimum_size IS NULL
+                  AND t.population_maximum_size IS NULL )
+             OR ( t.population_size_unit <> t.spa_population_unit ) )
+          AND ( NOT t.population_size_unit IS NULL
+                 OR NOT t.spa_population_unit IS NULL ), 'x', Round(
+       100 * Pow(IF(t.spa_population_min = 0, 1,
+                 IF(t.spa_population_min IS NULL,
+       t.spa_population_max, t.spa_population_min)) *
+       IF(t.spa_population_max = 0, 1, IF(t.spa_population_max IS NULL,
+       t.spa_population_min, t.spa_population_max)), 2) /
+       Pow(IF(t.population_minimum_size = 0, 1,
+       IF(t.population_minimum_size IS NULL,
+       t.population_maximum_size,
+       t.population_minimum_size)) * IF(t.population_maximum_size = 0, 1,
+       IF(t.population_maximum_size IS NULL, t.population_minimum_size,
+       t.population_maximum_size)), 2), 2))     AS pc
+FROM   art12rp1_eu.data_birds AS t
+       INNER JOIN art12rp1_eu.data_birds_check_list AS b
+               ON ( t.country = b.country )
+                  AND ( t.speciescode = b.speciescode )
+                  AND ( t.season = b.season )
+WHERE  ( ( ( t.season ) IN ( 'W', 'B' ) )
+         AND t.use_for_statistics = true
+         AND ( ( b.spa_trigger ) = true )
+         AND ( ( b.speciescode ) = '{subject}' ) )
+UNION
+SELECT t.country,
+       IF(t.season = 'W', 'winter', 'breeding') AS wb,
+       'NO'                                     AS spa,
+       NULL                                     AS pc
+FROM   art12rp1_eu.data_birds AS t
+       INNER JOIN art12rp1_eu.data_birds_check_list AS b
+               ON ( t.season = b.season )
+                  AND ( t.speciescode = b.speciescode )
+                  AND ( t.country = b.country )
+WHERE  ( ( ( t.season ) IN ( 'W', 'B' ) )
+         AND t.use_for_statistics = true
+         AND ( ( b.spa_trigger ) = false )
+         AND ( ( b.speciescode ) = '{subject}' ) )
+ORDER  BY reg ASC,
+          wb ASC;"""
