@@ -1,4 +1,4 @@
-from flask import render_template, request, current_app as app
+from flask import render_template, request, current_app as app, url_for
 from flask.views import MethodView
 
 from art12.models import db, EtcBirdsEu, EtcDataBird, Wiki, WikiChange
@@ -85,6 +85,10 @@ class BirdFactsheet(MethodView):
         self.set_etc_birds(bird_obj)
         self.set_subpop_lists(bird_obj)
         self.set_ms_birds(bird_obj)
+        bird_obj.url = url_for('views.summary',
+                               period=self.period,
+                               subject=self.subject,
+                               _external=True)
 
         if self.is_spa_trigger():
             bird_obj.is_spa_trigger = True

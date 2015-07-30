@@ -140,9 +140,9 @@
       <p>For the bird species triggering SPA classification Member States were
       asked to report the 20 most important threats and pressures using an
       agreed hierarchical list which can be found on the Article 12 Reference
-      Portal
-      {{ link("http://bd.eionet.europa.eu/activities/Reporting/Article_12/reference_portal") }}.
-      Pressures are activities which are currently having an impact on
+      Portal (
+      {{ link("http://bd.eionet.europa.eu/activities/Reporting/Article_12/reference_portal") }}
+      ). Pressures are activities which are currently having an impact on
       the species and threats are activities expected to have an impact in the
       near future. The table below only contains information form Member
       States, where a species triggers SPA classification.
@@ -212,6 +212,8 @@
           {% endfor %}
         </tbody>
       </table>
+
+      <p>See the endnotes for more information<sup>iii</sup></p>
     </section>
 
     <section>
@@ -252,5 +254,43 @@
       </table>
     </section>
   {% endif %}
+
+  <section>
+    <p>
+      This information is derived from the Member State national reports
+      submitted to the European Commission under Article 12 of the Birds
+      Directive in 2013 and covering the period 2008-2012. More detailed
+      information, including the MS reports, is available at:
+      {{ link(obj.url) }}.
+    </p>
+  </section>
+
+  <section class="page-breaker">
+    <p><sup>i</sup><strong>Assessment of status at the European (EU27)
+        level:</strong> The EU27 population trends were assessed using these
+      categories: ‘+’Increasing, ‘=’ Stable, ‘F’ Fluctuating, ‘-‘ Decreasing,
+      ‘xu’ Uncertain and ‘x’ Unknown. The breeding population size is estimated
+      in majority of the cases as ‘p’ number of pairs. Alternative population
+      units used are: ‘males’ number of males, ‘i’ number of individuals,
+      ‘cmales’ number of calling males and ‘bfem’ number of breeding females.
+      The breeding population size is estimated as number of individuals.</p>
+
+    <p><sup>ii</sup><strong>Species trends at the Member State level:</strong>
+      The percentage of the EU27 species population occurring in
+      the Member States (% in EU27) is calculated based on the population size
+      reported by the Member States.</p>
+
+    {% if obj.is_spa_trigger %}
+      <p><sup>iii</sup><strong>Percentage of coverage by Natura 2000 sites:
+          </strong>In some cases the population size within the Natura 2000
+        network has been estimated using a different methodology to the
+        estimate of overall population size and this can lead to percentage
+        covers greater than 100%. In such case the value has been given as 100%
+        and highlighted with an asterisk (*). The value ‘x’ indicates that the
+        Member State has not reported the species population and/or the
+        coverage by Natura 2000. No information is available for Greece and for
+        non-Annex I species in the Czech republic.</p>
+    {% endif %}
+  </section>
 
 {% endblock %}
