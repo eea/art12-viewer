@@ -140,7 +140,16 @@ class FactsheetHeader(MethodView):
                 .filter_by(speciescode=subject, dataset_id=period)
                 .first_or_404())
 
-        return {'period': bird.dataset.name, 'subject': bird.speciesname}
+        factsheet_engine = db.get_engine(app, 'factsheet')
+        result = factsheet_engine.execute(SUBUNIT_Q.format(code=subject))
+        row = result and result.first()
+        subunit = row and row['sub_unit']
+
+        return {
+            'period': bird.dataset.name,
+            'subject': bird.speciesname,
+            'subunit': subunit,
+        }
 
     def get(self):
         context = self.get_context_data(**request.args)

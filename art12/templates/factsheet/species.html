@@ -3,7 +3,7 @@
 {% block content %}
   {% from 'common/_macros.html' import trend_td, link %}
 
-  <h1 class="cover-title">Species name: {{ obj.speciesname }}</h1>
+  <h1 class="cover-title">Species name: <span>{{ obj.speciesname }}</span></h1>
   <h2 class="cover-subtitle">{{ obj.subunit }}</h2>
 
   <dl class="cover-summary">

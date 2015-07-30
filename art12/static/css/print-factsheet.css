@@ -119,10 +119,10 @@ header .subtitle {
 .complex_datatable td,
 .complex_datatable th,
 .complex_datatable caption {
-  padding: 3pt;
+  padding: 2pt;
   text-align: center;
 }
-.complex_datatable caption { 
+.complex_datatable caption {
   font-weight: normal;
   text-align: left;
 }
@@ -262,6 +262,10 @@ header .subtitle {
   display: block;
   font-size: medium;
   vertical-align: middle;
+}
+.cover-title span {
+  font-weight: bold;
+  font-style: italic;
 }
 
 /* cover summary */

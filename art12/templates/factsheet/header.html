@@ -9,8 +9,8 @@
           text-align: right;
       }
       .title {
-          font-size: 15pt;
-          line-height: 20pt;
+          font-size: 12pt;
+          line-height: 16pt;
       }
       .subtitle {
           font-size: 10pt;
@@ -39,7 +39,10 @@
   </head>
   <body onload="subst()">
     <div class="header">
-      <div class="title">Species name: {{ subject|safe }}</div>
+      <div class="title">
+        <strong>Species name: <i>{{ subject|safe }}</i></strong>
+        &nbsp;[{{ subunit }}]
+      </div>
       <div class="subtitle">Report under the Art. 12 of the Birds Directive</div>
     </div>
     <div class="header-first">

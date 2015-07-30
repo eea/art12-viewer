@@ -7,7 +7,7 @@ from flask import current_app as app
 from flask import Response, g
 
 _PAGE_DEFAULT_MARGIN = {'top': '30mm', 'bottom': '16mm',
-                        'left': '16mm', 'right': '16mm'}
+                        'left': '12mm', 'right': '12mm'}
 _FOOTER_SPACING = '5'
 _HEADER_SPACING = '7'
 
