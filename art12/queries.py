@@ -178,3 +178,67 @@ WHERE  ( ( ( t.season ) IN ( 'W', 'B' ) )
          AND ( ( b.speciescode ) = '{subject}' ) )
 ORDER  BY reg ASC,
           wb ASC;"""
+
+CONS_MEASURES_Q = """
+SELECT rst.*
+FROM (SELECT rs1.level2_code                        AS code,
+             rs1.level2_name                        AS name,
+             Round(100 * rs1.pl2_num / rs2.pl2_tot) AS pc
+      FROM (SELECT e.level2_code,
+                   e.level2_name,
+                   Count(e.speciescode) AS pl2_num,
+                   1                    AS pl2_set
+            FROM (SELECT DISTINCT a.country,
+                                  a.speciescode,
+                                  a.season,
+                                  c.level2_code,
+                                  c.level2_name
+                  FROM ((art12rp1_eu.data_bmeasures m
+                         INNER JOIN art12rp1_eu.data_birds a
+                                 ON ( a.specieshash = m.specieshash ))
+                         INNER JOIN art12rp1_eu.data_birds_check_list b
+                                 ON ( a.country = b.country
+                                      AND a.speciescode = b.speciescode
+                                      AND a.season = b.season ))
+                         LEFT JOIN (SELECT DISTINCT q_lu_measures.*,
+                                                    t_lu_measures.NAME AS level2_name
+                                    FROM (SELECT t.code,
+                                                 LEFT(t.code, 3) AS level2_code
+                                          FROM art12rp1_eu.lu_measures t)
+                                          q_lu_measures
+                                          LEFT JOIN art12rp1_eu.lu_measures t_lu_measures
+                                                 ON q_lu_measures.level2_code = t_lu_measures.code) c
+                                ON ( c.code = m.measurecode )
+                  WHERE  a.speciescode = '{subject}'
+                         AND a.use_for_statistics = true
+                         AND b.spa_trigger = true
+                         AND Ucase(m.rankingcode) = 'H'
+                         AND ( NOT m.measurecode LIKE '1*' )) AS e
+            GROUP  BY e.level2_code,
+                      e.level2_name) AS rs1
+      INNER JOIN (SELECT Count(e.speciescode) AS pl2_tot,
+                         1                    AS pl2_set
+                  FROM (SELECT DISTINCT a.country,
+                                          a.speciescode,
+                                          a.season,
+                                          LEFT(c.code, 3) AS level2_code
+                        FROM ((art12rp1_eu.data_bmeasures m
+                               INNER JOIN art12rp1_eu.data_birds a
+                                       ON a.specieshash = m.specieshash)
+                               INNER JOIN art12rp1_eu.data_birds_check_list b
+                                       ON (a.country = b.country
+                                           AND a.speciescode = b.speciescode
+                                           AND a.season = b.season))
+                               LEFT JOIN art12rp1_eu.lu_measures c
+                                      ON ( c.code = m.measurecode )
+                        WHERE  a.speciescode = '{subject}'
+                               AND a.use_for_statistics = true
+                               AND b.spa_trigger = true
+                               AND Ucase(m.rankingcode) = 'H'
+                               AND ( NOT m.measurecode LIKE '1*' )) AS e
+                  ) AS rs2
+              ON rs1.pl2_set = rs2.pl2_set
+      ORDER  BY Round(100 * rs1.pl2_num / rs2.pl2_tot) DESC) AS rst
+ORDER BY rst.pc DESC,
+         rst.code ASC
+LIMIT 10;"""

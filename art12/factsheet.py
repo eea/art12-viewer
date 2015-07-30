@@ -4,7 +4,7 @@ from flask.views import MethodView
 from art12.models import db, EtcBirdsEu, EtcDataBird, Wiki, WikiChange
 from art12.queries import (
     SPECIESNAME_Q, SUBUNIT_Q, ANNEX_Q, PLAN_Q, LISTS_Q, MS_TABLE_Q,
-    SPA_TRIGGER_Q, PRESS_THRE_Q, N2K_Q)
+    SPA_TRIGGER_Q, PRESS_THRE_Q, N2K_Q, CONS_MEASURES_Q)
 
 
 def get_arg(kwargs, key, default=None):
@@ -80,6 +80,11 @@ class BirdFactsheet(MethodView):
         result = self.engine.execute(query)
         obj.n2k = [DummyCls(**dict(row.items())) for row in result]
 
+    def set_conservation_measures(self, obj):
+        query = CONS_MEASURES_Q.format(subject=self.subject)
+        result = self.engine.execute(query)
+        obj.cons_measures = [DummyCls(**dict(row.items())) for row in result]
+
     def get_context_data(self, **kwargs):
         self.engine = db.get_engine(app, 'factsheet')
         self.tool_engine = db.get_engine(app)
@@ -95,6 +100,7 @@ class BirdFactsheet(MethodView):
             bird_obj.is_spa_trigger = True
             self.set_pressures_threats(bird_obj)
             self.set_n2k(bird_obj)
+            self.set_conservation_measures(bird_obj)
 
         return {'obj': bird_obj}
 

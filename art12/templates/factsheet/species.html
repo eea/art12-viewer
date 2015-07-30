@@ -153,7 +153,7 @@
 
       <p>
         <strong>
-          Ten most frequently reported ‘highly important’ conservation measures
+          Ten most frequently reported ‘highly important’ threats and pressures
         </strong>
       </p>
 
@@ -175,8 +175,6 @@
           {% endfor %}
         </tbody>
       </table>
-
-
     </section>
 
     <section>
@@ -210,6 +208,44 @@
               <td class="{{ css_class }}">{{ row.wb }}</td>
               <td class="{{ css_class }}">{{ row.spa }}</td>
               <td class="{{ css_class }}">{{ row.pc or '' }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <header>
+        <h2>Most frequently reported conservation measures</h2>
+      </header>
+      <p>For the bird species triggering SPA classification Member States were
+      asked to report up to 20 conservation measures being implemented for this
+      species using an agreed list which can be found on the Article 12
+      Reference Portal. Member States were further requested to highlight up to
+      five most important (‘highly important’) measures; the tables below only
+      show measures classed as ‘high’, for many species there were less than
+      ten measures reported as highly important.</p>
+
+      <p>
+        <strong>
+          Ten most frequently reported ‘highly important’ conservation measures
+        </strong>
+      </p>
+
+      <table class='table-simple'>
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th style="width: 100%; text-align: left">Measure</th>
+            <th>% of frequency</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in obj.cons_measures %}
+            <tr>
+              <td>{{ row.code }}</td>
+              <td>{{ row.name }}</td>
+              <td>{{ row.pc }}</td>
             </tr>
           {% endfor %}
         </tbody>
