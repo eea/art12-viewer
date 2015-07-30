@@ -94,8 +94,8 @@ class BirdFactsheet(MethodView):
         self.set_subpop_lists(bird_obj)
         self.set_ms_birds(bird_obj)
         bird_obj.url = url_for('views.summary',
-                               period=self.period,
                                subject=self.subject,
+                               period=self.period,
                                _external=True)
 
         if self.is_spa_trigger():
@@ -120,9 +120,36 @@ class BirdFactsheet(MethodView):
 
     def get_pdf(self, **kwargs):
         context = self.get_context_data(**kwargs)
+        header_url = url_for('views.factsheet-header',
+                             subject=self.subject,
+                             period=self.period,
+                             _external=True)
+        footer_url = url_for('views.factsheet-footer', _external=True)
         return PdfRenderer(self.template_name, pdf_file=self.subject,
                            height='11.693in', width='8.268in',
-                           context=context)
+                           context=context,
+                           header_url=header_url, footer_url=footer_url)
+
+
+class FactsheetHeader(MethodView):
+    def get_context_data(self, **kwargs):
+        subject = get_arg(kwargs, 'subject')
+        period = get_arg(kwargs, 'period')
+
+        bird = (EtcDataBird.query
+                .filter_by(speciescode=subject, dataset_id=period)
+                .first_or_404())
+
+        return {'period': bird.dataset.name, 'subject': bird.speciesname}
+
+    def get(self):
+        context = self.get_context_data(**request.args)
+        return render_template('factsheet/header.html', **context)
+
+
+class FactsheetFooter(MethodView):
+    def get(self):
+        return render_template('factsheet/footer.html')
 
 
 @factsheet_manager.command
