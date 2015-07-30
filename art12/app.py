@@ -10,6 +10,7 @@ from art12.urls import views
 from art12.wiki import wiki
 from art12.common import common, HOMEPAGE_VIEW_NAME
 from art12.utils import inject_static_file
+from art12.factsheet import factsheet_manager
 from eea_integration.auth.script import user_manager, role_manager
 from eea_integration.layout import layout
 from eea_integration.auth import UserDatastore, Auth
@@ -24,6 +25,8 @@ security_ext = Security(
 
 DEFAULT_CONFIG = {
     'WTF_CSRF_ENABLED': False,
+    'PDF_DESTINATION': '.',
+    'DEFAULT_PERIOD': 1,
 }
 
 
@@ -82,4 +85,5 @@ def create_manager(app):
     manager.add_command('db', db_manager)
     manager.add_command('user', user_manager)
     manager.add_command('role', role_manager)
+    manager.add_command('factsheet', factsheet_manager)
     return manager

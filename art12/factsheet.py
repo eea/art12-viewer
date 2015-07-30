@@ -1,10 +1,14 @@
 from flask import render_template, request, current_app as app, url_for
+from flask.ext.script import Manager
 from flask.views import MethodView
 
 from art12.models import db, EtcBirdsEu, EtcDataBird, Wiki, WikiChange
 from art12.queries import (
     SPECIESNAME_Q, SUBUNIT_Q, ANNEX_Q, PLAN_Q, LISTS_Q, MS_TABLE_Q,
     SPA_TRIGGER_Q, PRESS_THRE_Q, N2K_Q, CONS_MEASURES_Q)
+from art12.pdf import PdfRenderer
+
+factsheet_manager = Manager()
 
 
 def get_arg(kwargs, key, default=None):
@@ -19,6 +23,7 @@ class DummyCls(object):
 
 
 class BirdFactsheet(MethodView):
+    template_name = 'factsheet/species.html'
     property_to_query = {
         'speciesname': SPECIESNAME_Q,
         'subunit': SUBUNIT_Q,
@@ -76,6 +81,9 @@ class BirdFactsheet(MethodView):
         setattr(obj, prop_name, list_obj)
 
     def get_context_data(self, **kwargs):
+        self.period = get_arg(kwargs, 'period', app.config['DEFAULT_PERIOD'])
+        self.subject = get_arg(kwargs, 'subject')
+
         self.engine = db.get_engine(app, 'factsheet')
         self.tool_engine = db.get_engine(app)
 
@@ -103,12 +111,23 @@ class BirdFactsheet(MethodView):
         return {'obj': bird_obj}
 
     def get(self):
-        self.period = get_arg(request.args, 'period',
-                              app.config['FACTSHEET_DEFAULT_PERIOD'])
-        self.subject = get_arg(request.args, 'subject')
+        context = self.get_context_data(**request.args)
 
         if not self.subject:
             return self.list_all()
 
-        context = self.get_context_data()
-        return render_template('factsheet/species.html', **context)
+        return render_template(self.template_name, **context)
+
+    def get_pdf(self, **kwargs):
+        context = self.get_context_data(**kwargs)
+        return PdfRenderer(self.template_name, pdf_file=self.subject,
+                           height='11.693in', width='8.268in',
+                           context=context)
+
+
+@factsheet_manager.command
+def species(subject, period):
+    fs = BirdFactsheet()
+    renderer = fs.get_pdf(subject=subject, period=period)
+    renderer._generate()
+    print("Generated: " + renderer.pdf_path)

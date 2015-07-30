@@ -9,3 +9,9 @@ GOOGLE_ANALYTICS = True
 MAPS_PATH = 'absolute path to the maps directory'
 MAPS_URI = 'server URI for the maps directory'
 MAPS_EXTENSION = '.png'
+
+# Default period to be used in factsheet generation
+DEFAULT_PERIOD = 1
+
+# Folder where factsheet documents are sent
+PDF_DESTINATION = 'pdf'
