@@ -9,7 +9,7 @@ SELECT DISTINCT A.sub_unit
  WHERE (A.speciescode = '{code}');"""
 
 ANNEX_Q = """
-SELECT DISTINCT A.annexI
+SELECT DISTINCT REPLACE(REPLACE(A.annexI, 'N', 'No'), 'Y', 'Yes')
   FROM art12rp1_eu.data_birds_check_list A
  WHERE A.speciescode = '{code}';"""
 
@@ -20,13 +20,13 @@ SELECT DISTINCT REPLACE(A.plan, 'NA', 'No')
 
 LISTS_Q = """
 SELECT
-  COALESCE(A.conclusion_status_level1_record,
+  COALESCE(A.conclusion_status_level1,
            If(A.speciesname_subpopulation IS NULL,
               A.speciesname,
               CONCAT(A.speciesname,' [',A.speciesname_subpopulation,']')
              )
           ) AS first_list,
-  COALESCE(A.conclusion_status_level2_record,
+  COALESCE(A.conclusion_status_level2,
            If(A.speciesname_subpopulation IS NULL,
               A.speciesname,
               CONCAT(A.speciesname,' [',A.speciesname_subpopulation,']')
@@ -39,22 +39,28 @@ MS_TABLE_Q = """
 SELECT
   A.country,
   A.percentage_distribution_grid_area,
-  CONCAT_WS(' ', A.population_minimum_size_bs,
-            '-', A.population_maximum_size_bs,
-            If(A.population_size_unit_bs = 'p',
-               null,
-               A.population_size_unit_bs))
+  IF(A.population_minimum_size_bs IS null
+       AND A.population_maximum_size_bs IS null,
+     null,
+     CONCAT_WS(' ', A.population_minimum_size_bs,
+               '-', A.population_maximum_size_bs,
+               If(A.population_size_unit_bs = 'p',
+                  null,
+                  A.population_size_unit_bs)))
     AS breeding_population_size,
   A.population_trend_bs,
   A.population_trend_long_bs,
   A.range_surface_area_bs,
   A.range_trend_bs,
   A.range_trend_long_bs,
-  CONCAT_WS(' ', A.population_minimum_size_ws,
-            '-', A.population_maximum_size_ws,
-            If(A.population_size_unit_ws = 'i',
-               null,
-               A.population_size_unit_ws))
+  IF(A.population_minimum_size_ws IS null
+       AND A.population_maximum_size_ws IS null,
+     null,
+     CONCAT_WS(' ', A.population_minimum_size_ws,
+               '-', A.population_maximum_size_ws,
+               If(A.population_size_unit_ws = 'i',
+                  null,
+                  A.population_size_unit_ws)))
     AS winter_population_size,
   A.population_trend_ws,
   A.population_trend_long_ws
@@ -152,7 +158,7 @@ SELECT t.country                                AS reg,
        t.population_maximum_size,
        t.population_minimum_size)) * IF(t.population_maximum_size = 0, 1,
        IF(t.population_maximum_size IS NULL, t.population_minimum_size,
-       t.population_maximum_size)), 2), 2))     AS pc
+       t.population_maximum_size)), 2)))     AS pc
 FROM   art12rp1_eu.data_birds AS t
        INNER JOIN art12rp1_eu.data_birds_check_list AS b
                ON ( t.country = b.country )

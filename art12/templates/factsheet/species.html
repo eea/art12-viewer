@@ -3,7 +3,7 @@
 {% block content %}
   {% from 'common/_macros.html' import trend_td, link %}
 
-  <h1 class="cover-title">Species name: <span>{{ obj.speciesname }}</span></h1>
+  <h1 class="cover-title"><span>{{ obj.speciesname }}</span></h1>
   <h2 class="cover-subtitle">{{ obj.subunit }}</h2>
 
   <dl class="cover-summary">
@@ -17,8 +17,7 @@
 
   <section>
     <header>
-      <h2>Assessment of status at the European (EU27) level</h2>
-      <p class="subtitle">(all biogeographical and marine regions – EU27)</p>
+      <h2>Assessment of status at the European level</h2>
     </header>
 
     <table class="complex_datatable">
@@ -69,7 +68,7 @@
 
     <p>When relevant reporting guidelines requests separate reports for
     subspecies and/or subspecific populations. The population status
-    assessments at the EU level were carried out at the species level1. The EU
+    assessments at the EU level were carried out at the species level. The EU
     status assessment covers following subspecies/populations:
     {{ obj.first_list | join(', ') }}. The EU trends were assessed at the
     subspecies level. The EU trends cover following subspecies/populations:
@@ -89,11 +88,11 @@
         <tr>
           <th rowspan="2">MS/Ter.</th>
           <th rowspan="2">% in EU27</th>
-          <th rowspan="2">Breeding population size</th>
+          <th rowspan="2">Breeding population size / p</th>
           <th colspan="2">Breeding population trend</th>
           <th rowspan="2">Range area</th>
           <th colspan="2">Breeding range trend</th>
-          <th rowspan="2">Winter population size</th>
+          <th rowspan="2">Winter population size / i</th>
           <th colspan="2">Winter population trend</th>
         </tr>
         <tr>
@@ -110,13 +109,17 @@
         <tr class="stripe_row">
           <td>{{ row.country }}</td>
           <td>{{ row.percentage_distribution_grid_area or '' }}</td>
-          <td>{{ row.breeding_population_size }}</td>
+          <td>{{ row.breeding_population_size or '' }}</td>
           {{ trend_td(row.population_trend_bs) }}
           {{ trend_td(row.population_trend_long_bs) }}
-          <td>{{ row.range_surface_area_bs or '' }}</td>
+          <td>
+            {% if row.range_surface_area_bs %}
+              {{ row.range_surface_area_bs | int }}
+            {% endif %}
+          </td>
           {{ trend_td(row.range_trend_bs) }}
           {{ trend_td(row.range_trend_long_bs) }}
-          <td>{{ row.winter_population_size }}</td>
+          <td>{{ row.winter_population_size or '' }}</td>
           {{ trend_td(row.population_trend_ws) }}
           {{ trend_td(row.population_trend_long_ws) }}
         </tr>
@@ -138,7 +141,7 @@
         <h2>Main pressures and threats reported by Member States</h2>
       </header>
       <p>For the bird species triggering SPA classification Member States were
-      asked to report the 20 most important threats and pressures using an
+      asked to report the 20 most important pressures and threats using an
       agreed hierarchical list which can be found on the Article 12 Reference
       Portal (
       {{ link("http://bd.eionet.europa.eu/activities/Reporting/Article_12/reference_portal") }}
@@ -153,7 +156,7 @@
 
       <p>
         <strong>
-          Ten most frequently reported ‘highly important’ threats and pressures
+          Ten most frequently reported ‘highly important’ pressures and threats
         </strong>
       </p>
 
@@ -162,7 +165,7 @@
           <tr>
             <th>Code</th>
             <th style="width: 100%; text-align: left">Activity</th>
-            <th>% of frequency</th>
+            <th>Frequency</th>
           </tr>
         </thead>
         <tbody>
@@ -170,7 +173,7 @@
             <tr>
               <td>{{ threat.code }}</td>
               <td>{{ threat.name }}</td>
-              <td>{{ threat.pc }}</td>
+              <td class="cell-number">{{ threat.pc }}</td>
             </tr>
           {% endfor %}
         </tbody>
@@ -206,8 +209,8 @@
             <tr>
               <td class="{{ css_class }}">{{ row.reg }}</td>
               <td class="{{ css_class }}">{{ row.wb }}</td>
-              <td class="{{ css_class }}">{{ row.spa }}</td>
-              <td class="{{ css_class }}">{{ row.pc or '' }}</td>
+              <td class="{{ css_class }} cell-center">{{ row.spa }}</td>
+              <td class="{{ css_class }} cell-number">{{ row.pc }}</td>
             </tr>
           {% endfor %}
         </tbody>
@@ -239,7 +242,7 @@
           <tr>
             <th>Code</th>
             <th style="width: 100%; text-align: left">Measure</th>
-            <th>% of frequency</th>
+            <th>Frequency</th>
           </tr>
         </thead>
         <tbody>
@@ -247,7 +250,7 @@
             <tr>
               <td>{{ row.code }}</td>
               <td>{{ row.name }}</td>
-              <td>{{ row.pc }}</td>
+              <td class="cell-number">{{ row.pc }}</td>
             </tr>
           {% endfor %}
         </tbody>
@@ -266,14 +269,14 @@
   </section>
 
   <section class="page-breaker">
-    <p><sup>i</sup><strong>Assessment of status at the European (EU27)
-        level:</strong> The EU27 population trends were assessed using these
-      categories: ‘+’Increasing, ‘=’ Stable, ‘F’ Fluctuating, ‘-‘ Decreasing,
+    <p><sup>i</sup><strong>Assessment of status at the European level:</strong>
+      The EU27 population trends were assessed using these categories:
+      ‘+’Increasing, ‘0’ Stable, ‘F’ Fluctuating, ‘-‘ Decreasing,
       ‘xu’ Uncertain and ‘x’ Unknown. The breeding population size is estimated
       in majority of the cases as ‘p’ number of pairs. Alternative population
       units used are: ‘males’ number of males, ‘i’ number of individuals,
       ‘cmales’ number of calling males and ‘bfem’ number of breeding females.
-      The breeding population size is estimated as number of individuals.</p>
+      The winter population size is estimated as number of individuals.</p>
 
     <p><sup>ii</sup><strong>Species trends at the Member State level:</strong>
       The percentage of the EU27 species population occurring in

@@ -3,9 +3,8 @@
 /* Generic */
 body {
   font-family: sans-serif;
-  line-height: 1.4;
-  font-size: 11pt;
-  line-height: 13pt;
+  font-size: 9pt;
+  line-height: 11pt;
   padding: 0;
 }
 h1, h2, h3 {
@@ -68,8 +67,8 @@ table tr {
 
 /* Section header */
 header {
-  margin-top: 24pt;
-  margin-bottom: 12pt;
+  margin-top: 20pt;
+  margin-bottom: 10pt;
   page-break-inside: avoid;
 }
 header h2,
@@ -111,8 +110,8 @@ header .subtitle {
 /* COMPLEX DATATABLE */
 .complex_datatable {
   border-collapse: collapse;
-  font-size: 9pt;
-  line-height: 1.4;
+  font-size: 7pt;
+  line-height: 1.2;
   margin: 1em 0;
   letter-spacing: -.04em;
 }
@@ -236,6 +235,9 @@ header .subtitle {
 .cell-number {
   text-align: right;
 }
+.cell-center {
+  text-align: center;
+}
 
 /* logo */
 .logo {
@@ -253,10 +255,8 @@ header .subtitle {
 /* cover title */
 .cover-title {
   line-height: 1.2;
-  padding-bottom: .3em;
   padding-top: 40pt;
-  margin-bottom: 12pt;
-  border-bottom: 2pt solid #005e9c;
+  margin-bottom: 0;
 }
 .cover-title small {
   display: block;
@@ -267,6 +267,12 @@ header .subtitle {
   font-weight: bold;
   font-style: italic;
 }
+.cover-subtitle {
+  padding-bottom: .6em;
+  padding-top: .4em;
+  margin-top: 0;
+  border-bottom: 2pt solid #005e9c;
+}
 
 /* cover summary */
 .cover-summary {
@@ -276,7 +282,7 @@ header .subtitle {
   float: left;
   clear: left;
   text-align: left;
-  width: 8em;
+  width: 14em;
   font-weight: bold;
 }
 .cover-summary dd {

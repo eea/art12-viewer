@@ -97,6 +97,7 @@ class BirdFactsheet(MethodView):
                                subject=self.subject,
                                period=self.period,
                                _external=True)
+        bird_obj.code = self.subject
 
         if self.is_spa_trigger():
             bird_obj.is_spa_trigger = True
