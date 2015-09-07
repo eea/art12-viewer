@@ -1,12 +1,12 @@
 import json
 
-from flask import request, current_app
+from flask import request, url_for
 from flask.views import View
 from sqlalchemy.sql.expression import bindparam
 
 from art12.common import (
     TemplateView, generate_map_url, generate_eu_map_breeding_url,
-    generate_eu_map_winter_url, check_map_exists
+    generate_eu_map_winter_url, get_map_path,
 )
 from art12.definitions import EU_COUNTRY
 from art12.forms import (
@@ -206,14 +206,6 @@ class EuMap(TemplateView):
     def get_context_data(self, **kwargs):
         speciescode = request.args['speciescode']
         suffix = request.args['suffix']
-
-        if (check_map_exists(speciescode, suffix)):
-            map_uri = "{}{}{}{}".format(
-                current_app.config['MAPS_URI'],
-                speciescode,
-                suffix,
-                current_app.config['MAPS_EXTENSION']
-            )
-            return {'map_uri': map_uri}
-
-        return {}
+        map_path = get_map_path(speciescode, suffix)
+        map_url = url_for('static', filename=map_path)
+        return {'map_url': map_url}

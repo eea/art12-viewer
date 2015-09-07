@@ -1,8 +1,7 @@
-import os.path
+from path import path
 from urlparse import urlparse
-from flask import (
-    Blueprint, url_for, render_template, redirect, request, flash, current_app
-)
+from flask import Blueprint, url_for, render_template, redirect, request, flash
+from flask import current_app as app
 from flask.views import MethodView
 from art12.definitions import (
     TREND_OPTIONS, EU_COUNTRY, TREND_CLASSES, TREND_OPTIONS_EU,
@@ -192,7 +191,7 @@ def generate_eu_map_breeding_url(subject, sensitive=False):
         eu_map_breeding_href = config.eu_species_map_breeding_url
 
     if not eu_map_breeding_href:
-        return url_for('views.eu_map', speciescode=subject, suffix='_breeding')
+        return url_for('views.eu_map', speciescode=subject, suffix='breeding')
 
     return eu_map_breeding_href + '&CCode=' + subject
 
@@ -206,7 +205,7 @@ def generate_eu_map_winter_url(subject, sensitive=False):
         eu_map_winter_href = config.eu_species_map_winter_url
 
     if not eu_map_winter_href:
-        return url_for('views.eu_map', speciescode=subject, suffix='_winter')
+        return url_for('views.eu_map', speciescode=subject, suffix='winter')
 
     return eu_map_winter_href + '&CCode=' + subject
 
@@ -283,8 +282,12 @@ def change_details():
     })
 
 
-def check_map_exists(speciescode, suffix):
-    map_fname = "{}{}{}{}".format(current_app.config['MAPS_PATH'],
-                                  speciescode, suffix,
-                                  current_app.config['MAPS_EXTENSION'])
-    return os.path.isfile(map_fname)
+@common.app_template_global('get_maps_url')
+def get_map_path(code, suffix):
+    maps_format = app.config['MAPS_FORMAT']
+    filename = maps_format.format(code=code, suffix=suffix)
+    maps_path = path(app.static_folder) / app.config['MAPS_STATIC'] / filename
+    if maps_path.exists():
+        return path(app.config['MAPS_STATIC']) / filename
+    else:
+        return path('img') / app.config['DEFAULT_MAP']

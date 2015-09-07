@@ -6,12 +6,15 @@ SECRET_KEY = 'secret is secret'
 
 GOOGLE_ANALYTICS = True
 
-MAPS_PATH = 'absolute path to the maps directory'
-MAPS_URI = 'server URI for the maps directory'
-MAPS_EXTENSION = '.png'
-
 # Default period to be used in factsheet generation
 DEFAULT_PERIOD = 1
 
 # Folder where factsheet documents are sent
 PDF_DESTINATION = 'pdf'
+
+# Static path location of the maps
+MAPS_STATIC = 'maps'
+# Maps filename format
+MAPS_FORMAT = '{code}_{suffix}.png'
+# Default image to be used when no map is available
+DEFAULT_MAP = 'blank_map.png'
