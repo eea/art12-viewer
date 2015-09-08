@@ -289,15 +289,18 @@ header .subtitle {
   margin-left: 9em;
 }
 .page-breaker {
-    display: block;
-    clear: both;
-    page-break-before: always;
+  display: block;
+  clear: both;
+  page-break-before: always;
 }
 
 /* misc */
 .important-cell {
-    background-color: #eee;
+  background-color: #eee;
 }
 .bold-text {
   font-weight: bold;
+}
+img {
+  width: 12.0175cm;
 }

@@ -282,7 +282,7 @@ def change_details():
     })
 
 
-@common.app_template_global('get_maps_url')
+@common.app_template_global('get_map_path')
 def get_map_path(code, suffix):
     maps_format = app.config['MAPS_FORMAT']
     filename = maps_format.format(code=code, suffix=suffix)

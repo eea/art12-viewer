@@ -3,18 +3,20 @@
 {% block content %}
   {% from 'common/_macros.html' import trend_td, link %}
 
-  <h1 class="cover-title"><span>{{ obj.speciesname }}</span></h1>
-  <h2 class="cover-subtitle">{{ obj.subunit }}</h2>
+  <section>
+    <h1 class="cover-title"><span>{{ obj.speciesname }}</span></h1>
+    <h2 class="cover-subtitle">{{ obj.subunit }}</h2>
 
-  <dl class="cover-summary">
-    <dt>Annex I</dt>
-    <dd>{{ obj.annex }}</dd>
-    <dt>International action plan</dt>
-    <dd>{{ obj.plan }}</dd>
-  </dl>
+    <dl class="cover-summary">
+      <dt>Annex I</dt>
+      <dd>{{ obj.annex }}</dd>
+      <dt>International action plan</dt>
+      <dd>{{ obj.plan }}</dd>
+    </dl>
+    {{ obj.wiki | safe }}
+  </section>
 
-  {{ obj.wiki | safe }}
-
+  <div class="page-breaker"></div>
   <section>
     <header>
       <h2>Assessment of status at the European level</h2>
@@ -78,6 +80,7 @@
 
   </section>
 
+  <div class="page-breaker"></div>
   <section>
     <header>
       <h2>Species trends at the Member State level</h2>
@@ -129,12 +132,19 @@
 
     <p>See the endnotes for more information<sup>ii</sup></p>
 
-    <i>&lt;Picture 5&gt;</i>
+    <div class="page-breaker"></div>
+    {% set breeding_map = get_map_path(code=obj.code, suffix='breeding') %}
+    <img src="{{ url_for('static', filename=breeding_map, _external=True) }}">
+
     <br>
-    <i>&lt;Picture 6&gt;</i>
+
+    <div class="page-breaker"></div>
+    {% set winter_map = get_map_path(code=obj.code, suffix='winter') %}
+    <img src="{{ url_for('static', filename=winter_map, _external=True) }}">
 
   </section>
 
+  <div class="page-breaker"></div>
   {% if obj.is_spa_trigger %}
     <section>
       <header>
