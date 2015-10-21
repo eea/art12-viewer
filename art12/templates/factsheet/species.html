@@ -14,6 +14,17 @@
       <dd>{{ obj.plan }}</dd>
     </dl>
     {{ obj.wiki | safe }}
+
+    {% if obj.conclusion_status_level1_record or obj.conclusion_status_level2_record %}
+      <p class="bold-text">
+        This factsheet was produced for <i>{{ obj.speciesname }}</i>
+        {% if obj.subunit %}[{{ obj.subunit }}] population{% endif %}.
+        Also other subspecies/populations of the same species occur within the
+        EU27. The assessment of status at the European level and the
+        introductory text were done at the species level in line with the
+        criteria for assessment of the EU population status.
+      </p>
+    {% endif %}
   </section>
 
   <div class="page-breaker"></div>
@@ -51,7 +62,7 @@
           </td>
           {{ trend_td(row.br_population_trend) }}
           {{ trend_td(row.br_population_trend_long) }}
-          <td>{{ row.br_range_surface_area or '' }}</td>
+          <td>{{ row.br_range_surface_area_downrounded or '' }}</td>
           {{ trend_td(row.br_range_trend) }}
           {{ trend_td(row.br_range_trend_long) }}
           <td>
@@ -68,13 +79,21 @@
 
     <p>See the endnotes for more information<sup>i</sup></p>
 
-    <p>When relevant reporting guidelines requests separate reports for
-    subspecies and/or subspecific populations. The population status
-    assessments at the EU level were carried out at the species level. The EU
-    status assessment covers following subspecies/populations:
-    {{ obj.first_list | join(', ') }}. The EU trends were assessed at the
-    subspecies level. The EU trends cover following subspecies/populations:
-    {{ obj.second_list | join(', ') }}.</p>
+    {% if obj.conclusion_status_level1_record %}
+      <p>The population status assessment at the EU level was carried out at
+      the species level. The EU status assessment covers following
+      subspecies/populations:
+      {{ obj.conclusion_status_level1 | format_subpopulation }} (each of them
+      presented in a separate factsheet).</p>
+    {% endif %}
+
+    {% if obj.conclusion_status_level2_record %}
+      <p>The EU trends were assessed at the species or subspecies level
+      following BirdLife International's current taxonomy. The EU trends
+      assessment cover more former subspecies or populations:
+      {{ obj.conclusion_status_level2 | format_subpopulation }}
+      (each of them presented in a separate factsheet).</p>
+    {% endif %}
 
     <i>&lt;Picture 1&gt;</i>
 
@@ -83,7 +102,7 @@
   <div class="page-breaker"></div>
   <section>
     <header>
-      <h2>Species trends at the Member State level</h2>
+      <h2>Trends at the Member State level</h2>
     </header>
 
     <table class="complex_datatable">
@@ -116,7 +135,7 @@
           {{ trend_td(row.population_trend_bs) }}
           {{ trend_td(row.population_trend_long_bs) }}
           <td>
-            {% if row.range_surface_area_bs %}
+            {% if row.range_surface_area_bs is not none %}
               {{ row.range_surface_area_bs | int }}
             {% endif %}
           </td>
@@ -134,13 +153,23 @@
 
     <div class="page-breaker"></div>
     {% set breeding_map = get_map_path(code=obj.code, suffix='breeding') %}
-    <img src="{{ url_for('static', filename=breeding_map, _external=True) }}">
+    {% if breeding_map %}
+      <img src="{{ url_for('static', filename=breeding_map, _external=True) }}">
+    {% else %}
+      <p>Short-term breeding population trend was not reported for this
+      species.</p>
+    {% endif %}
 
     <br>
 
     <div class="page-breaker"></div>
     {% set winter_map = get_map_path(code=obj.code, suffix='winter') %}
-    <img src="{{ url_for('static', filename=winter_map, _external=True) }}">
+    {% if winter_map %}
+      <img src="{{ url_for('static', filename=winter_map, _external=True) }}">
+    {% else %}
+      <p>Short-term winter population trend was not reported for this
+      species.</p>
+    {% endif %}
 
   </section>
 
@@ -157,7 +186,7 @@
       {{ link("http://bd.eionet.europa.eu/activities/Reporting/Article_12/reference_portal") }}
       ). Pressures are activities which are currently having an impact on
       the species and threats are activities expected to have an impact in the
-      near future. The table below only contains information form Member
+      near future. The table below only contains information from Member
       States, where a species triggers SPA classification.
       Pressures and threats were ranked in three classes ‘high, medium and low
       importance’, the table  below only shows pressures and threats classed as
@@ -215,12 +244,11 @@
         </thead>
         <tbody>
           {% for row in obj.n2k %}
-            {% set css_class = 'bold-text' if row.spa == 'YES' else '' %}
             <tr>
-              <td class="{{ css_class }}">{{ row.reg }}</td>
-              <td class="{{ css_class }}">{{ row.wb }}</td>
-              <td class="{{ css_class }} cell-center">{{ row.spa }}</td>
-              <td class="{{ css_class }} cell-number">{{ row.pc }}</td>
+              <td>{{ row.reg }}</td>
+              <td>{{ row.wb }}</td>
+              <td class="cell-center">{{ row.spa }}</td>
+              <td class="cell-number">{{ row.pc }}</td>
             </tr>
           {% endfor %}
         </tbody>
@@ -237,8 +265,8 @@
       asked to report up to 20 conservation measures being implemented for this
       species using an agreed list which can be found on the Article 12
       Reference Portal. Member States were further requested to highlight up to
-      five most important (‘highly important’) measures; the tables below only
-      show measures classed as ‘high’, for many species there were less than
+      five most important (‘highly important’) measures; the table below only
+      shows measures classed as ‘high’, for many species there were less than
       ten measures reported as highly important.</p>
 
       <p>
@@ -279,14 +307,22 @@
   </section>
 
   <section class="page-breaker">
-    <p><sup>i</sup><strong>Assessment of status at the European level:</strong>
+    <p>
+      <p>
+        <sup>i</sup>
+        <strong>Assessment of status at the European level:</strong>
+        The EU assessments of birds population status was made by the European
+        Red List of Birds Consortium (under contract with the European
+        Commission)
+      </p>
       The EU27 population trends were assessed using these categories:
       ‘+’Increasing, ‘0’ Stable, ‘F’ Fluctuating, ‘-‘ Decreasing,
       ‘xu’ Uncertain and ‘x’ Unknown. The breeding population size is estimated
       in majority of the cases as ‘p’ number of pairs. Alternative population
       units used are: ‘males’ number of males, ‘i’ number of individuals,
       ‘cmales’ number of calling males and ‘bfem’ number of breeding females.
-      The winter population size is estimated as number of individuals.</p>
+      The winter population size is estimated as number of individuals.
+    </p>
 
     <p><sup>ii</sup><strong>Species trends at the Member State level:</strong>
       The percentage of the EU27 species population occurring in
@@ -302,7 +338,7 @@
         and highlighted with an asterisk (*). The value ‘x’ indicates that the
         Member State has not reported the species population and/or the
         coverage by Natura 2000. No information is available for Greece and for
-        non-Annex I species in the Czech republic.</p>
+        non-Annex I species in the Czech Republic.</p>
     {% endif %}
   </section>
 

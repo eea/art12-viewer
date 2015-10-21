@@ -40,8 +40,10 @@
   <body onload="subst()">
     <div class="header">
       <div class="title">
-        <strong>Species: <i>{{ subject|safe }}</i></strong>
-        &nbsp;[{{ subunit }}]
+        <strong><i>{{ subject|safe }}</i></strong>
+        {% if subunit %}
+          &nbsp;[{{ subunit }}]
+        {% endif %}
       </div>
       <div class="subtitle">Report under the Article 12 of the Birds Directive</div>
     </div>

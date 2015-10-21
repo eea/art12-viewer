@@ -1,14 +1,28 @@
+from flask import Blueprint
 from flask import render_template, request, current_app as app, url_for
 from flask.ext.script import Manager
 from flask.views import MethodView
+import jinja2
 
 from art12.models import db, EtcBirdsEu, EtcDataBird, Wiki, WikiChange
 from art12.queries import (
-    SPECIESNAME_Q, SUBUNIT_Q, ANNEX_Q, PLAN_Q, LISTS_Q, MS_TABLE_Q,
+    SPECIESNAME_Q, SUBUNIT_Q, ANNEX_Q, PLAN_Q, MS_TABLE_Q,
     SPA_TRIGGER_Q, PRESS_THRE_Q, N2K_Q, CONS_MEASURES_Q)
 from art12.pdf import PdfRenderer
 
 factsheet_manager = Manager()
+factsheet = Blueprint('factsheet', __name__)
+
+
+@factsheet.app_template_filter('format_subpopulation')
+def format_subpopulation(subpopulation):
+    subpopulation = '<i>{}</i>'.format(subpopulation)
+    return jinja2.Markup(
+        subpopulation
+        .replace('[', '</i>[')
+        .replace(']', ']<i>')
+        .replace('all others', '</i>all others<i>')
+    )
 
 
 def get_arg(kwargs, key, default=None):
@@ -54,20 +68,22 @@ class BirdFactsheet(MethodView):
             dataset_id=self.period,
         )
 
+    def set_conclusion_status_levels(self, obj):
+        def get_bird_values(attr):
+            return [getattr(b, attr) for b in obj.etc_birds if getattr(b, attr)]
+
+        for attr in ['conclusion_status_level1_record',
+                     'conclusion_status_level2_record']:
+            setattr(obj, attr, any(get_bird_values(attr)))
+
+        for attr in ['conclusion_status_level1',
+                     'conclusion_status_level2']:
+            setattr(obj, attr, ', '.join(get_bird_values(attr)))
+
     def set_ms_birds(self, obj):
         query = MS_TABLE_Q.format(subject=self.subject, period=self.period)
         result = self.tool_engine.execute(query)
         obj.ms_birds = [DummyCls(**dict(row.items())) for row in result]
-
-    def set_subpop_lists(self, obj):
-        query = LISTS_Q.format(subject=self.subject, period=self.period)
-        result = self.tool_engine.execute(query)
-        d = {}
-        for row in result:
-            for k, v in row.items():
-                d.setdefault(k, []).append(v)
-        for key, val in d.iteritems():
-            setattr(obj, key, val)
 
     def is_spa_trigger(self):
         query = SPA_TRIGGER_Q.format(subject=self.subject)
@@ -91,7 +107,7 @@ class BirdFactsheet(MethodView):
         self.set_properties(bird_obj)
         self.set_wiki(bird_obj)
         self.set_etc_birds(bird_obj)
-        self.set_subpop_lists(bird_obj)
+        self.set_conclusion_status_levels(bird_obj)
         self.set_ms_birds(bird_obj)
         bird_obj.url = url_for('views.summary',
                                subject=self.subject,
@@ -121,11 +137,11 @@ class BirdFactsheet(MethodView):
 
     def get_pdf(self, **kwargs):
         context = self.get_context_data(**kwargs)
-        header_url = url_for('views.factsheet-header',
+        header_url = url_for('factsheet.header',
                              subject=self.subject,
                              period=self.period,
                              _external=True)
-        footer_url = url_for('views.factsheet-footer', _external=True)
+        footer_url = url_for('factsheet.footer', _external=True)
         return PdfRenderer(self.template_name, pdf_file=self.subject,
                            height='11.693in', width='8.268in',
                            context=context,

@@ -289,5 +289,3 @@ def get_map_path(code, suffix):
     maps_path = path(app.static_folder) / app.config['MAPS_STATIC'] / filename
     if maps_path.exists():
         return path(app.config['MAPS_STATIC']) / filename
-    else:
-        return path('img') / app.config['DEFAULT_MAP']
