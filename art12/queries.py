@@ -78,7 +78,7 @@ FROM (SELECT rs1.level2_code                        AS code,
                                      AND a.speciescode = b.speciescode
                                      AND a.season = b.season ))
                   LEFT JOIN (SELECT DISTINCT q_lu_threats.*,
-                                             t_lu_threats.name AS level2_name
+                                             t_lu_threats.name_corrected AS level2_name
                              FROM (SELECT t.code,
                                           Substring_index(t.code, '.', 1) AS level2_code
                                    FROM   art12rp1_eu.lu_threats t) q_lu_threats
@@ -131,17 +131,17 @@ SELECT t.country                                AS reg,
              OR ( t.population_size_unit <> t.spa_population_unit ) )
           AND ( NOT t.population_size_unit IS NULL
                  OR NOT t.spa_population_unit IS NULL ), 'x', Round(
-       100 * Pow(IF(t.spa_population_min = 0, 1,
+       100 * SQRT(IF(t.spa_population_min = 0, 1,
                  IF(t.spa_population_min IS NULL,
        t.spa_population_max, t.spa_population_min)) *
        IF(t.spa_population_max = 0, 1, IF(t.spa_population_max IS NULL,
-       t.spa_population_min, t.spa_population_max)), 2) /
-       Pow(IF(t.population_minimum_size = 0, 1,
+       t.spa_population_min, t.spa_population_max))) /
+       SQRT(IF(t.population_minimum_size = 0, 1,
        IF(t.population_minimum_size IS NULL,
        t.population_maximum_size,
        t.population_minimum_size)) * IF(t.population_maximum_size = 0, 1,
        IF(t.population_maximum_size IS NULL, t.population_minimum_size,
-       t.population_maximum_size)), 2)))     AS pc
+       t.population_maximum_size))), 2))     AS pc
 FROM   art12rp1_eu.data_birds AS t
        INNER JOIN art12rp1_eu.data_birds_check_list AS b
                ON ( t.country = b.country )
