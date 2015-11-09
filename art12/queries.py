@@ -27,9 +27,7 @@ SELECT
      null,
      CONCAT_WS(' ', A.population_minimum_size_bs,
                '-', A.population_maximum_size_bs,
-               If(A.population_size_unit_bs = 'p',
-                  null,
-                  A.population_size_unit_bs)))
+               A.population_size_unit_bs))
     AS breeding_population_size,
   A.population_trend_bs,
   A.population_trend_long_bs,
@@ -41,9 +39,7 @@ SELECT
      null,
      CONCAT_WS(' ', A.population_minimum_size_ws,
                '-', A.population_maximum_size_ws,
-               If(A.population_size_unit_ws = 'i',
-                  null,
-                  A.population_size_unit_ws)))
+               A.population_size_unit_ws))
     AS winter_population_size,
   A.population_trend_ws,
   A.population_trend_long_ws

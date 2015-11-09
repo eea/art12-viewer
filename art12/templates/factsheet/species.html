@@ -90,7 +90,7 @@
     {% if obj.conclusion_status_level2_record %}
       <p>The EU trends were assessed at the species or subspecies level
       following BirdLife International's current taxonomy. The EU trends
-      assessment cover more former subspecies or populations:
+      assessment covers more former subspecies or populations:
       {{ obj.conclusion_status_level2 | format_subpopulation }}
       (each of them presented in a separate factsheet).</p>
     {% endif %}
@@ -150,7 +150,13 @@
   </section>
   {% endif %}
 
-  <i>&lt;Picture 1&gt;</i>
+  {% set distribution_map = get_map_path(code=obj.code, suffix='distribution') %}
+  {% if distribution_map %}
+    <img src="{{ url_for('static', filename=distribution_map, _external=True) }}">
+    <div class="page-breaker"></div>
+  {% else %}
+    <p class="warning">Distribution map not available.</p>
+  {% endif %}
 
   <section>
     <header>
@@ -162,11 +168,11 @@
         <tr>
           <th rowspan="2">MS/Ter.</th>
           <th rowspan="2">% in EU27</th>
-          <th rowspan="2">Breeding population size / p</th>
+          <th rowspan="2">Breeding population size</th>
           <th colspan="2">Breeding population trend</th>
           <th rowspan="2">Range area</th>
           <th colspan="2">Breeding range trend</th>
-          <th rowspan="2">Winter population size / i</th>
+          <th rowspan="2">Winter population size</th>
           <th colspan="2">Winter population trend</th>
         </tr>
         <tr>
@@ -183,7 +189,8 @@
         <tr class="stripe_row">
           <td>{{ row.country }}</td>
           <td>{{ row.percentage_distribution_grid_area or '' }}</td>
-          <td>{{ row.breeding_population_size or '' }}</td>
+          <td>{{ row.breeding_population_size or '' }}
+              {{ row.breeding_population_size_unit }}</td>
           {{ trend_td(row.population_trend_bs) }}
           {{ trend_td(row.population_trend_long_bs) }}
           <td>
@@ -203,30 +210,29 @@
 
     <p>See the endnotes for more information<sup>ii</sup></p>
 
-    <div class="page-breaker"></div>
     {% set breeding_map = get_map_path(code=obj.code, suffix='breeding') %}
     {% if breeding_map %}
       <img src="{{ url_for('static', filename=breeding_map, _external=True) }}">
+      <div class="page-breaker"></div>
     {% else %}
-      <p>Short-term breeding population trend was not reported for this
-      species.</p>
+      <p class="warning">Short-term breeding population trend was not reported
+      for this species.</p>
     {% endif %}
 
     <br>
 
-    <div class="page-breaker"></div>
     {% set winter_map = get_map_path(code=obj.code, suffix='winter') %}
     {% if winter_map %}
       <img src="{{ url_for('static', filename=winter_map, _external=True) }}">
+      <div class="page-breaker"></div>
     {% else %}
-      <p>Short-term winter population trend was not reported for this
-      species.</p>
+      <p class="warning">Short-term winter population trend was not reported
+      for this species.</p>
     {% endif %}
 
   </section>
 
   {% if obj.is_spa_trigger %}
-  <div class="page-breaker"></div>
     <section>
       <header>
         <h2>Main pressures and threats reported by Member States</h2>
@@ -251,6 +257,7 @@
         </strong>
       </p>
 
+      {% if obj.threats %}
       <table class='table-simple'>
         <thead>
           <tr>
@@ -269,6 +276,10 @@
           {% endfor %}
         </tbody>
       </table>
+      {% else %}
+        <p class="warning">No ‘highly important’ pressures or threats were
+        reported.</p>
+      {% endif %}
     </section>
 
     <section>
@@ -285,6 +296,7 @@
         <strong>Percentage of coverage by Natura 2000 sites</strong>
       </p>
 
+      {% if obj.n2k %}
       <table class='table-simple'>
         <thead>
           <tr>
@@ -300,11 +312,16 @@
               <td>{{ row.reg }}</td>
               <td>{{ row.wb }}</td>
               <td class="cell-center">{{ row.spa }}</td>
-              <td class="cell-number">{{ row.pc }}</td>
+              <td class="cell-number">
+                {{ (row.pc or '' |string).rstrip('0').rstrip('.') }}
+              </td>
             </tr>
           {% endfor %}
         </tbody>
       </table>
+      {% else %}
+        <p class="warning">No data available.</p>
+      {% endif %}
 
       <p>See the endnotes for more information<sup>iii</sup></p>
     </section>
@@ -327,6 +344,7 @@
         </strong>
       </p>
 
+      {% if obj.cons_measures %}
       <table class='table-simple'>
         <thead>
           <tr>
@@ -345,6 +363,10 @@
           {% endfor %}
         </tbody>
       </table>
+      {% else %}
+        <p class="warning">No ‘highly important’ measures were reported.</p>
+      {% endif %}
+
     </section>
   {% endif %}
 
@@ -368,7 +390,7 @@
         Commission)
       </p>
       The EU27 population trends were assessed using these categories:
-      ‘+’Increasing, ‘0’ Stable, ‘F’ Fluctuating, ‘-‘ Decreasing,
+      ‘+’ Increasing, ‘0’ Stable, ‘F’ Fluctuating, ‘-’ Decreasing,
       ‘xu’ Uncertain and ‘x’ Unknown. The breeding population size is estimated
       in majority of the cases as ‘p’ number of pairs. Alternative population
       units used are: ‘males’ number of males, ‘i’ number of individuals,
