@@ -303,6 +303,9 @@ header .subtitle {
 }
 img {
   width: 12.0175cm;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 .warning {
   font-size: 11pt;
