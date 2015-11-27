@@ -245,8 +245,8 @@ class LuDataBird(Base):
 class LuRestrictedDataBird(Base):
     __tablename__ = 'lu_restricted_birds'
 
-    speciescode = Column(String(10), nullable=False)
-    country = Column(String(8), nullable=False)
+    speciescode = Column(String(10), nullable=False, primary_key=True)
+    country = Column(String(8), nullable=False, primary_key=True)
     show_data = Column(SmallInteger(), nullable=False)
     dataset_id = Column('ext_dataset_id', ForeignKey('datasets.id'),
                         primary_key=True, nullable=False,
