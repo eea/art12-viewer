@@ -57,8 +57,8 @@
         {% include 'common/species_table_eu_header.html' with context %}
         <tbody>
         {% for row in eu_objects %}
-          <tr class="stripe_row">
-            <td>{{ EU_COUNTRY }}</td>
+          <tr class="stripe_row {% if row.additional_record %}italic_row{% endif %}">
+            <td {% if row.additional_record %}title="Additional assessment at the subspecies level for subspecies listed in the Annexes of the Birds Directive"{% endif %}>{{ EU_COUNTRY }}</td>
             {% include 'summary/eu/population_bs.html' with context %}
             {% include 'summary/eu/range.html' with context %}
             {% include 'summary/eu/population_ws.html' with context %}
@@ -71,6 +71,10 @@
         The hash sign (#) under Subspecies/subspecific units-Trends or Status
         means that the EU population trends or EU status were not assessed at
         the same level as the current selection (species and subspecific unit).
+      </p>
+      <p>
+        In italics additional assessment at the subspecies level for
+        subspecies listed in the Annexes of the Birds Directive.
       </p>
     {% else %}
       <p><b>Please select a species.</b></p>

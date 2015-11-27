@@ -224,6 +224,7 @@ class EtcBirdsEu(Base):
     decision = Column(String(3))
     user_decision = Column(String(50))
     last_update_decision = Column(String(50))
+    additional_record = Column('addtionnal_record', Integer)
     dataset_id = Column('ext_dataset_id', ForeignKey('datasets.id'),
                         primary_key=True, nullable=False,
                         server_default=text("'0'"))

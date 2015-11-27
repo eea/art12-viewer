@@ -114,3 +114,7 @@ body #workarea {
 th.gray-cell {
     color: #666 !important;
 }
+
+.italic_row td {
+    font-style: italic;
+}
