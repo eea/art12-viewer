@@ -2,6 +2,8 @@ import json
 
 from flask import request, current_app
 from flask.views import View
+from sqlalchemy.orm import joinedload
+
 from art12.common import (
     TemplateView, generate_map_url, generate_eu_map_breeding_url,
     generate_eu_map_winter_url, check_map_exists
@@ -11,7 +13,7 @@ from art12.forms import (
     SummaryFilterForm, ProgressFilterForm, ReportsFilterForm,
 )
 from art12.mixins import SpeciesMixin
-from art12.models import Dataset, LuRestrictedDataBird
+from art12.models import Dataset, LuRestrictedDataBird, LuDataBird, db
 from eea_integration.auth.security import current_user
 
 
@@ -143,10 +145,18 @@ class Progress(SpeciesMixin, TemplateView):
             conclusions_data.setdefault(c[0], [])
             conclusions_data[c[0]].append((c[1], c[2] if c[2] != None else ''))
 
+        species = (
+            db.session.query(LuDataBird)
+            .options(joinedload('eu_objects'))
+            .filter_by(dataset=dataset)
+            .order_by(LuDataBird.speciesname)
+            .all()
+        )
+
         return {
             'filter_form': filter_form,
             'conclusions': conclusions_data,
-            'species': self.get_subjects(dataset),
+            'species': species,
             'current_selection': filter_form.get_selection(),
             'dataset': dataset,
             'label_type': label_type,
@@ -204,4 +214,3 @@ class EuMap(TemplateView):
             return {'map_uri': map_uri}
 
         return {}
-

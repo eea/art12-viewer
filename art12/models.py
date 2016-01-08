@@ -229,6 +229,13 @@ class EtcBirdsEu(Base):
                         primary_key=True, nullable=False,
                         server_default=text("'0'"))
     dataset = relationship(Dataset)
+    lu_bird = relationship(
+        u'LuDataBird',
+        primaryjoin="and_(EtcBirdsEu.speciescode==LuDataBird.speciescode,"
+                    "EtcBirdsEu.dataset_id==LuDataBird.dataset_id)",
+        foreign_keys=[speciescode, dataset_id],
+        backref='eu_objects',
+    )
 
 
 class LuDataBird(Base):
@@ -241,6 +248,9 @@ class LuDataBird(Base):
                         primary_key=True, nullable=False,
                         server_default=text("'0'"))
     dataset = relationship(Dataset)
+
+    def has_additional_record(self):
+        return any([obj.additional_record for obj in self.eu_objects])
 
 
 class LuRestrictedDataBird(Base):

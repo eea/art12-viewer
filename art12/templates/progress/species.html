@@ -1,55 +1,54 @@
 {% extends 'layout.html' %}
 
 {% block breadcrumbs %}
-	{% from 'common/_macros.html' import breadcrumbs %}
-	{{ breadcrumbs(APP_BREADCRUMBS + [
-      ('Species progress', None),
-    ]) }}
+  {% from 'common/_macros.html' import breadcrumbs %}
+    {{ breadcrumbs(APP_BREADCRUMBS + [('Species progress', None), ]) }}
 {% endblock %}
 
 
 {% block content %}
-	<div tabindex="1">
-		<h1>EU population status and trends</h1>
+  <div tabindex="1">
+    <h1>EU population status and trends</h1>
 
-		<p>
-			Choose a period and an assessment type.
-		</p>
+    <p>
+      Choose a period and an assessment type.
+    </p>
 
-		{% include 'progress/filters.html' %}
+    {% include 'progress/filters.html' %}
 
-		{% if current_selection %}
+    {% if current_selection %}
       {% set page_type='progress' %}
-			{% include 'common/legend.html' with context %}
-			<table class="complex_datatable">
-				<caption>
-					<b>Current selection</b>:
-					{{ current_selection|join(', ') }}.
-				</caption>
+      {% include 'common/legend.html' with context %}
+      <table class="complex_datatable">
+        <caption>
+          <b>Current selection</b>:
+          {{ current_selection|join(', ') }}.
+        </caption>
 
-				<tbody class="thead">
-				<tr>
-					<th>Species</th>
-					<th>Assessment</th>
-				</tr>
-				</tbody>
+        <tbody class="thead">
+        <tr>
+          <th>Species</th>
+          <th>Assessment</th>
+        </tr>
+        </tbody>
 
-				<tbody>
-				{% for code, name in species %}
-          {% if code not in conclusions.keys() %}
-            <tr class="stripe_row">
+        <tbody>
+        {% for row in species %}
+          {% set add_rec = row.has_additional_record() %}
+          {% if row.speciescode not in conclusions.keys() %}
+            <tr class="stripe_row {% if add_rec %}italic_row{% endif %}">
               <td class="th">
-                {% set summary_url = url_for('views.summary', period=dataset.id, subject=code) %}
-                <a href="{{ summary_url }}">{{ name }}</a>
+                {% set summary_url = url_for('views.summary', period=dataset.id, subject=row.speciescode) %}
+                <a href="{{ summary_url }}">{{ row.speciesname }}</a>
               </td>
               <td class="th"></td>
             </tr>
           {% endif %}
-          {% for conclusion, title in conclusions.get(code, '') %}
-            <tr class="stripe_row">
+          {% for conclusion, title in conclusions.get(row.speciescode, '') %}
+            <tr class="stripe_row {% if add_rec %}italic_row{% endif %}">
               <td class="th">
-                {% set summary_url = url_for('views.summary', period=dataset.id, subject=code) %}
-                <a href="{{ summary_url }}">{{ name }}</a>
+                {% set summary_url = url_for('views.summary', period=dataset.id, subject=row.speciescode) %}
+                <a href="{{ summary_url }}">{{ row.speciesname }}</a>
               </td>
               {% if label_type == 'status' %}
               <td class="center border_left status-{{ STATUS_CLASSES.get(conclusion) }} text-center" title="{{ title }}">
@@ -62,12 +61,17 @@
               </td>
             </tr>
           {% endfor %}
-				{% endfor %}
-				</tbody>
+        {% endfor %}
+        </tbody>
 
-			</table>
-		{% else %}
-			<p><b>Please select a period and an assessment type.</b></p>
-		{% endif %}
-	</div>
+      </table>
+    {% else %}
+      <p><b>Please select a period and an assessment type.</b></p>
+    {% endif %}
+
+    <p>
+      In italics additional assessment at the subspecies level for subspecies
+      listed in the Annexes of the Birds Directive.
+    </p>
+  </div>
 {% endblock %}
