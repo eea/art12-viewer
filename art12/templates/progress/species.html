@@ -34,44 +34,33 @@
 
         <tbody>
         {% for row in species %}
-          {% set add_rec = row.has_additional_record() %}
-          {% if row.speciescode not in conclusions.keys() %}
-            <tr class="stripe_row {% if add_rec %}italic_row{% endif %}">
-              <td class="th">
-                {% set summary_url = url_for('views.summary', period=dataset.id, subject=row.speciescode) %}
-                <a href="{{ summary_url }}">{{ row.speciesname }}</a>
-              </td>
-              <td class="th"></td>
-            </tr>
-          {% endif %}
-          {% for conclusion, title in conclusions.get(row.speciescode, '') %}
-            <tr class="stripe_row {% if add_rec %}italic_row{% endif %}">
-              <td class="th">
-                {% set summary_url = url_for('views.summary', period=dataset.id, subject=row.speciescode) %}
-                <a href="{{ summary_url }}">{{ row.speciesname }}</a>
-              </td>
-              {% if label_type == 'status' %}
-              <td class="center border_left status-{{ STATUS_CLASSES.get(conclusion) }} text-center" title="{{ title }}">
-              {% else %}
-              <td class="center border_left trend-{{ TREND_CLASSES.get(conclusion) }} text-center" title="{{ title }}">
-              {% endif %}
-                <span class="conclusion">
-                  {{ conclusion or ''}}
-                </span>
-              </td>
-            </tr>
-          {% endfor %}
+          <tr class="stripe_row {% if row.additional_record %}italic_row{% endif %}">
+            <td class="th">
+              {% set summary_url = url_for('views.summary', period=dataset.id, subject=row.code) %}
+              <a href="{{ summary_url }}">{{ row.name }}</a>
+            </td>
+            {% if label_type == 'status' %}
+            <td class="center border_left status-{{ STATUS_CLASSES.get(row.conclusion) }}
+                text-center" title="{{ row.status }}">
+            {% else %}
+            <td class="center border_left trend-{{ TREND_CLASSES.get(row.conclusion) }}
+                text-center" title="{{ row.status }}">
+            {% endif %}
+              <span class="conclusion">
+                {{ row.conclusion or ''}}
+              </span>
+            </td>
+          </tr>
         {% endfor %}
         </tbody>
-
       </table>
+
+      <p>
+        In italics additional assessment at the subspecies level for subspecies
+        listed in the Annexes of the Birds Directive.
+      </p>
     {% else %}
       <p><b>Please select a period and an assessment type.</b></p>
     {% endif %}
-
-    <p>
-      In italics additional assessment at the subspecies level for subspecies
-      listed in the Annexes of the Birds Directive.
-    </p>
   </div>
 {% endblock %}

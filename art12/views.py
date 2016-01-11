@@ -2,7 +2,7 @@ import json
 
 from flask import request, current_app
 from flask.views import View
-from sqlalchemy.orm import joinedload
+from sqlalchemy.sql.expression import bindparam
 
 from art12.common import (
     TemplateView, generate_map_url, generate_eu_map_breeding_url,
@@ -13,7 +13,7 @@ from art12.forms import (
     SummaryFilterForm, ProgressFilterForm, ReportsFilterForm,
 )
 from art12.mixins import SpeciesMixin
-from art12.models import Dataset, LuRestrictedDataBird, LuDataBird, db
+from art12.models import Dataset, LuRestrictedDataBird, LuDataBird
 from eea_integration.auth.security import current_user
 
 
@@ -100,16 +100,16 @@ class Progress(SpeciesMixin, TemplateView):
     TREND_LABEL = 'trend'
     STATUS_LABEL = 'status'
 
-    def get_conclusion_qs(self, dataset, conclusion_value, status_level):
+    def get_species_qs(self, dataset, conclusion_value, status_level):
         return (
             self.model_eu_cls.query
                 .filter_by(dataset=dataset)
                 .filter(conclusion_value != None)
-                .with_entities(self.model_eu_cls.speciescode,
-                               conclusion_value,
-                               status_level)
-                .order_by(self.model_eu_cls.speciesname)
-                .all()
+                .with_entities(self.model_eu_cls.speciescode.label('code'),
+                               self.model_eu_cls.speciesname.label('name'),
+                               conclusion_value.label('conclusion'),
+                               status_level.label('status'),
+                               self.model_eu_cls.additional_record)
         )
 
     def get_context_data(self, **kwargs):
@@ -119,6 +119,7 @@ class Progress(SpeciesMixin, TemplateView):
         dataset = filter_form.dataset
         status_level = self.model_eu_cls.conclusion_status_level2
         label_type = self.TREND_LABEL
+        species = []
         if conclusion_type:
             if conclusion_type == 'bs':
                 status_level = self.model_eu_cls.conclusion_status_level1
@@ -134,28 +135,30 @@ class Progress(SpeciesMixin, TemplateView):
                 conclusion_value = self.model_eu_cls.wi_population_trend_long
             else:
                 raise ValueError('Unknown conclusion type')
-            conclusions = self.get_conclusion_qs(dataset,
-                                                 conclusion_value,
-                                                 status_level)
-        else:
-            conclusions = []
+            eu_species = self.get_species_qs(dataset,
+                                             conclusion_value,
+                                             status_level)
 
-        conclusions_data = {}
-        for c in conclusions:
-            conclusions_data.setdefault(c[0], [])
-            conclusions_data[c[0]].append((c[1], c[2] if c[2] != None else ''))
+            ignore_species = (
+                self.model_eu_cls.query
+                .with_entities(self.model_eu_cls.speciescode)
+            )
+            ms_species = (
+                LuDataBird.query
+                .filter(~LuDataBird.speciescode.in_(ignore_species))
+                .filter_by(dataset=dataset)
+                .with_entities(LuDataBird.speciescode.label('code'),
+                               LuDataBird.speciesname.label('name'),
+                               bindparam('conclution', ''),
+                               bindparam('status', ''),
+                               bindparam('additional_record', 0))
+            )
 
-        species = (
-            db.session.query(LuDataBird)
-            .options(joinedload('eu_objects'))
-            .filter_by(dataset=dataset)
-            .order_by(LuDataBird.speciesname)
-            .all()
-        )
+            species = sorted(eu_species.union(ms_species),
+                             key=lambda x: x.name)
 
         return {
             'filter_form': filter_form,
-            'conclusions': conclusions_data,
             'species': species,
             'current_selection': filter_form.get_selection(),
             'dataset': dataset,
