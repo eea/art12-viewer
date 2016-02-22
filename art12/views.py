@@ -4,17 +4,15 @@ from flask import request, url_for
 from flask.views import View
 from sqlalchemy.sql.expression import bindparam
 
-from art12.common import (
-    TemplateView, generate_map_url, generate_eu_map_breeding_url,
-    generate_eu_map_winter_url, get_map_path,
-)
-from art12.definitions import EU_COUNTRY
-from art12.forms import (
-    SummaryFilterForm, ProgressFilterForm, ReportsFilterForm,
-)
-from art12.mixins import SpeciesMixin
-from art12.models import Dataset, LuRestrictedDataBird, LuDataBird
 from eea_integration.auth.security import current_user
+
+from art12.common import TemplateView, get_map_path, get_map_url
+from art12.common import get_eu_map_breeding_url, get_eu_map_winter_url
+from art12.definitions import EU_COUNTRY
+from art12.factsheet import get_factsheet_url
+from art12.forms import ProgressFilterForm, ReportsFilterForm, SummaryFilterForm
+from art12.mixins import SpeciesMixin
+from art12.models import Dataset, LuDataBird, LuRestrictedDataBird
 
 
 class Homepage(TemplateView):
@@ -35,6 +33,7 @@ class Summary(SpeciesMixin, TemplateView):
         map_url = ''
         map_warning = ''
         eu_map_breeding_url, eu_map_winter_url = '', ''
+        factsheet_url = ''
         filter_form = SummaryFilterForm(request.args)
         filter_args = {}
         subject = filter_form.subject.data
@@ -66,18 +65,19 @@ class Summary(SpeciesMixin, TemplateView):
                 else:
                     sensitive = True
 
-            map_url = generate_map_url(
+            map_url = get_map_url(
                 subject=subject,
                 sensitive=sensitive,
             )
-            eu_map_breeding_url = generate_eu_map_breeding_url(
+            eu_map_breeding_url = get_eu_map_breeding_url(
                 subject=subject,
                 sensitive=sensitive,
             )
-            eu_map_winter_url = generate_eu_map_winter_url(
+            eu_map_winter_url = get_eu_map_winter_url(
                 subject=subject,
                 sensitive=sensitive,
             )
+            factsheet_url = get_factsheet_url(subject=subject)
         else:
             content_objects = []
             eu_objects = []
@@ -92,6 +92,7 @@ class Summary(SpeciesMixin, TemplateView):
             'map_warning': map_warning,
             'eu_map_breeding_url': eu_map_breeding_url,
             'eu_map_winter_url': eu_map_winter_url,
+            'factsheet_url': factsheet_url,
         }
 
 

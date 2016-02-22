@@ -1,30 +1,38 @@
 <div>
-	{% set datasheet_url=url_for('wiki.datasheet', period=dataset.id, subject=subject) %}
-	{% set audittrail_url=url_for('wiki.audittrail', period=dataset.id, subject=subject) %}
+  {% set datasheet_url=url_for('wiki.datasheet', period=dataset.id, subject=subject) %}
+  {% set audittrail_url=url_for('wiki.audittrail', period=dataset.id, subject=subject) %}
 
-	<button type="button" id="wikibutton" href="{{ datasheet_url }}">
-		View data sheet info
-	</button>
+  <button type="button" id="wikibutton" href="{{ datasheet_url }}">
+    View data sheet info
+  </button>
 
-	<button type="button" id="wikibutton" href="{{ audittrail_url }}">
-		Audit trail
-	</button>
+  <button type="button" id="wikibutton" href="{{ audittrail_url }}">
+    Audit trail
+  </button>
 
-	{% if map_url %}
-		<button type="button" id="show-map" data-url="{{ map_url }}">Map</button>
+  {% if map_url %}
+    <button type="button" id="show-map" data-url="{{ map_url }}">Map</button>
   {% else %}
     <button type="button" class="disabled">Map</button>
-	{% endif %}
+  {% endif %}
 
-	{% if eu_map_breeding_url %}
-		<button type="button" id="show-eu-map" data-url="{{ eu_map_breeding_url }}">EU map of Breeding population trend</button>
+  {% if eu_map_breeding_url %}
+    <button type="button" id="show-eu-map" data-url="{{ eu_map_breeding_url }}">
+      EU map of Breeding population trend
+    </button>
   {% else %}
     <button type="button" class="disabled">EU map of Breeding population trend</button>
-	{% endif %}
+  {% endif %}
 
-	{% if eu_map_winter_url %}
-		<button type="button" id="show-eu-map" data-url="{{ eu_map_winter_url }}">EU map of Winter population trend</button>
+  {% if eu_map_winter_url %}
+    <button type="button" id="show-eu-map" data-url="{{ eu_map_winter_url }}">
+      EU map of Winter population trend
+    </button>
   {% else %}
     <button type="button" class="disabled">EU map of Winter population trend</button>
-	{% endif %}
+  {% endif %}
+
+  {% if factsheet_url %}
+    <a href="{{ factsheet_url }}" target="_blank" class="button">Download factsheet</a>
+  {% endif %}
 </div>

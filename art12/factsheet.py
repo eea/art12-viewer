@@ -2,13 +2,16 @@ from flask import Blueprint
 from flask import render_template, request, current_app as app, url_for
 from flask.ext.script import Manager
 from flask.views import MethodView
+from path import path
 import jinja2
+import subprocess
 
 from art12.models import db, EtcBirdsEu, EtcDataBird, Wiki, WikiChange
 from art12.queries import (
     SPECIESNAME_Q, SUBUNIT_Q, ANNEX_Q, PLAN_Q, MS_TABLE_Q,
     SPA_TRIGGER_Q, PRESS_THRE_Q, N2K_Q, CONS_MEASURES_Q)
 from art12.pdf import PdfRenderer
+from art12.utils import slugify
 
 factsheet_manager = Manager()
 factsheet = Blueprint('factsheet', __name__)
@@ -28,6 +31,11 @@ def format_subpopulation(subpopulation):
 def get_arg(kwargs, key, default=None):
     arg = kwargs.get(key)
     return arg[0] if isinstance(arg, list) else arg or default
+
+
+def get_query_result(engine, query, subject):
+    result = engine.execute(query.format(code=subject))
+    return ', '.join([row[0] for row in result if row[0]])
 
 
 class DummyCls(object):
@@ -51,8 +59,7 @@ class BirdFactsheet(MethodView):
 
     def set_properties(self, obj):
         for prop_name, query in self.property_to_query.iteritems():
-            result = self.engine.execute(query.format(code=self.subject))
-            value = ', '.join([row[0] for row in result if row[0]])
+            value = get_query_result(self.engine, query, self.subject)
             setattr(obj, prop_name, value)
 
     def set_wiki(self, obj):
@@ -135,6 +142,16 @@ class BirdFactsheet(MethodView):
 
         return render_template(self.template_name, **context)
 
+    @classmethod
+    def get_pdf_file_name(cls, subject, engine=None):
+        engine = engine or db.get_engine(app, 'factsheet')
+        name = get_query_result(engine, SPECIESNAME_Q, subject)
+        subunit = get_query_result(engine, SUBUNIT_Q, subject)
+        return slugify('{} {}'.format(name, subunit))
+
+    def _get_pdf_file_name(self):
+        return self.get_pdf_file_name(self.subject, self.engine)
+
     def get_pdf(self, **kwargs):
         context = self.get_context_data(**kwargs)
         header_url = url_for('factsheet.header',
@@ -142,10 +159,15 @@ class BirdFactsheet(MethodView):
                              period=self.period,
                              _external=True)
         footer_url = url_for('factsheet.footer', _external=True)
-        return PdfRenderer(self.template_name, pdf_file=self.subject,
+        return PdfRenderer(self.template_name,
+                           pdf_file=self._get_pdf_file_name(),
                            height='11.693in', width='8.268in',
                            context=context,
                            header_url=header_url, footer_url=footer_url)
+
+    @classmethod
+    def get_all(cls, period):
+        return EtcDataBird.query.filter_by(dataset_id=period)
 
 
 class FactsheetHeader(MethodView):
@@ -178,9 +200,28 @@ class FactsheetFooter(MethodView):
         return render_template('factsheet/footer.html')
 
 
+def get_factsheet_url(subject):
+    pdf_path = path(app.config['PDF_DESTINATION']) / (
+        BirdFactsheet.get_pdf_file_name(subject) + '.pdf')
+    real_path = path(app.static_folder) / pdf_path
+    if real_path.exists():
+        return url_for('static', filename=pdf_path)
+    return None
+
+
 @factsheet_manager.command
 def species(subject, period):
     fs = BirdFactsheet()
     renderer = fs.get_pdf(subject=subject, period=period)
     renderer._generate()
-    print("Generated: " + renderer.pdf_path)
+    print "Generated for {}: {}".format(subject, renderer.pdf_path)
+
+
+@factsheet_manager.command
+def genall(period):
+    for obj in BirdFactsheet.get_all(period):
+        try:
+            species(obj.speciescode, period)
+        except subprocess.CalledProcessError:
+            print "Error occured for: {}".format(obj.speciescode)
+    print "Done"

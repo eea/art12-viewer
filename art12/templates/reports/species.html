@@ -36,7 +36,7 @@
         {% for row in objects %}
           <tr {% if row.is_assesm %}class="assesm"{% endif %}>
             <td class="border">
-              {% set original_url=generate_original_url(row) %}
+              {% set original_url=get_original_url(row) %}
               <a class="clipped popup-btn block" data-title="Factsheet"
                  href="{{ original_url }}" title="{{ title }}">
                 {{ row.speciesname }}

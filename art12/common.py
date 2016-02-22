@@ -39,7 +39,7 @@ def inject_globals():
         'range_trend_long': range_trend_long,
         'get_conclusion': get_conclusion,
         # summary functions
-        'generate_original_url': generate_original_url,
+        'get_original_url': get_original_url,
         'get_title_for_country': get_title_for_species_country,
     }
 
@@ -168,7 +168,7 @@ def get_config():
     return rows[0]
 
 
-def generate_map_url(subject, sensitive=False):
+def get_map_url(subject, sensitive=False):
     config = get_config()
 
     if sensitive and current_user.is_authenticated():
@@ -182,7 +182,7 @@ def generate_map_url(subject, sensitive=False):
     return map_href + '&CCode=' + subject
 
 
-def generate_eu_map_breeding_url(subject, sensitive=False):
+def get_eu_map_breeding_url(subject, sensitive=False):
     config = get_config()
 
     if sensitive:
@@ -196,7 +196,7 @@ def generate_eu_map_breeding_url(subject, sensitive=False):
     return eu_map_breeding_href + '&CCode=' + subject
 
 
-def generate_eu_map_winter_url(subject, sensitive=False):
+def get_eu_map_winter_url(subject, sensitive=False):
     config = get_config()
 
     if sensitive:
@@ -210,7 +210,7 @@ def generate_eu_map_winter_url(subject, sensitive=False):
     return eu_map_winter_href + '&CCode=' + subject
 
 
-def generate_original_url(row):
+def get_original_url(row):
     if not row.envelope:
         return ''
     CONVERTER_URL = (
