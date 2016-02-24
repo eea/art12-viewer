@@ -16,5 +16,5 @@ PDF_DESTINATION = 'pdf'
 MAPS_STATIC = 'maps'
 # Maps filename format
 MAPS_FORMAT = '{code}_{suffix}.png'
-# Default image to be used when no map is available
-DEFAULT_MAP = 'blank_map.png'
+# Prefix for the PDF urls (header & footer)
+PDF_URL_PREFIX = ''

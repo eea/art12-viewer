@@ -154,11 +154,9 @@ class BirdFactsheet(MethodView):
 
     def get_pdf(self, **kwargs):
         context = self.get_context_data(**kwargs)
-        header_url = url_for('factsheet.header',
-                             subject=self.subject,
-                             period=self.period,
-                             _external=True)
-        footer_url = url_for('factsheet.footer', _external=True)
+        header_url = app.config['PDF_URL_PREFIX'] + url_for(
+            'factsheet.header', subject=self.subject, period=self.period)
+        footer_url = app.config['PDF_URL_PREFIX'] + url_for('factsheet.footer')
         return PdfRenderer(self.template_name,
                            pdf_file=self._get_pdf_file_name(),
                            height='11.693in', width='8.268in',
