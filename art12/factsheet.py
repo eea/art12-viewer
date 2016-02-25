@@ -165,7 +165,12 @@ class BirdFactsheet(MethodView):
 
     @classmethod
     def get_all(cls, period):
-        return EtcDataBird.query.filter_by(dataset_id=period)
+        return (
+            db.session
+            .query(EtcDataBird.speciescode)
+            .filter(EtcDataBird.dataset_id == period)
+            .distinct()
+        )
 
 
 class FactsheetHeader(MethodView):
@@ -198,11 +203,17 @@ class FactsheetFooter(MethodView):
         return render_template('factsheet/footer.html')
 
 
-def get_factsheet_url(subject):
+def get_pdf_path(subject):
     pdf_path = path(app.config['PDF_DESTINATION']) / (
         BirdFactsheet.get_pdf_file_name(subject) + '.pdf')
     real_path = path(app.static_folder) / pdf_path
     if real_path.exists():
+        return pdf_path
+
+
+def get_factsheet_url(subject):
+    pdf_path = get_pdf_path(subject)
+    if pdf_path:
         return url_for('static', filename=pdf_path)
     return None
 
@@ -216,8 +227,10 @@ def species(subject, period):
 
 
 @factsheet_manager.command
-def genall(period):
+def genall(period, overwrite_existing=False):
     for obj in BirdFactsheet.get_all(period):
+        if not overwrite_existing and get_pdf_path(obj.speciescode):
+            continue
         try:
             species(obj.speciescode, period)
         except subprocess.CalledProcessError:
