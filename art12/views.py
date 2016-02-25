@@ -208,5 +208,5 @@ class EuMap(TemplateView):
         speciescode = request.args['speciescode']
         suffix = request.args['suffix']
         map_path = get_map_path(speciescode, suffix)
-        map_url = url_for('static', filename=map_path)
+        map_url = url_for('static', filename=map_path) if map_path else None
         return {'map_url': map_url}
