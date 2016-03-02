@@ -150,9 +150,9 @@
   </section>
   {% endif %}
 
-  {% set distribution_map = get_map_path(code=obj.code, suffix='distribution') %}
+  {% set distribution_map = get_map_url(code=obj.code, suffix='distribution') %}
   {% if distribution_map %}
-    <img src="{{ url_for('static', filename=distribution_map, _external=True) }}">
+    <img src="{{ distribution_map }}">
     <div class="page-breaker"></div>
   {% else %}
     <p class="warning">Distribution map not available.</p>
@@ -210,9 +210,9 @@
 
     <p>See the endnotes for more information<sup>ii</sup></p>
 
-    {% set breeding_map = get_map_path(code=obj.code, suffix='breeding') %}
+    {% set breeding_map = get_map_url(code=obj.code, suffix='breeding') %}
     {% if breeding_map %}
-      <img src="{{ url_for('static', filename=breeding_map, _external=True) }}">
+      <img src="{{ breeding_map }}">
       <div class="page-breaker"></div>
     {% else %}
       <p class="warning">Short-term breeding population trend was not reported
@@ -221,9 +221,9 @@
 
     <br>
 
-    {% set winter_map = get_map_path(code=obj.code, suffix='winter') %}
+    {% set winter_map = get_map_url(code=obj.code, suffix='winter') %}
     {% if winter_map %}
-      <img src="{{ url_for('static', filename=winter_map, _external=True) }}">
+      <img src="{{ winter_map }}">
       <div class="page-breaker"></div>
     {% else %}
       <p class="warning">Short-term winter population trend was not reported

@@ -6,11 +6,12 @@ from path import path
 import jinja2
 import subprocess
 
+from art12.common import get_map_path
 from art12.models import db, EtcBirdsEu, EtcDataBird, Wiki, WikiChange
+from art12.pdf import PdfRenderer
 from art12.queries import (
     SPECIESNAME_Q, SUBUNIT_Q, ANNEX_Q, PLAN_Q, MS_TABLE_Q,
     SPA_TRIGGER_Q, PRESS_THRE_Q, N2K_Q, CONS_MEASURES_Q)
-from art12.pdf import PdfRenderer
 from art12.utils import slugify
 
 factsheet_manager = Manager()
@@ -26,6 +27,13 @@ def format_subpopulation(subpopulation):
         .replace(']', ']<i>')
         .replace('all others', '</i>all others<i>')
     )
+
+
+@factsheet.app_template_global('get_map_url')
+def get_map_url(code, suffix):
+    map = get_map_path(code=code, suffix=suffix)
+    if map:
+        return app.config['PDF_URL_PREFIX'] + url_for('static', filename=map)
 
 
 def get_arg(kwargs, key, default=None):
@@ -116,10 +124,8 @@ class BirdFactsheet(MethodView):
         self.set_etc_birds(bird_obj)
         self.set_conclusion_status_levels(bird_obj)
         self.set_ms_birds(bird_obj)
-        bird_obj.url = url_for('views.summary',
-                               subject=self.subject,
-                               period=self.period,
-                               _external=True)
+        bird_obj.url = app.config['PDF_URL_PREFIX'] + url_for(
+            'views.summary', subject=self.subject, period=self.period)
         bird_obj.code = self.subject
 
         if self.is_spa_trigger():
