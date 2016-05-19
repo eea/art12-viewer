@@ -198,7 +198,7 @@ FROM (SELECT rs1.level2_code                        AS code,
                          AND a.use_for_statistics = true
                          AND b.spa_trigger = true
                          AND Ucase(m.rankingcode) = 'H'
-                         AND ( NOT m.measurecode LIKE '1*' )) AS e
+                         AND ( NOT m.measurecode LIKE '1%%' )) AS e
             GROUP  BY e.level2_code,
                       e.level2_name) AS rs1
       INNER JOIN (SELECT Count(e.speciescode) AS pl2_tot,
@@ -220,7 +220,7 @@ FROM (SELECT rs1.level2_code                        AS code,
                                AND a.use_for_statistics = true
                                AND b.spa_trigger = true
                                AND Ucase(m.rankingcode) = 'H'
-                               AND ( NOT m.measurecode LIKE '1*' )) AS e
+                               AND ( NOT m.measurecode LIKE '1%%' )) AS e
                   ) AS rs2
               ON rs1.pl2_set = rs2.pl2_set
       ORDER  BY Round(100 * rs1.pl2_num / rs2.pl2_tot) DESC) AS rst
