@@ -409,6 +409,12 @@ def alembic(alembic_args):
 
 
 @db_manager.command
+def init():
+    db.create_all()
+    alembic(['stamp', 'head'])
+
+
+@db_manager.command
 def revision(message=None):
     if message is None:
         message = raw_input('revision name: ')

@@ -16,7 +16,7 @@ services:
       TZ: Europe/Copenhagen
     volumes:
     - ../../:/var/local/art12
-    command: ["runserver", "-t", "0.0.0.0", "-p", "5000"]
+    command: ["runserver", "-h", "0.0.0.0", "-p", "5000"]
 
   mysql:
     image: mysql:latest
@@ -25,7 +25,7 @@ services:
     ports:
     - "3306:3306"
     env_file:
-    - ../art12.env
+    - ../art12.devel.env
     environment:
       TZ: Europe/Copenhagen
     volumes:

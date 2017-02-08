@@ -12,3 +12,4 @@ art12/static/maps
 art12.env
 art12.devel.env
 rsync.key
+.skip-db-init
