@@ -5,3 +5,4 @@ WebTest==2.0.16
 factory-boy==2.4.1
 mock==1.0.1
 pytest==2.6.3
+gunicorn==19.6
