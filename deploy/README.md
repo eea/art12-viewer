@@ -4,6 +4,8 @@ Clone the repository
 
     $ git clone https://github.com/eea/art12-viewer
 
+[Base docker image](https://hub.docker.com/r/eeacms/art12-viewer/)
+
 ## 1. Production
 
 The production deployment will be done through Rancher. Depending on the
