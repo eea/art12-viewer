@@ -4,6 +4,14 @@ Clone the repository
 
     $ git clone https://github.com/eea/art12-viewer
 
+During the first time deployement, create and edit the following file:
+
+    $ cd art12-viewer/deploy/
+
+    # setup SSH key for rsync service
+    $ cp rsync.key.example rsync.key
+    $ vim rsync.key
+
 [Base docker image](https://hub.docker.com/r/eeacms/art12-viewer/)
 
 ## 1. Production
@@ -23,11 +31,28 @@ During the first time deployement, create and edit the following files:
     $ cp art12.env.example art12.env
     $ vim art12.env
 
-    # setup SSH key for rsync service
-    $ cp rsync.key.example rsync.key
-    $ vim rsync.key
+### 1.1. Start stack
 
-_WIP_
+    $ cd art12-viewer/deploy/art12/
+    $ docker-compose up -d
+
+### 1.2. Configure _apache_ service
+
+Copy conf file and restart container
+
+    $ scp -P 2222 ../conf/apache.conf root@localhost:/usr/local/apache2/conf/extra/vh-my-app.conf
+    $ docker-compose restart apache
+
+### 1.3. Configure _art12-static_ service
+
+Copy conf file and restart container
+
+    $ scp -P 2222 ../conf/static.conf root@localhost:/etc/nginx/conf.d/default.conf
+    $ docker-compose restart art12-static
+
+### 1.4. Debugging
+
+Please refer to points 2.5. - 2.7. below.
 
 ## 2. Development
 
@@ -58,60 +83,90 @@ A minimal configuration file could be:
     DB_HOST=mysql
     DB_NAME=art12
 
-### 2.1 Local build
+
+### 2.1. Local build
 
 To use a local build, run the following command:
 
     $ cd art12-viewer/
     $ docker build -t art12:devel .
 
-and in docker-compose.yml use for art12 service:
+and in docker-compose.yml use for _art12-app_ service:
 
     image: art12:devel
 
-Start services
+### 2.2. Start stack
 
-    $ cd art12-viewer/deploy/art12-devel
+    $ cd art12-viewer/deploy/art12-devel/
     $ docker-compose up -d
 
-    #show services and their status
+### 2.3. Configure _apache_ service
+
+Copy conf file and restart container
+
+    $ scp -P 2222 ../conf/apache.devel.conf root@localhost:/usr/local/apache2/conf/extra/vh-my-app.conf
+    $ docker-compose restart apache
+
+### 2.4. Configure _art12-static_ service
+
+Copy conf file and restart container
+
+    $ scp -P 2222 ../conf/static.conf root@localhost:/etc/nginx/conf.d/default.conf
+    $ docker-compose restart art12-static
+
+### 2.5. View, check status and logs
+
+To use the application, open a browser/tab and got to http://localhost/.
+
+Other command line useful commands:
+
+    $ # list services and their status
     $ docker-compose ps
 
-### 2.2. Art 12 service
+    $ # view log
+    $ docker-compose logs -f
+
+If, for some reason, you want to completely delete the stack and its volumes:
+
+    $ docker-compose stop
+    $ docker-compose rm
+    $ docker volume rm art12_apache art12_mysqldata art12_nginx art12_staticdata
+
+### 2.6. _art12-app_ service
 
 There is a mapping between your local art12 folder and the folder inside the service.
 Any code change will be automatically detected and the app restarted.
 
     # view logs
-    $ docker-compose logs -f art12
+    $ docker-compose logs -f art12-app
 
 Still, if a syntax error occurs the service will stop working and therefore must be
 manually restarted:
 
     # restart service
-    $ docker-compose restart art12
+    $ docker-compose restart art12-app
 
 Another approach is to step in the container and manually start/stop the app.
-To do that, in docker-compose.yml file change for art12 service the _command_ as below:
+To do that, in docker-compose.yml file change for _art12-app_ service the _command_ as below:
 
     command: /usr/bin/tail -f /dev/null
 
 and after:
 
     # upgrade service
-    $ docker-compose up -d art12
+    $ docker-compose up -d art12-app
 
-    # step into the art12 container
-    $ docker exec -it art12devel_mysql_1 bash
+    # step into the art12-app container
+    $ docker exec -it art12devel_art12-app_1 bash
 
 and from inside the container:
 
-    # manually start app
+    # manually start the app
     $ python manage.py runserver -t 0.0.0.0 -p 5000
 
-_Note: make sure you have set **DEBUG=True** in the art12.env file._
+_Note: make sure you have set **DEBUG=True** in the art12.devel.env file._
 
-### 2.3. MySQL service
+### 2.7. _mysql_ service
 
 If you need to take a closer look at the MySQL database, you can do that like below:
 
@@ -139,4 +194,3 @@ version.
 ## Funding
 
 [European Environment Agency (EU)](http://eea.europa.eu)
-
