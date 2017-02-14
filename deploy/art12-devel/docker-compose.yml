@@ -23,7 +23,7 @@ services:
     volumes:
     - staticdata:/var/local/art12/art12/static
     - ../../:/var/local/art12
-    command: ["runserver", "-t", "0.0.0.0", "-p", "5000"]
+    command: ["runserver", "-h", "0.0.0.0", "-p", "5000"]
 
   art12-static:
     image: nginx:alpine
