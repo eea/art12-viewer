@@ -14,14 +14,12 @@ from sqlalchemy.dialects import mysql
 
 
 def upgrade():
-    op.create_table('datasets',
-                    sa.Column('id', sa.Integer, nullable=False),
-                    sa.Column('name', mysql.VARCHAR(255), nullable=True),
-                    sa.PrimaryKeyConstraint('id'),
+    op.create_table(
+        'datasets',
+        sa.Column('id', sa.Integer, nullable=False),
+        sa.Column('name', mysql.VARCHAR(255), nullable=True),
+        sa.PrimaryKeyConstraint('id'),
     )
-    op.alter_column('etc_data_birds', 'ext_dataset_id',
-                    existing_type=mysql.INTEGER(display_width=11),
-                    nullable=True)
 
 
 def downgrade():

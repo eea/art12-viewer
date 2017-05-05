@@ -29,3 +29,4 @@ path.py==7.0
 requests==2.4.1
 webassets==0.10.1
 wsgiref==0.1.2
+smart_getenv==1.1.0

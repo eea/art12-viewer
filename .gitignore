@@ -8,3 +8,8 @@ __pycache__
 env.ini
 env
 art12/static/maps
+.secret
+art12.env
+art12.devel.env
+rsync.key
+.skip-db-init
