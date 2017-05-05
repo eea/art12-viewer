@@ -3,16 +3,19 @@ version: '2'
 services:
 
   apache:
-    image: eeacms/apache:2.4s
+    image: eeacms/apache:latest
     ports:
     - 80:80
     depends_on:
     - art12-app
     - art12-static
+    environment:
+      TZ: Europe/Copenhagen
     volumes:
     - apache:/usr/local/apache2/conf
 
   art12-app:
+    #image: eeacms/art12-viewer:latest
     image: art12:devel
     ports:
     - "5000:5000"
@@ -20,15 +23,20 @@ services:
     - mysql
     env_file:
     - ../art12.devel.env
+    environment:
+      TZ: Europe/Copenhagen
     volumes:
     - staticdata:/var/local/art12/art12/static
     - ../../:/var/local/art12
-    command: ["runserver", "-h", "0.0.0.0", "-p", "5000"]
+    #command: ["runserver", "-t", "0.0.0.0", "-p", "5000"]
+    #command: /usr/bin/tail -f /dev/null
 
   art12-static:
     image: nginx:alpine
     depends_on:
     - art12-app
+    environment:
+      TZ: Europe/Copenhagen
     volumes:
     - nginx:/etc/nginx/conf.d
     - staticdata:/var/local/art12/art12/static:ro
@@ -39,6 +47,8 @@ services:
     - "3306:3306"
     env_file:
     - ../art12.devel.env
+    environment:
+      TZ: Europe/Copenhagen
     volumes:
     - mysqldata:/var/lib/mysql
     command: "--character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
@@ -55,6 +65,8 @@ services:
     - server
     env_file:
     - ../rsync.key
+    environment:
+      TZ: Europe/Copenhagen
     tty: true
     stdin_open: true
     volumes:
