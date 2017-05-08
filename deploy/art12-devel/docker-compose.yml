@@ -15,8 +15,8 @@ services:
     - apache:/usr/local/apache2/conf
 
   art12-app:
-    #image: eeacms/art12-viewer:latest
-    image: art12:devel
+    image: eeacms/art12-viewer:latest
+    #image: art12:devel
     ports:
     - "5000:5000"
     depends_on:
@@ -27,9 +27,8 @@ services:
       TZ: Europe/Copenhagen
     volumes:
     - staticdata:/var/local/art12/art12/static
-    - ../../:/var/local/art12
-    #command: ["runserver", "-t", "0.0.0.0", "-p", "5000"]
-    #command: /usr/bin/tail -f /dev/null
+    # command: ["runserver", "-t", "0.0.0.0", "-p", "5000"]
+    # command: /usr/bin/tail -f /dev/null
 
   art12-static:
     image: nginx:alpine
@@ -54,7 +53,7 @@ services:
     command: "--character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
 
   rsync-server:
-    image: eeacms/rsync
+    image: eeacms/rsync:latest
     depends_on:
     - apache
     - art12-app
