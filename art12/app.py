@@ -52,6 +52,8 @@ def create_app(config={}, testing=False):
     app.add_template_global(inject_static_file)
 
     app.jinja_env.globals['TREND_CLASSES'] = TREND_CLASSES
+    app.jinja_env.globals['SCRIPT_NAME'] = app.config.get('SCRIPT_NAME',
+                                                          '/article12')
 
     if not app.testing:
         auth_ext = Auth(models=models, security_ext=security_ext,

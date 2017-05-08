@@ -82,6 +82,7 @@ A minimal configuration file could be:
     DB_PASS=art12
     DB_HOST=mysql
     DB_NAME=art12
+    BIND_NAME=art12rp1_eu
 
 
 ### 2.1. Local build
