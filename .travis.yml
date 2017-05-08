@@ -5,7 +5,7 @@ install:
   - pip install -r requirements-dev.txt
   - pip install pytest-cov==1.8.1 coverage==3.7.1 coveralls==0.5
 before_script:
-  - mkdir instance && cp settings.py.example instance/test_settings.py
+  - cp settings.py.example instance/test_settings.py
   - mysql -e 'create database art12;'
 script:  py.test --cov=art12 testsuite
 after_success: coveralls
