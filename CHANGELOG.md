@@ -1,7 +1,10 @@
 Changelog
 =========
 
-2.1.dev0 - (unreleased)
+2.2.dev0 - (unreleased)
+-----------------------
+
+2.1 (2017-05-11)
 -----------------------
 * Missing factsheets in dockerized article 17 si article 12
   - installed wkhtmltopdf

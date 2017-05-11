@@ -14,8 +14,8 @@ services:
       TZ: Europe/Copenhagen
     volumes:
     - staticdata:/var/local/art12/art12/static
-    - maps:/var/local/art17-data/maps
-    - factsheets:/var/local/art17-data/factsheets
+    - maps:/var/local/art12-data/maps
+    - factsheets:/var/local/art12-data/factsheets
 
   art12-static:
     image: nginx:alpine
@@ -26,8 +26,8 @@ services:
     volumes:
     - nginx:/etc/nginx/conf.d
     - staticdata:/var/local/art12/art12/static:ro
-    - maps:/var/local/art17-data/maps:ro
-    - factsheets:/var/local/art17-data/factsheets:ro
+    - maps:/var/local/art12-data/maps:ro
+    - factsheets:/var/local/art12-data/factsheets:ro
 
   mysql:
     image: mysql:5.6
@@ -47,7 +47,7 @@ services:
       io.rancher.container.pull_image: always
       io.rancher.scheduler.affinity:host_label_ne: reserved=yes
     depends_on:
-    - art17-app
+    - art12-app
     - mysql
     ports:
     - "2222:22/tcp"
@@ -62,7 +62,7 @@ services:
     volumes:
     - nginx:/etc/nginx/conf.d
     - mysqldata:/var/lib/mysql
-    - maps:/var/local/art17-data/maps
+    - maps:/var/local/art12-data/maps
 
 volumes:
   nginx:
