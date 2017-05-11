@@ -62,7 +62,7 @@ services:
     volumes:
     - nginx:/etc/nginx/conf.d
     - mysqldata:/var/lib/mysql
-    - maps:/var/local/maps
+    - maps:/var/local/art17-data/maps
 
 volumes:
   nginx:
