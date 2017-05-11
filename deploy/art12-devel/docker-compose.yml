@@ -26,9 +26,9 @@ services:
       TZ: Europe/Copenhagen
     volumes:
     - staticdata:/var/local/art12/art12/static
-    - maps:/var/local/art17-data/maps
-    - factsheets:/var/local/art17-data/factsheets
-    #- ../../art17:/var/local/art12/art12/
+    - maps:/var/local/art12-data/maps
+    - factsheets:/var/local/art12-data/factsheets
+    #- ../../art12:/var/local/art12/art12/
     #command: ["runserver", "-t", "0.0.0.0", "-p", "5000"]
     #command: /usr/bin/tail -f /dev/null
 
@@ -41,8 +41,8 @@ services:
     volumes:
     - nginx:/etc/nginx/conf.d
     - staticdata:/var/local/art12/art12/static:ro
-    - maps:/var/local/art17-data/maps:ro
-    - factsheets:/var/local/art17-data/factsheets:ro
+    - maps:/var/local/art12-data/maps:ro
+    - factsheets:/var/local/art12-data/factsheets:ro
 
   mysql:
     image: mysql:5.6
