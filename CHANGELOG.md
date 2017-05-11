@@ -3,6 +3,13 @@ Changelog
 
 2.1.dev0 - (unreleased)
 -----------------------
+* Missing factsheets in dockerized article 17 si article 12
+  - installed wkhtmltopdf
+  - used mysql 5.6 - DO NOT upgrade to 5.7 since MySQL 5.7.5+ changed the way
+    GROUP BY behaved in order to be SQL99 compliant
+    (where in previous versions it was not).
+  - created volumes for maps and factsheets
+  [chiridra refs #84975]
 
 2.0 - (2017-05-08)
 ------------------

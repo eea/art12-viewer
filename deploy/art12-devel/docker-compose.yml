@@ -16,7 +16,6 @@ services:
 
   art12-app:
     image: eeacms/art12-viewer:latest
-    #image: art12:devel
     ports:
     - "5000:5000"
     depends_on:
@@ -27,8 +26,11 @@ services:
       TZ: Europe/Copenhagen
     volumes:
     - staticdata:/var/local/art12/art12/static
-    # command: ["runserver", "-t", "0.0.0.0", "-p", "5000"]
-    # command: /usr/bin/tail -f /dev/null
+    - maps:/var/local/art17-data/maps
+    - factsheets:/var/local/art17-data/factsheets
+    #- ../../art17:/var/local/art12/art12/
+    #command: ["runserver", "-t", "0.0.0.0", "-p", "5000"]
+    #command: /usr/bin/tail -f /dev/null
 
   art12-static:
     image: nginx:alpine
@@ -39,9 +41,11 @@ services:
     volumes:
     - nginx:/etc/nginx/conf.d
     - staticdata:/var/local/art12/art12/static:ro
+    - maps:/var/local/art17-data/maps:ro
+    - factsheets:/var/local/art17-data/factsheets:ro
 
   mysql:
-    image: mysql:latest
+    image: mysql:5.6
     ports:
     - "3306:3306"
     env_file:
@@ -72,6 +76,7 @@ services:
     - apache:/usr/local/apache2/conf
     - nginx:/etc/nginx/conf.d
     - mysqldata:/var/lib/mysql
+    - maps:/var/local/maps
 
 volumes:
   apache:
@@ -81,4 +86,8 @@ volumes:
   staticdata:
     driver: local
   mysqldata:
+    driver: local
+  maps:
+    driver: local
+  factsheets:
     driver: local
