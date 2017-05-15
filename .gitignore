@@ -7,6 +7,7 @@ __pycache__
 env.ini
 env
 art12/static/maps
+art12/static/factsheet
 .secret
 art12.env
 art12.staging.env

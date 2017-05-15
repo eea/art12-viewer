@@ -4,17 +4,17 @@ Clone the repository
 
     $ git clone https://github.com/eea/art12-viewer
 
-During the first time deployement, create and edit the following file:
+[Base docker image](https://hub.docker.com/r/eeacms/art12-viewer/)
+
+## 1. Production
+
+During the first time deployment, create and edit the following file:
 
     $ cd art12-viewer/deploy/
 
     # setup SSH key for rsync service
     $ cp rsync.key.example rsync.key
     $ vim rsync.key
-
-[Base docker image](https://hub.docker.com/r/eeacms/art12-viewer/)
-
-## 1. Production
 
 The production deployment will be done through Rancher. Depending on the
 Rancher environment's version, one of the following will be used:
@@ -23,7 +23,7 @@ Rancher environment's version, one of the following will be used:
 
 2. [Rancher CLI](https://docs.rancher.com/rancher/v1.2/en/cli/)
 
-During the first time deployement, create and edit the following files:
+During the first time deployment, create and edit the following files:
 
     $ cd art12-viewer/deploy
 
@@ -60,7 +60,7 @@ Please refer to points 2.5. - 2.7. below.
 
 2. Install [Docker Compose](https://docs.docker.com/compose/).
 
-During the first time deployement, create and edit the following files:
+During the first time deployment, create and edit the following files:
 
     $ cd art12-viewer/deploy
 
@@ -84,40 +84,55 @@ A minimal configuration file could be:
     DB_NAME=art12
     BIND_NAME=art12rp1_eu
 
+    AUTH_ZOPE=False
+    PDF_URL_PREFIX=http://localhost:5000
+    LAYOUT_ZOPE_URL=
 
-### 2.1. Local build
+### 2.1. Local `docker-compose.yml` file
+
+    $ cd art12-viewer/deploy/art12-devel/
+    $ cp docker-compose.yml.example docker-compose.yml
+
+### 2.2. Local build
 
 To use a local build, run the following command:
 
     $ cd art12-viewer/
     $ docker build -t art12:devel .
 
-and in docker-compose.yml use for _art12-app_ service:
+and in `docker-compose.yml`, for _art12-app_ service, use:
 
     image: art12:devel
 
-### 2.2. Start stack
+### 2.3. Developing and debugging
+
+In order for your container to see the latest updates made to the code, you
+have to use a volume. Uncomment the following lines in `docker-compose.yml`:
+
+    #volumes:
+    #- ../../art12:/var/local/art12/art12/
+
+To debug the application, first override the command used by the image.
+Uncomment this line:
+
+    #command: /usr/bin/tail -f /dev/null
+
+After starting the stack (see 2.4 below), start the development server from
+inside the container. The execution will stop and wait for your commands every
+time it encounters a breakpoint in your code.
+
+    $ docker exec -it art12-app bash
+    $ ./manage.py runserver -h 0.0.0.0 -p 5000
+
+
+### 2.4. Start stack
 
     $ cd art12-viewer/deploy/art12-devel/
     $ docker-compose up -d
 
-### 2.3. Configure _apache_ service
-
-Copy conf file and restart container
-
-    $ scp -P 2222 ../conf/apache.devel.conf root@localhost:/usr/local/apache2/conf/extra/vh-my-app.conf
-    $ docker-compose restart apache
-
-### 2.4. Configure _art12-static_ service
-
-Copy conf file and restart container
-
-    $ scp -P 2222 ../conf/static.conf root@localhost:/etc/nginx/conf.d/default.conf
-    $ docker-compose restart art12-static
-
 ### 2.5. View, check status and logs
 
-To use the application, open a browser/tab and got to http://localhost/.
+To use the application, open a browser/tab and got to http://localhost:5000/.
 
 Other command line useful commands:
 
@@ -131,7 +146,7 @@ If, for some reason, you want to completely delete the stack and its volumes:
 
     $ docker-compose stop
     $ docker-compose rm
-    $ docker volume rm art12_apache art12_mysqldata art12_nginx art12_staticdata
+    $ docker volume rm art12_mysqldata
 
 ### 2.6. _art12-app_ service
 
@@ -158,7 +173,7 @@ and after:
     $ docker-compose up -d art12-app
 
     # step into the art12-app container
-    $ docker exec -it art12devel_art12-app_1 bash
+    $ docker exec -it art12-app bash
 
 and from inside the container:
 
@@ -172,7 +187,7 @@ _Note: make sure you have set **DEBUG=True** in the art12.devel.env file._
 If you need to take a closer look at the MySQL database, you can do that like below:
 
     # step into the mysql container
-    $ docker exec -it art12devel_mysql_1 bash
+    $ docker exec -it art12-mysql bash
 
     # start mysql client
     $ mysql -u root -p
@@ -180,6 +195,22 @@ If you need to take a closer look at the MySQL database, you can do that like be
     # runn SQL commands
     mysql> use DB_NAME;
     mysql> show tables;
+
+To import old data, first copy the sql dumps to your mysql container:
+
+    $ docker cp art12.sql art12-mysql:/var/lib/mysql/
+
+    # step into the mysql container
+    $ docker exec -it art12-mysql bash
+
+    # start mysql interpreter
+    $ mysql -u art12 -p
+
+    # import data
+    mysql> use art12;
+    mysql> source /var/lib/mysql/art12.sql
+
+Do the same set of operations for `art12rp1_eu` database.
 
 ## Copyright and license
 
