@@ -3,11 +3,13 @@ gen
 sandbox
 *~
 *.pyc
+*.sql
 __pycache__
 env.ini
 env
 art12/static/maps
 art12/static/factsheet
+deploy/art12-devel/docker-compose.yml
 .secret
 art12.env
 art12.staging.env

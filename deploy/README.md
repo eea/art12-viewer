@@ -50,9 +50,16 @@ Copy conf file and restart container
     $ scp -P 2222 ../conf/static.conf root@localhost:/etc/nginx/conf.d/default.conf
     $ docker-compose restart art12-static
 
-### 1.4. Debugging
+### 1.4. Factsheets
 
-Please refer to points 2.5. - 2.7. below.
+Create factsheets:
+
+    $ docker exec -it art12-app bash
+    $ ./manage.py factsheet genall [period_id]
+
+### 1.5. Debugging
+
+Please refer to points 2.3. - 2.7. below.
 
 ## 2. Development
 
@@ -211,6 +218,13 @@ To import old data, first copy the sql dumps to your mysql container:
     mysql> source /var/lib/mysql/art12.sql
 
 Do the same set of operations for `art12rp1_eu` database.
+
+### 2.8. Factsheets
+
+Create factsheets:
+
+    $ docker exec -it art12-app bash
+    $ ./manage.py factsheet genall [period_id]
 
 ## Copyright and license
 
