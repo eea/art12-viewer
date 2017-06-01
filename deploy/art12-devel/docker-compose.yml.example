@@ -3,7 +3,7 @@ version: '2'
 services:
 
   art12-app:
-    image: eeacms/apache:latest
+    image: eeacms/art12-viewer:latest
     container_name: art12-app
     ports:
     - "5000:5000"
