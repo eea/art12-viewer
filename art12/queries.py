@@ -1,21 +1,21 @@
 SPECIESNAME_Q = """
 SELECT DISTINCT A.speciesname
-  FROM art12rp1_eu.data_birds_check_list A
+  FROM art12_eu.data_birds_check_list A
  WHERE A.speciescode = '{code}';"""
 
 SUBUNIT_Q = """
 SELECT DISTINCT A.sub_unit
-  FROM art12rp1_eu.data_birds_check_list A
+  FROM art12_eu.data_birds_check_list A
  WHERE (A.speciescode = '{code}');"""
 
 ANNEX_Q = """
 SELECT DISTINCT REPLACE(REPLACE(A.annexI, 'N', 'No'), 'Y', 'Yes')
-  FROM art12rp1_eu.data_birds_check_list A
+  FROM art12_eu.data_birds_check_list A
  WHERE A.speciescode = '{code}';"""
 
 PLAN_Q = """
 SELECT DISTINCT REPLACE(A.plan, 'NA', 'No')
-  FROM art12rp1_eu.data_birds A
+  FROM art12_eu.data_birds A
  WHERE A.speciescode = '{code}';"""
 
 MS_TABLE_Q = """
@@ -48,7 +48,7 @@ SELECT
 
 SPA_TRIGGER_Q = """
 SELECT count(*) AS count
-    FROM art12rp1_eu.data_birds_check_list
+    FROM art12_eu.data_birds_check_list
   WHERE speciescode = '{subject}' AND spa_trigger = True;"""
 
 
@@ -66,10 +66,10 @@ FROM (SELECT rs1.level2_code                        AS code,
                                   a.season,
                                   c.level2_code,
                                   c.level2_name
-                  FROM ((art12rp1_eu.data_bpressures_threats t
-                         INNER JOIN art12rp1_eu.data_birds a
+                  FROM ((art12_eu.data_bpressures_threats t
+                         INNER JOIN art12_eu.data_birds a
                                  ON ( a.specieshash = t.specieshash ))
-                        INNER JOIN art12rp1_eu.data_birds_check_list b
+                        INNER JOIN art12_eu.data_birds_check_list b
                                 ON ( a.country = b.country
                                      AND a.speciescode = b.speciescode
                                      AND a.season = b.season ))
@@ -77,8 +77,8 @@ FROM (SELECT rs1.level2_code                        AS code,
                                              t_lu_threats.name_corrected AS level2_name
                              FROM (SELECT t.code,
                                           Substring_index(t.code, '.', 1) AS level2_code
-                                   FROM   art12rp1_eu.lu_threats t) q_lu_threats
-                                   LEFT JOIN art12rp1_eu.lu_threats t_lu_threats
+                                   FROM   art12_eu.lu_threats t) q_lu_threats
+                                   LEFT JOIN art12_eu.lu_threats t_lu_threats
                                           ON q_lu_threats.level2_code = t_lu_threats.code) c
                                ON ( c.code = t.pressurecode )
                   WHERE  a.speciescode = '{subject}'
@@ -94,14 +94,14 @@ FROM (SELECT rs1.level2_code                        AS code,
                                         a.speciescode,
                                         a.season,
                                         Substring_index(c.code, '.', 1) AS level2_code
-                        FROM ((art12rp1_eu.data_bpressures_threats t
-                               INNER JOIN art12rp1_eu.data_birds a
+                        FROM ((art12_eu.data_bpressures_threats t
+                               INNER JOIN art12_eu.data_birds a
                                        ON ( a.specieshash = t.specieshash ))
-                              INNER JOIN art12rp1_eu.data_birds_check_list b
+                              INNER JOIN art12_eu.data_birds_check_list b
                                       ON (a.country = b.country
                                           AND a.speciescode = b.speciescode
                                           AND a.season = b.season))
-                        LEFT JOIN art12rp1_eu.lu_threats c
+                        LEFT JOIN art12_eu.lu_threats c
                                ON ( c.code = t.pressurecode )
                         WHERE  a.speciescode = '{subject}'
                                AND a.use_for_statistics = true
@@ -138,8 +138,8 @@ SELECT t.country                                AS reg,
        t.population_minimum_size)) * IF(t.population_maximum_size = 0, 1,
        IF(t.population_maximum_size IS NULL, t.population_minimum_size,
        t.population_maximum_size))), 2))     AS pc
-FROM   art12rp1_eu.data_birds AS t
-       INNER JOIN art12rp1_eu.data_birds_check_list AS b
+FROM   art12_eu.data_birds AS t
+       INNER JOIN art12_eu.data_birds_check_list AS b
                ON ( t.country = b.country )
                   AND ( t.speciescode = b.speciescode )
                   AND ( t.season = b.season )
@@ -152,8 +152,8 @@ SELECT t.country,
        IF(t.season = 'W', 'winter', 'breeding') AS wb,
        'NO'                                     AS spa,
        NULL                                     AS pc
-FROM   art12rp1_eu.data_birds AS t
-       INNER JOIN art12rp1_eu.data_birds_check_list AS b
+FROM   art12_eu.data_birds AS t
+       INNER JOIN art12_eu.data_birds_check_list AS b
                ON ( t.season = b.season )
                   AND ( t.speciescode = b.speciescode )
                   AND ( t.country = b.country )
@@ -178,10 +178,10 @@ FROM (SELECT rs1.level2_code                        AS code,
                                   a.season,
                                   c.level2_code,
                                   c.level2_name
-                  FROM ((art12rp1_eu.data_bmeasures m
-                         INNER JOIN art12rp1_eu.data_birds a
+                  FROM ((art12_eu.data_bmeasures m
+                         INNER JOIN art12_eu.data_birds a
                                  ON ( a.specieshash = m.specieshash ))
-                         INNER JOIN art12rp1_eu.data_birds_check_list b
+                         INNER JOIN art12_eu.data_birds_check_list b
                                  ON ( a.country = b.country
                                       AND a.speciescode = b.speciescode
                                       AND a.season = b.season ))
@@ -189,9 +189,9 @@ FROM (SELECT rs1.level2_code                        AS code,
                                                     t_lu_measures.NAME AS level2_name
                                     FROM (SELECT t.code,
                                                  LEFT(t.code, 3) AS level2_code
-                                          FROM art12rp1_eu.lu_measures t)
+                                          FROM art12_eu.lu_measures t)
                                           q_lu_measures
-                                          LEFT JOIN art12rp1_eu.lu_measures t_lu_measures
+                                          LEFT JOIN art12_eu.lu_measures t_lu_measures
                                                  ON q_lu_measures.level2_code = t_lu_measures.code) c
                                 ON ( c.code = m.measurecode )
                   WHERE  a.speciescode = '{subject}'
@@ -207,14 +207,14 @@ FROM (SELECT rs1.level2_code                        AS code,
                                           a.speciescode,
                                           a.season,
                                           LEFT(c.code, 3) AS level2_code
-                        FROM ((art12rp1_eu.data_bmeasures m
-                               INNER JOIN art12rp1_eu.data_birds a
+                        FROM ((art12_eu.data_bmeasures m
+                               INNER JOIN art12_eu.data_birds a
                                        ON a.specieshash = m.specieshash)
-                               INNER JOIN art12rp1_eu.data_birds_check_list b
+                               INNER JOIN art12_eu.data_birds_check_list b
                                        ON (a.country = b.country
                                            AND a.speciescode = b.speciescode
                                            AND a.season = b.season))
-                               LEFT JOIN art12rp1_eu.lu_measures c
+                               LEFT JOIN art12_eu.lu_measures c
                                       ON ( c.code = m.measurecode )
                         WHERE  a.speciescode = '{subject}'
                                AND a.use_for_statistics = true
