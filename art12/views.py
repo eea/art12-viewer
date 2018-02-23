@@ -84,7 +84,8 @@ class Summary(SpeciesMixin, TemplateView):
 
         return {
             'filter_form': filter_form,
-            'objects': content_objects, 'eu_objects': eu_objects,
+            'objects': content_objects,
+            'eu_objects': eu_objects,
             'current_selection': filter_form.get_selection(),
             'dataset': dataset,
             'subject': subject,

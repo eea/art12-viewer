@@ -4,6 +4,7 @@ sandbox
 *~
 *.pyc
 *.sql
+.idea
 __pycache__
 env.ini
 env

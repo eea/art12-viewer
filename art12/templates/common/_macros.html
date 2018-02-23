@@ -28,7 +28,7 @@
 {% macro additional_info(bool, value) %}
   <td class="default-td"
       {% if bool %}
-        title="{{ value|wordwrap }}"
+        title="{{ value }}"
       {% endif %}>
     {{ bool or '' }}
   </td>

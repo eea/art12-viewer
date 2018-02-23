@@ -12,6 +12,7 @@ from art12.factsheet import factsheet
 from art12.common import common, HOMEPAGE_VIEW_NAME
 from art12.utils import inject_static_file
 from art12.factsheet import factsheet_manager
+from art12.management.import_greece import import_greece
 from eea_integration.auth.script import user_manager, role_manager
 from eea_integration.layout import layout
 from eea_integration.auth import UserDatastore, Auth
@@ -88,6 +89,7 @@ def create_manager(app):
     manager = Manager(app)
     manager.add_command('db', db_manager)
     manager.add_command('user', user_manager)
+    manager.add_command('import_greece', import_greece)
     manager.add_command('role', role_manager)
     manager.add_command('factsheet', factsheet_manager)
     return manager
