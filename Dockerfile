@@ -5,11 +5,11 @@ ENV WORK_DIR=/var/local/art12
 ENV DATA_DIR=/var/local/art12-data
 
 RUN runDeps="curl vim build-essential netcat mysql-client libmysqlclient-dev python-dev libldap2-dev libsasl2-dev libssl-dev libxrender1 libfontconfig1 libxext6" \
- && apt-get update \
- && apt-get install -y --no-install-recommends $runDeps \
- && rm -vrf /var/lib/apt/lists/*
+	&& apt-get update \
+	&& apt-get install -y --no-install-recommends $runDeps \
+	&& rm -vrf /var/lib/apt/lists/*
 
-RUN curl -O https://downloads.wkhtmltopdf.org/0.12/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
+RUN curl -OL https://downloads.wkhtmltopdf.org/0.12/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
 	&& tar -xvf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
 	&& cp -r wkhtmltox/* /usr/local/ \
 	&& rm -R wkhtmltox \
@@ -25,7 +25,7 @@ RUN mkdir $WORK_DIR/logs \
 	&& ln -s $DATA_DIR/factsheets $WORK_DIR/art12/static/factsheets
 
 RUN pip install -U setuptools \
- && pip install -r requirements-dep.txt --trusted-host eggshop.eaudeweb.ro \
- && mv docker-entrypoint.sh /bin/
+	&& pip install -r requirements-dep.txt --trusted-host eggshop.eaudeweb.ro \
+	&& mv docker-entrypoint.sh /bin/
 
 ENTRYPOINT ["docker-entrypoint.sh"]
