@@ -57,6 +57,7 @@ $(document).ready(function () {
     $('#period').on('change', function () {
         var option = $(this).find(':selected');
         var value = option.val();
+        var subject_selected = $('#subject').find(':selected').val();
         var data = {'dataset_id': value};
         var url = 'summary/filter_form';
         $.ajax({
@@ -69,11 +70,20 @@ $(document).ready(function () {
                 $('#subject').empty();
                 $.each(data, function(index, element) {
                     console.log(element);
+                    if (element[0] == subject_selected){
+                      $('#subject').append(
+                        $("<option selected></option>")
+                            .text(element[1])
+                            .val(element[0])
+                    );
+                    }
+                    else{
                     $('#subject').append(
                         $("<option></option>")
                             .text(element[1])
                             .val(element[0])
                     );
+                    }
                 });
             },
             error: function(resp) {
