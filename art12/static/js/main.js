@@ -58,7 +58,7 @@ $(document).ready(function () {
         var option = $(this).find(':selected');
         var value = option.val();
         var data = {'dataset_id': value};
-        var url = '/summary/filter_form';
+        var url = 'summary/filter_form';
         $.ajax({
             type: "GET",
             url: url,
