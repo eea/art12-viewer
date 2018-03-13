@@ -173,12 +173,12 @@ class Reports(SpeciesMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         filter_form = ReportsFilterForm(request.args)
-
         country = filter_form.country.data
+        period = filter_form.period.data
         if country:
             objects = (
                 self.model_cls.query
-                .filter_by(country_isocode=country)
+                .filter_by(country_isocode=country).filter_by(dataset_id=period)
                 .order_by(self.model_cls.speciesname)
             )
         else:
