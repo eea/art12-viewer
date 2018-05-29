@@ -202,6 +202,16 @@ class ConnectedSelectBoxes(View, SpeciesMixin):
         return json.dumps(options)
 
 
+class FilterFormCountries(View, SpeciesMixin):
+    methods = ['GET']
+
+    def dispatch_request(self):
+        dataset_id = request.args.get('dataset_id', 1)
+        dataset = Dataset.query.get_or_404(dataset_id)
+        options = [('', '-')] + self.get_countries(dataset)
+        return json.dumps(options)
+
+
 class EuMap(TemplateView):
     template_name = 'summary/eu_map.html'
 

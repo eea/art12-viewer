@@ -17,6 +17,8 @@ class SpeciesMixin(object):
         )
 
     def get_countries(self, dataset):
+        if dataset.id == 2:
+            return [(u'GR', u'GR')]
         return (
             self.model_cls.query
             .filter_by(dataset=dataset)

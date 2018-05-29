@@ -20,19 +20,20 @@ class ImportGreeceCommand(BaseCreateUserCommand):
             models.EtcDataBird.query.all()
             if data.dataset_id == 2
         ]
+        species = [
+            data.speciesname for data in models.EtcDataBird.query.filter_by(
+                country_isocode='GR').filter_by(dataset_id=2)
+        ]
+
         for speciescode in speciescodes:
             ludatabird = models.LuDataBird.query.filter_by(
-                speciescode=speciescode
+                speciescode=speciescode,
+                dataset_id=2
             ).first()
-            if not models.LuDataBird.query.filter_by(
-                    speciescode=ludatabird.speciescode, dataset_id=2).all():
-                new_ludatabird = models.LuDataBird(
-                    speciescode=ludatabird.speciescode,
-                    speciesname=ludatabird.speciesname,
-                    dataset_id=2,
-                )
-                models.db.session.add(new_ludatabird)
-                models.db.session.commit()
+            if ludatabird:
+                if ludatabird.speciesname not in species:
+                    models.db.session.delete(ludatabird)
+            models.db.session.commit()
 
 
 import_greece = Manager()

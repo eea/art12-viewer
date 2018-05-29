@@ -15,7 +15,14 @@
     <p>
       Choose a period and a species.
     </p>
-
+  {% if dataset.id == 2 %}
+  <p class="note">
+    IMPORTANT: 2008-2012bis reporting period displays data from the delayed delivery by Greece
+    (where relevant) together with data from other Member States used for the EU population status
+    assessment in 2014. EU population status assessment is not available for 2008-2012bis period.
+    Where relevant the map includes the information from the delayed delivery by Greece.
+  </p>
+  {% endif %}
     {% include 'summary/filters.html' %}
 
     {% set colspan_all=30 %}

@@ -2,21 +2,21 @@
   {% set datasheet_url=url_for('wiki.datasheet', period=dataset.id, subject=subject) %}
   {% set audittrail_url=url_for('wiki.audittrail', period=dataset.id, subject=subject) %}
 
-  <button type="button" id="wikibutton" href="{{ datasheet_url }}">
+  <button type="button" id="wikibutton" href="{{ datasheet_url }}" {% if dataset.id == 2 %}disabled{% endif %}>
     View data sheet info
   </button>
 
-  <button type="button" id="wikibutton" href="{{ audittrail_url }}">
+  <button type="button" id="wikibutton" href="{{ audittrail_url }}" {% if dataset.id == 2 %}disabled{% endif %}>
     Audit trail
   </button>
 
-  {% if map_url %}
+  {% if map_url and dataset.id != 2 %}
     <button type="button" id="show-map" data-url="{{ map_url }}">Map</button>
   {% else %}
     <button type="button" class="disabled">Map</button>
   {% endif %}
 
-  {% if eu_map_breeding_url %}
+  {% if eu_map_breeding_url and dataset.id != 2 %}
     <button type="button" id="show-eu-map" data-url="{{ eu_map_breeding_url }}">
       EU map of Breeding population trend
     </button>
@@ -24,7 +24,7 @@
     <button type="button" class="disabled">EU map of Breeding population trend</button>
   {% endif %}
 
-  {% if eu_map_winter_url %}
+  {% if eu_map_winter_url and dataset.id != 2 %}
     <button type="button" id="show-eu-map" data-url="{{ eu_map_winter_url }}">
       EU map of Winter population trend
     </button>
@@ -32,7 +32,7 @@
     <button type="button" class="disabled">EU map of Winter population trend</button>
   {% endif %}
 
-  {% if factsheet_url %}
+  {% if factsheet_url and dataset.id != 2 %}
     <a href="{{ factsheet_url }}" target="_blank" class="button">Download factsheet</a>
   {% endif %}
 </div>

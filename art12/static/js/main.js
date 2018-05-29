@@ -90,7 +90,44 @@ $(document).ready(function () {
                 alert('Error on selection')
             }
         });
+
+        var option = $(this).find(':selected');
+        var value = option.val();
+        var subject_selected = $('#country').find(':selected').val();
+        var data = {'dataset_id': value};
+        var url = 'summary/filter_form/countries';
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: data,
+            dataType: 'html',
+            success: function(resp) {
+                var data = JSON.parse(resp);
+                $('#country').empty();
+                $.each(data, function(index, element) {
+                    console.log(element);
+                    if (element[0] == subject_selected){
+                      $('#country').append(
+                        $("<option selected></option>")
+                            .text(element[1])
+                            .val(element[0])
+                    );
+                    }
+                    else{
+                    $('#country').append(
+                        $("<option></option>")
+                            .text(element[1])
+                            .val(element[0])
+                    );
+                    }
+                });
+            },
+            error: function(resp) {
+                alert('Error on selection')
+            }
+        });
     });
+
 
     var copy_alert = 'Copying the data is not allowed';
     $('.copy-disabled').bind('contextmenu', function(e){

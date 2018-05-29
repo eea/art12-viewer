@@ -16,6 +16,11 @@
       Choose a period and a species.
     </p>
 
+    {% if dataset.id == 2 %}
+    <p class="note">
+    IMPORTANT: 2008-2012bis reporting period displays data from the delayed delivery by Greece.
+    </p>
+    {% endif %}
     {% include 'reports/filters.html' %}
 
     {% set colspan_all=30 %}
