@@ -2,6 +2,9 @@ Project Name
 ------------
 The Project Name is `Art 12 Consultation Tool`
 
+[![Travis](https://travis-ci.org/eea/art12-viewer.svg?branch=master)](https://travis-ci.org/eea/art12-viewer)
+[![Docker](https://dockerbuildbadges.quelltext.eu/status.svg?organization=eeacms&repository=copernicus-insitu-db)](https://hub.docker.com/r/eeacms/art12-viewer/builds/)
+
 Prerequisites - System packages
 -------------------------------
 
