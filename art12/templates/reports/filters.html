@@ -3,7 +3,9 @@
 
   <div class="box-col width-180">
     <label>{{ filter_form.period.label }}</label>
-    {{ filter_form.period }}
+    {{ filter_form.period( **{'data-href': url_for('.filter_form'),
+                              'data-href-countries': url_for('.filter_form_countries')})
+    }}
   </div>
 
   <div class="box-col width-240">

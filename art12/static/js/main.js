@@ -57,45 +57,51 @@ $(document).ready(function () {
     $('#period').on('change', function () {
         var option = $(this).find(':selected');
         var value = option.val();
-        var subject_selected = $('#subject').find(':selected').val();
-        var data = {'dataset_id': value};
-        var url = $(this).data('href');
-        $.ajax({
+        var subject_selected = $('#subject option:selected').val();
+        $('#subject').data('subject', subject_selected);
+
+        if ($('#subject')){
+          var data = {'dataset_id': value};
+          var url = $(this).data('href');
+          $.ajax({
             type: "GET",
             url: url,
             data: data,
             dataType: 'html',
             success: function(resp) {
-                var data = JSON.parse(resp);
-                $('#subject').empty();
-                $.each(data, function(index, element) {
-                    console.log(element);
-                    if (element[0] == subject_selected){
-                      $('#subject').append(
-                        $("<option selected></option>")
-                            .text(element[1])
-                            .val(element[0])
-                    );
-                    }
-                    else{
-                    $('#subject').append(
-                        $("<option></option>")
-                            .text(element[1])
-                            .val(element[0])
-                    );
-                    }
-                });
+              var data = JSON.parse(resp);
+              var subject_selected = $('#subject').data('subject');
+              $('#subject').empty();
+              $.each(data, function(index, element) {
+                if (element[0] == subject_selected){
+                  $('#subject').append(
+                  $("<option selected></option>")
+                    .text(element[1])
+                    .val(element[0])
+                  );
+                }
+                else{
+                  $('#subject').append(
+                  $("<option></option>")
+                    .text(element[1])
+                    .val(element[0])
+                  );
+                }
+              });
             },
             error: function(resp) {
-                alert('Error on selection')
+              alert('Error on selection')
             }
-        });
+          });
+        }
 
         var option = $(this).find(':selected');
         var value = option.val();
-        var subject_selected = $('#country').find(':selected').val();
+        var country_selected = $('#country').find(':selected').val();
+        $('#country').data('country', subject_selected);
         var data = {'dataset_id': value};
         var url = $(this).data('href-countries');
+        if ($('#country')){
         $.ajax({
             type: "GET",
             url: url,
@@ -105,8 +111,8 @@ $(document).ready(function () {
                 var data = JSON.parse(resp);
                 $('#country').empty();
                 $.each(data, function(index, element) {
-                    console.log(element);
-                    if (element[0] == subject_selected){
+                    var country_selected = $('#country').data('country');
+                    if (element[0] == country_selected){
                       $('#country').append(
                         $("<option selected></option>")
                             .text(element[1])
@@ -126,6 +132,7 @@ $(document).ready(function () {
                 alert('Error on selection')
             }
         });
+        }
     });
 
 
