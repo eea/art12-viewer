@@ -1,8 +1,60 @@
 Changelog
 =========
 
-2.2.dev0 - (unreleased)
+2.4.3 (2018-05-30)
+----------------------
+* Fix ajax links
+ [dianaboiangiu]
+ 
+2.4.2 (2018-05-30)
+----------------------
+* Use new mysqlclient package
+ [dianaboiangiu]
+ 
+2.4.1 (2018-07-26)
+----------------------
+* Refactor import greece script for production environment
+ [dianaboiangiu]
+
+2.4.0 (2018-05-29)
+----------------------
+* Refactor import greece script
+ [dianaboiangiu]
+
+2.3.5 (2018-03-13)
+----------------------
+* Add filter on reports page
+ [dianaboiangiu]
+
+2.3.4 (2018-03-12)
+----------------------
+* Keep subject options selected on period change
+ [dianaboiangiu]
+
+2.3.3 (2018-03-12)
+----------------------
+* Improve period filter
+ [dianaboiangiu]
+
+2.3.2 (2018-03-12)
+----------------------
+* Rename database
+ [nico4]
+
+2.3.1 (2018-03-12)
+----------------------
+* Docker follow redirect on linux package download
+ [nico4]
+
+2.3 (2018-02-23)
 -----------------------
+* Prepare Greece import
+ [dianaboiangiu]
+
+2.2 (2017-06-08)
+-----------------------
+* Rename database
+ [nico4]
 
 2.1 (2017-05-11)
 -----------------------
