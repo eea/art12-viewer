@@ -59,7 +59,7 @@ $(document).ready(function () {
         var value = option.val();
         var subject_selected = $('#subject').find(':selected').val();
         var data = {'dataset_id': value};
-        var url = 'summary/filter_form';
+        var url = $(this).data('href');
         $.ajax({
             type: "GET",
             url: url,
@@ -95,7 +95,7 @@ $(document).ready(function () {
         var value = option.val();
         var subject_selected = $('#country').find(':selected').val();
         var data = {'dataset_id': value};
-        var url = 'summary/filter_form/countries';
+        var url = $(this).data('href-countries');
         $.ajax({
             type: "GET",
             url: url,
