@@ -1,12 +1,12 @@
 Changelog
 =========
 
-2.4.3 (2018-05-30)
+2.4.3 (2018-08-06)
 ----------------------
 * Fix ajax links
  [dianaboiangiu]
  
-2.4.2 (2018-05-30)
+2.4.2 (2018-07-30)
 ----------------------
 * Use new mysqlclient package
  [dianaboiangiu]
