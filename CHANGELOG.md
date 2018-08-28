@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.4.4 (2018-08-28)
+----------------------
+* Set new wordings
+  [dianaboiangiu]
+
 2.4.3 (2018-08-06)
 ----------------------
 * Fix ajax links
