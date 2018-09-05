@@ -51,6 +51,14 @@ class ProgressFilterForm(CommonFilterForm):
     conclusion = SelectField('Assessment type...', choices=CONCLUSION_TYPE,
                              default='')
 
+    def __init__(self, *args, **kwargs):
+        super(ProgressFilterForm, self).__init__(*args, **kwargs)
+
+        self.period.choices = [(d.id, d.name) for d in
+                               Dataset.query.filter(Dataset.id != 2)]
+        dataset_id = request.args.get('period', get_default_period())
+        self.dataset = Dataset.query.get_or_404(dataset_id)
+
     def get_selection(self):
         conclusion = self.conclusion.data
         if not conclusion:
