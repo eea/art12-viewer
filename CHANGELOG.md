@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.4.5 (2018-09-05)
+----------------------
+* Remove period 2012bis from progress page
+  [dianaboiangiu]
+
 2.4.4 (2018-08-28)
 ----------------------
 * Set new wordings
