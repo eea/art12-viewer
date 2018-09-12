@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.4.6 (2018-09-12)
+----------------------
+* Simulate collect static in docker entrypoint
+  [dianaboiangiu]
+
 2.4.5 (2018-09-05)
 ----------------------
 * Remove period 2012bis from progress page
