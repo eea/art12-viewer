@@ -3,6 +3,12 @@ set -e
 
 COMMANDS="shell utils db sync runserver api match"
 
+echo "Refreshing static files..."
+STATIC_DIR="/var/local/art12/art12/static/"
+TEMP_STATIC_DIR="/var/local/art12/temp_static/"
+cp -a $TEMP_STATIC_DIR/. $STATIC_DIR
+rm -r $TEMP_STATIC_DIR
+
 if [ -z "$MYSQL_ADDR" ]; then
   MYSQL_ADDR="mysql"
 fi
