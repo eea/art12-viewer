@@ -52,8 +52,12 @@ SENTRY_DSN = getenv('SENTRY_DSN', default='')
 
 # Destination for PDF reports in the Factsheet module
 PDF_DESTINATION = getenv('PDF_DESTINATION', default='factsheet')
-PDF_URL_PREFIX = getenv('PDF_URL_PREFIX', default='http://localhost:5000/article12')
+PDF_URL_PREFIX = getenv('PDF_URL_PREFIX', default='')
+LOCAL_PDF_URL_PREFIX = getenv('LOCAL_PDF_URL_PREFIX', default='http://localhost:5000/article12')
+PDF_URL_SUFIX = '{filename}/download/en/1/{filename}.pdf'
 
+
+MAP_URL_PREFIX = getenv('MAP_URL_PREFIX', default='http://localhost:5000/article12')
 MAPS_FORMAT = getenv('MAPS_FORMAT', default='{code}_{suffix}.png')
 MAPS_STATIC = getenv('MAPS_STATIC', default='maps')
 

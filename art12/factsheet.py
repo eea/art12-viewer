@@ -5,6 +5,7 @@ from flask.views import MethodView
 from path import path
 import jinja2
 import subprocess
+import urllib
 
 from art12.common import get_map_path
 from art12.models import db, EtcBirdsEu, EtcDataBird, Wiki, WikiChange
@@ -33,7 +34,7 @@ def format_subpopulation(subpopulation):
 def get_map_url(code, suffix):
     map = get_map_path(code=code, suffix=suffix)
     if map:
-        return app.config['PDF_URL_PREFIX'] + url_for('static', filename=map)
+        return app.config['MAP_URL_PREFIX'] + url_for('static', filename=map)
 
 
 def get_arg(kwargs, key, default=None):
@@ -124,7 +125,7 @@ class BirdFactsheet(MethodView):
         self.set_etc_birds(bird_obj)
         self.set_conclusion_status_levels(bird_obj)
         self.set_ms_birds(bird_obj)
-        bird_obj.url = app.config['PDF_URL_PREFIX'] + url_for(
+        bird_obj.url = app.config['LOCAL_PDF_URL_PREFIX'] + url_for(
             'views.summary', subject=self.subject, period=self.period)
         bird_obj.code = self.subject
 
@@ -216,11 +217,19 @@ def get_pdf_path(subject):
     if real_path.exists():
         return pdf_path
 
+def get_pdf_url(subject):
+    pdf_file_name = BirdFactsheet.get_pdf_file_name(subject)
+    pdf_url = app.config['PDF_URL_PREFIX'] + '/' + (
+        app.config['PDF_URL_SUFIX'].format(filename=pdf_file_name)
+    )
+    code = urllib.urlopen(pdf_url).getcode()
+    if code == 200:
+        return pdf_url
 
 def get_factsheet_url(subject):
-    pdf_path = get_pdf_path(subject)
-    if pdf_path:
-        return url_for('static', filename=pdf_path)
+    pdf_url = get_pdf_url(subject)
+    if pdf_url:
+        return pdf_url
     return None
 
 

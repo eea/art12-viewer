@@ -92,7 +92,8 @@ A minimal configuration file could be:
     BIND_NAME=art12rp1_eu
 
     AUTH_ZOPE=False
-    PDF_URL_PREFIX=http://localhost:5000
+    PDF_URL_PREFIX=
+    MAP_URL_PREFIX=
     LAYOUT_ZOPE_URL=
 
 ### 2.1. Local `docker-compose.yml` file
