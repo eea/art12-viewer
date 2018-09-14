@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.4.7(2018-09-14)
+----------------------
+* Download factsheets from external source
+ [dianaboiangiu]
+
 2.4.6 (2018-09-12)
 ----------------------
 * Simulate collect static in docker entrypoint
