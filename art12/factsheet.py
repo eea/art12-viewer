@@ -8,7 +8,10 @@ import subprocess
 import urllib
 
 from art12.common import get_map_path
-from art12.models import db, EtcBirdsEu, EtcDataBird, Wiki, WikiChange
+from art12.models import (
+    db, EtcBirdsEu, EtcDataBird,
+    LuDataBird, Wiki, WikiChange,
+)
 from art12.pdf import PdfRenderer
 from art12.queries import (
     SPECIESNAME_Q, SUBUNIT_Q, ANNEX_Q, PLAN_Q, MS_TABLE_Q,
@@ -217,7 +220,19 @@ def get_pdf_path(subject):
     if real_path.exists():
         return pdf_path
 
-def get_pdf_url(subject):
+def check_if_species_is_non_native(subject, dataset):
+    """
+    Check if the subject is non-native and if there is a native version.
+    """
+    native_exists = LuDataBird.query.filter_by(
+        dataset=dataset,
+        speciescode=subject[:-2]).count()
+    if subject.endswith('-X') and native_exists:
+        return True
+
+def get_pdf_url(subject, dataset):
+    if check_if_species_is_non_native(subject, dataset):
+        return
     pdf_file_name = BirdFactsheet.get_pdf_file_name(subject)
     pdf_url = app.config['PDF_URL_PREFIX'] + '/' + (
         app.config['PDF_URL_SUFIX'].format(filename=pdf_file_name)
@@ -226,8 +241,8 @@ def get_pdf_url(subject):
     if code == 200:
         return pdf_url
 
-def get_factsheet_url(subject):
-    pdf_url = get_pdf_url(subject)
+def get_factsheet_url(subject, dataset):
+    pdf_url = get_pdf_url(subject, dataset)
     if pdf_url:
         return pdf_url
     return None

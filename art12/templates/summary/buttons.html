@@ -31,8 +31,14 @@
   {% else %}
     <button type="button" class="disabled">EU map of Winter population trend</button>
   {% endif %}
-
-  {% if factsheet_url and dataset.id != 2 %}
-    <a href="{{ factsheet_url }}" target="_blank" class="button">Download factsheet</a>
+  
+  {% if dataset.id != 2 %}
+    {% if factsheet_url %}
+      <a href="{{ factsheet_url }}" target="_blank" class="button">Download factsheet</a>
+    {% else %}
+      <button type="button" id="download-factsheets" data-url="{{ factsheet_url }}" class="disabled">
+        Download factsheet
+      </button>
+    {% endif %}
   {% endif %}
 </div>

@@ -77,7 +77,7 @@ class Summary(SpeciesMixin, TemplateView):
                 subject=subject,
                 sensitive=sensitive,
             )
-            factsheet_url = get_factsheet_url(subject=subject)
+            factsheet_url = get_factsheet_url(subject=subject, dataset=dataset)
         else:
             content_objects = []
             eu_objects = []
