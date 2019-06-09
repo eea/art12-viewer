@@ -91,7 +91,7 @@ abbr {
   font-size: 14px;
   font-weight: bold;
   line-height: 23px;
-  text-align: left;
+  text-align: left !important;
 }
 .complex_datatable thead tr:first-child,
 .complex_datatable .thead tr:first-child {
@@ -281,7 +281,6 @@ a.conclusion:hover {
   color: #000;
 }
 td .conclusion {
-  max-width: 80px;
   width: 100%;
 }
 a.conclusion:hover {
@@ -1610,7 +1609,9 @@ td.form-error-td .select:hover {
 
 .offset_top_label {
   float: left;
-  margin-top: 22px;
+  margin-top: 27px;
+  background-image: unset;
+  background: unset;
 }
 
 /* TABLE ROW HIGHLIGHTS HIGHLIGHTS */
@@ -1644,4 +1645,53 @@ td.form-error-td .select:hover {
 
 [data-template] {
     display: none!important;
+}
+
+
+
+body {
+  padding: 0;
+}
+
+li.hasDropDown > i {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+li.hasDropDown i {
+  background: none;
+}
+
+.search-wrapper {
+  margin-top: 16px;
+}
+
+.search-submit {
+  margin-top: 5px;
+  color: black !important;
+  background: none;
+}
+#loginlink {
+  background: none;
+}
+
+#breadcrumbs-home  > i.glyphicon.link-https:after {
+  content: none;
+}
+
+td input {
+  height: 1.8em !important;
+}
+
+.caret {
+  height: auto;
+}
+
+tbody th {
+  text-align: center !important;
+}
+
+.outer-wrapper .container {
+  margin-left: unset;
 }

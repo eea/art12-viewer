@@ -17,3 +17,11 @@ art12.staging.env
 art12.devel.env
 rsync.key
 .skip-db-init
+
+art12/templates/plone/head.html
+art12/templates/plone/header.html
+art12/templates/plone/before_login.html
+art12/templates/plone/before_breadcrumbs.html
+art12/templates/plone/header_before_container.html
+art12/templates/plone/header_after_container.html
+art12/templates/plone/footer.html

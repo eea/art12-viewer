@@ -33,6 +33,10 @@ AUTH_ZOPE = getenv('AUTH_ZOPE', type=bool, default=True)
 AUTH_ZOPE_WHOAMI_URL = getenv('AUTH_ZOPE_WHOAMI_URL', default='http://example.com/art12_api/whoami')
 LAYOUT_ZOPE_URL = getenv('LAYOUT_ZOPE_URL', default='http://example.com/art12_api/layout')
 
+PLONE_URL = getenv('PLONE_URL',
+                    default='https://plone5demo.eionet.europa.eu')
+LAYOUT_PLONE_URL=getenv('LAYOUT_PLONE_URL',
+                        default='https://plone5demo.eionet.europa.eu/external-template-header')
 AUTH_ZOPE_ACL_MANAGER_URL = getenv('AUTH_ZOPE_ACL_MANAGER_URL', default='http://example.com/acl_manager')
 AUTH_ZOPE_ACL_MANAGER_KEY = getenv('AUTH_ZOPE_ACL_MANAGER_KEY', default='')
 

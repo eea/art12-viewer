@@ -23,9 +23,11 @@ EMPTY = ''
 def inject_globals():
     make_tooltip = lambda d: '\n' + '\n'.join(
         ['%s: %s' % (k, v) for k, v in d])
-
     return {
-        'APP_BREADCRUMBS': [('Article 12', url_for(HOMEPAGE_VIEW_NAME))],
+        'APP_BREADCRUMBS': [
+            ('Eionet', app.config['LAYOUT_PLONE_URL']),
+            ('Article 12', url_for(HOMEPAGE_VIEW_NAME))
+        ],
         'EU_COUNTRY': EU_COUNTRY,
         'TREND_TOOLTIP': make_tooltip(TREND_OPTIONS),
         'TREND_TOOLTIP_EU': make_tooltip(TREND_OPTIONS_EU),
@@ -41,6 +43,7 @@ def inject_globals():
         # summary functions
         'get_original_url': get_original_url,
         'get_title_for_country': get_title_for_species_country,
+        'current_user': current_user,
     }
 
 

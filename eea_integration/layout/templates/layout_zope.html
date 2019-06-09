@@ -1,24 +1,31 @@
-{{ g.zope_layout.start_to_title }}
 
-{%- block title %}{% endblock -%}
-
-{{ g.zope_layout.title_to_endofhead }}
+{% include 'plone/head.html' %}
 
 {%- block extra_head %}{% endblock -%}
 
-{{ g.zope_layout.endofhead_to_startofbody }}
+{% include 'plone/before_login.html' %}
+
+{% if current_user.is_authenticated() %}
+  <a href="http://www.eionet.europa.eu/directory/user?uid={{ current_user.username }}"
+     id="profilelink">{{ current_user.username }}</a>
+  <a id="loginlink" href="https://plone5demo.eionet.europa.eu/logout">Log out</a>
+{% else %}
+  <a id="loginlink" href="https://plone5demo.eionet.europa.eu/login">Log in</a>
+{% endif %}
 
 {%- block afterbody %}{% endblock -%}
 
-{{ g.zope_layout.startofbody_to_breadcrumbs }}
+{% include 'plone/before_breadcrumbs.html' %}
 
 {%- block breadcrumbs %}{% endblock -%}
 
-{{ g.zope_layout.breadcrumbs_to_leftcolumn }}
-{{ g.zope_layout.leftcolumn_to_content }}
+{% include 'plone/header_before_container.html' %}
 
 {% block before_content %}{% endblock %}
 {% block content %}{% endblock %}
+
+{% include 'plone/header_after_container.html' %}
+
 {% block scripts %}{% endblock %}
 
-{{ g.zope_layout.content_to_end }}
+{% include 'plone/footer.html' %}
