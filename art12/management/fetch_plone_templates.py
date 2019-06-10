@@ -34,8 +34,12 @@ class FetchPloneTemplates(BaseCreateUserCommand):
 
         plone_url_layout = flask.current_app.config['LAYOUT_PLONE_URL']
         plone_url = flask.current_app.config['PLONE_URL']
-        auth_header = flask.request.headers.get('Authorization')
-        resp = requests.get(plone_url_layout, headers={'Authorization': auth_header}, verify=False)
+        auth_cookie = flask.request.cookies.get('__ac')
+        resp = requests.get(
+            plone_url_layout,
+            cookies={'__ac': auth_cookie},
+            verify=False
+        )
 
         plone_path = os.path.join(
             flask.current_app.instance_path, 

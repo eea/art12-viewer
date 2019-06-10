@@ -77,10 +77,11 @@ class ZopeAuthProvider(object):
         })
 
     def before_request_handler(self):
-        auth_header = flask.request.headers.get('Authorization')
+        auth_cookie = flask.request.cookies.get('__ac')
         resp = requests.get(
             self.whoami_url,
-            headers={'Authorization': auth_header},
+            cookies={'__ac': auth_cookie},
+            verify=False
         )
         resp_data = resp.json()
         if resp_data['user_id']:
