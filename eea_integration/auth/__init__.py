@@ -4,7 +4,7 @@ from flask.ext.security import Security
 auth = flask.Blueprint('auth', __name__, template_folder='templates')
 
 from .security import UserDatastore, current_user
-from .providers import DebugAuthProvider, ZopeAuthProvider
+from .providers import DebugAuthProvider, PloneAuthProvider
 from .forms import EeaForgotPasswordForm
 from .common import ugly_fix
 
@@ -19,8 +19,8 @@ class Auth(object):
         if app.config.get('AUTH_DEBUG'):
             DebugAuthProvider().init_app(app)
 
-        if app.config.get('AUTH_ZOPE'):
-            ZopeAuthProvider().init_app(app)
+        if app.config.get('AUTH_PLONE'):
+            PloneAuthProvider().init_app(app)
 
         app.config.update({
             'SECURITY_CONFIRMABLE': True,

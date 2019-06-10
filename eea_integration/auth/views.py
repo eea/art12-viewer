@@ -8,7 +8,7 @@ from flask.ext.security.changeable import change_user_password
 from flask.ext.security.registerable import register_user, encrypt_password
 from werkzeug.datastructures import ImmutableMultiDict
 
-from . import zope_acl_manager, current_user, auth
+from . import plone_acl_manager, current_user, auth
 from .forms import EeaAdminEditUserForm, \
     EeaLDAPRegisterForm, EeaLocalRegisterForm
 from .providers import _get_initial_ldap_data
@@ -196,7 +196,7 @@ def change_password():
         auth.models.db.session.commit()
         msg = "Your password has been changed. Please log in again."
         flask.flash(msg, 'success')
-        zope_acl_manager.edit(current_user.id, form.new_password.data)
+        plone_acl_manager.edit(current_user.id, form.new_password.data)
         return flask.redirect(flask.url_for(HOMEPAGE_VIEW_NAME))
 
     return flask.render_template('auth/change_password.html', **{
@@ -245,11 +245,11 @@ def admin_user(user_id):
     if flask.request.method == 'POST':
         if flask.request.form.get('btn') == u'delete':
             if user.is_ldap:
-                # delete from Zope
+                # delete from Plone
                 try:
-                    zope_acl_manager.delete(user)
+                    plone_acl_manager.delete(user)
                 except RuntimeError:
-                    flask.flash("Failed to delete user from Zope.", 'error')
+                    flask.flash("Failed to delete user from Plone.", 'error')
                     return flask.redirect(
                         flask.url_ufor('.admin_user', user_id=user_id))
             # delete from local database
@@ -315,7 +315,7 @@ def admin_user_reset_password(user_id):
         auth.models.db.session.commit()
         msg = "Your password has been reset successfully"
         flask.flash(msg, 'success')
-        zope_acl_manager.edit(user.id, form.password.data)
+        plone_acl_manager.edit(user.id, form.password.data)
 
     return flask.render_template('auth/admin_user_reset_password.html', **{
         'user': user,

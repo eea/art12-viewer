@@ -25,7 +25,7 @@ def inject_globals():
         ['%s: %s' % (k, v) for k, v in d])
     return {
         'APP_BREADCRUMBS': [
-            ('Eionet', app.config['LAYOUT_PLONE_URL']),
+            ('Eionet', app.config['PLONE_URL']),
             ('Article 12', url_for(HOMEPAGE_VIEW_NAME))
         ],
         'EU_COUNTRY': EU_COUNTRY,
