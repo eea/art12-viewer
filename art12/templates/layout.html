@@ -8,8 +8,6 @@
     <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}"/>
   {% endassets %}
 
-  <link rel="stylesheet" type="text/css" media="screen"
-        href="https://www.eionet.europa.eu/styles/eionet2007/screen.css">
 
   <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed"
         rel="stylesheet" type="text/css">
@@ -17,9 +15,7 @@
 
 {% block breadcrumbs %}
   {% from 'common/_macros.html' import breadcrumbs %}
-  {{ breadcrumbs(APP_BREADCRUMBS + [
-      ('Article 12', None),
-    ]) }}
+  {{ breadcrumbs(APP_BREADCRUMBS) }}
 {% endblock %}
 
 {% block before_content %}

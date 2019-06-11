@@ -5,8 +5,8 @@ import flask
 def _get_config():
     app = flask.current_app
     return (
-        app.config.get('AUTH_ZOPE_ACL_MANAGER_URL'),
-        app.config.get('AUTH_ZOPE_ACL_MANAGER_KEY'),
+        app.config.get('AUTH_PLONE_ACL_MANAGER_URL'),
+        app.config.get('AUTH_PLONE_ACL_MANAGER_KEY'),
     )
 
 

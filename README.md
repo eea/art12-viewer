@@ -7,7 +7,7 @@ The Project Name is `Art 12 Consultation Tool`
 
 Prerequisites - System packages
 -------------------------------
-
+ 
 These packages should be installed as superuser (root).
 
 ### Debian based systems ###

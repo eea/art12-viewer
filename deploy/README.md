@@ -91,10 +91,10 @@ A minimal configuration file could be:
     DB_NAME=art12
     BIND_NAME=art12rp1_eu
 
-    AUTH_ZOPE=False
+    AUTH_PLONE=False
     PDF_URL_PREFIX=
     MAP_URL_PREFIX=
-    LAYOUT_ZOPE_URL=
+    LAYOUT_PLONE_URL=
 
 ### 2.1. Local `docker-compose.yml` file
 

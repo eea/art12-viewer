@@ -4,6 +4,7 @@ Changelog
 ----------------------
 * Disable factsheets download for non-native species which have a native version
   [dianaboiangiu]
+
 2.4.7(2018-09-14)
 ----------------------
 * Download factsheets from external source

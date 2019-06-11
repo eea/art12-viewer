@@ -97,9 +97,9 @@ def ldap_user_info(request):
 
 
 @fixture
-def zope_auth(app, request):
-    app.config['AUTH_ZOPE'] = True
-    app.config['AUTH_ZOPE_WHOAMI_URL'] = 'http://example.com/'
+def plone_auth(app, request):
+    app.config['AUTH_PLONE'] = True
+    app.config['AUTH_PLONE_WHOAMI_URL'] = 'http://example.com/'
     security_ext = Security(
         datastore=UserDatastore(
             models.db,

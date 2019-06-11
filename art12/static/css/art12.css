@@ -118,3 +118,54 @@ th.gray-cell {
 .italic_row td {
     font-style: italic;
 }
+
+body {
+  padding: 0;
+}
+
+li.hasDropDown > i {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+li.hasDropDown i {
+  background: none;
+}
+
+.search-wrapper {
+  margin-top: 16px;
+}
+
+.search-submit {
+  margin-top: 5px;
+  color: black !important;
+  background: none;
+}
+#loginlink {
+  background: none;
+}
+
+#breadcrumbs-home  > i.glyphicon.link-https:after {
+  content: none;
+}
+
+td input {
+  height: 1.8em !important;
+}
+
+.caret {
+  height: auto;
+}
+
+tbody th {
+  text-align: center !important;
+}
+
+.outer-wrapper .container {
+  margin-left: unset;
+}
+
+table {
+  width: initial !important;
+}
