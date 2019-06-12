@@ -1,4 +1,5 @@
 import flask
+from flask_collect import Collect
 from flask.ext.mail import Mail
 from flask.ext.script import Manager
 from flask.ext.security import Security
@@ -71,8 +72,9 @@ def create_app(config={}, testing=False):
         from raven.contrib.flask import Sentry
 
         Sentry(app)
-
-    return app
+    collect = Collect()
+    collect.init_app(app)
+    return (app, collect)
 
 
 def create_url_prefix_middleware(wsgi_app, url_prefix):
@@ -86,7 +88,7 @@ def create_url_prefix_middleware(wsgi_app, url_prefix):
     return middleware
 
 
-def create_manager(app):
+def create_manager(app, collect):
     manager = Manager(app)
     manager.add_command('db', db_manager)
     manager.add_command('user', user_manager)
@@ -94,4 +96,5 @@ def create_manager(app):
     manager.add_command('fetch_plone_templates', fetch_plone_templates)
     manager.add_command('role', role_manager)
     manager.add_command('factsheet', factsheet_manager)
+    collect.init_script(manager)
     return manager

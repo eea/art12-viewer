@@ -28,6 +28,9 @@ SQLALCHEMY_BINDS = {
 ASSETS_DEBUG = getenv('ASSETS_DEBUG', type=bool, default=False)
 AUTH_DEBUG = getenv('AUTH_DEBUG', type=bool, default=False)
 
+COLLECT_STATIC_ROOT =  getenv('STATIC_ROOT', default='/static')
+COLLECT_STORAGE = 'flask_collect.storage.file'
+
 AUTH_LOG_FILE = getenv('AUTH_LOG_FILE', default='/var/local/art12/logs/flask-auth.log')
 AUTH_PLONE = getenv('AUTH_PLONE', type=bool, default=True)
 AUTH_PLONE_WHOAMI_URL = getenv('AUTH_PLONE_WHOAMI_URL', default='http://example.com/art12_api/whoami')
