@@ -84,7 +84,7 @@ class PloneAuthProvider(object):
             verify=False
         )
         resp_data = resp.json()
-        if resp_data['user_id']:
+        if resp_data.get('user_id'):
             set_user(
                 user_id=resp_data['user_id'],
                 is_ldap_user=resp_data['is_ldap_user'],
