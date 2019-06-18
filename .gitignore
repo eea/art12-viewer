@@ -25,3 +25,5 @@ art12/templates/plone/before_breadcrumbs.html
 art12/templates/plone/header_before_container.html
 art12/templates/plone/header_after_container.html
 art12/templates/plone/footer.html
+
+docker-compose.override.yml
