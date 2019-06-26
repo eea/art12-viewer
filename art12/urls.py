@@ -1,6 +1,9 @@
 from flask import Blueprint
-from art12.views import Homepage, Summary, Progress, Reports, \
-    ConnectedSelectBoxes, FilterFormCountries, EuMap
+from art12.views import (
+    Homepage, Summary, Progress, Reports,
+    ConnectedSelectBoxes, FilterFormCountries, EuMap,
+    LoginView, LogoutView
+)
 from art12.factsheet import factsheet
 from art12.factsheet import BirdFactsheet, FactsheetHeader, FactsheetFooter
 
@@ -15,6 +18,8 @@ views.add_url_rule('/summary/filter_form/countries',
 views.add_url_rule('/progress', view_func=Progress.as_view('progress'))
 views.add_url_rule('/report', view_func=Reports.as_view('report'))
 views.add_url_rule('/eu_map', view_func=EuMap.as_view('eu_map'))
+views.add_url_rule('/login', view_func=LoginView.as_view('login'))
+views.add_url_rule('/logout', view_func=LogoutView.as_view('logout'))
 
 factsheet.add_url_rule('/factsheet/',
                        view_func=BirdFactsheet.as_view('factsheet'))

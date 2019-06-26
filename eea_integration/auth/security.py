@@ -2,9 +2,11 @@ from datetime import datetime
 import flask
 import flask.ext.security.script
 import flask.ext.security as flask_security
+from flask.ext.login import current_user as c_user
 from flask.ext.security import user_registered
 from flask.ext.security import SQLAlchemyUserDatastore, AnonymousUser
 from flask.ext.security.utils import string_types
+from flask.ext.login import LoginManager
 from werkzeug.local import LocalProxy
 from wtforms import ValidationError
 from flask.ext.security.forms import (
@@ -12,7 +14,10 @@ from flask.ext.security.forms import (
 )
 from . import auth
 
-current_user = LocalProxy(lambda: flask.g.get('user') or AnonymousUser())
+login_manager = LoginManager()
+
+# current_user = LocalProxy(lambda: flask.g.get('user') or AnonymousUser())
+current_user = LocalProxy(lambda: AnonymousUser() if not hasattr(c_user, "id")  else c_user)
 flask_security.core.current_user = current_user
 flask_security.forms.current_user = current_user
 flask_security.decorators.current_user = current_user

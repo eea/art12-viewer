@@ -1,7 +1,7 @@
 from flask import request
 from flask.ext.wtf import Form
-from wtforms import SelectField, StringField
-from wtforms.validators import Optional
+from wtforms import SelectField, StringField, TextField, PasswordField
+from wtforms.validators import Optional, InputRequired
 from art12.common import get_default_period
 from art12.mixins import SpeciesMixin
 from art12.models import Dataset, EtcDataBird
@@ -118,3 +118,7 @@ class ChangeDetailsForm(Form):
     abbrev = StringField(label="Abbreviation", validators=[Optional()])
     MS = StringField(label="MS", validators=[Optional()])
     qualification = StringField(label="Qualification", validators=[Optional()])
+
+class LoginForm(Form):
+    username = TextField('Username', [InputRequired()])
+    password = PasswordField('Password', [InputRequired()])

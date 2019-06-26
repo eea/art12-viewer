@@ -15,6 +15,7 @@ BUNDLE_CSS = (
     'css/formalize.css',
     'css/font-awesome.min.css',
     'css/art17-ui.css',
+    'css/header-styles.css',
     'css/art12.css',
 )
 

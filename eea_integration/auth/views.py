@@ -8,7 +8,7 @@ from flask.ext.security.changeable import change_user_password
 from flask.ext.security.registerable import register_user, encrypt_password
 from werkzeug.datastructures import ImmutableMultiDict
 
-from . import plone_acl_manager, current_user, auth
+from . import current_user, auth
 from .forms import EeaAdminEditUserForm, \
     EeaLDAPRegisterForm, EeaLocalRegisterForm
 from .providers import _get_initial_ldap_data
@@ -133,6 +133,7 @@ def register_ldap():
 @require_admin
 def admin_create_ldap():
     user_id = flask.request.form.get('user_id')
+
     if user_id is None:
         return flask.render_template('auth/register_ldap_enter_user_id.html')
 
@@ -150,7 +151,7 @@ def admin_create_ldap():
     else:
         form = EeaLDAPRegisterForm(flask.request.form)
         form.name.data = initial_data.get('name', '')
-        form.email.data = initial_data.get('email', '')
+        form.email.data = initial_data.get('email') or flask.request.form['email']
         if form.validate():
             kwargs = form.to_dict()
             kwargs['id'] = user_id
@@ -186,7 +187,7 @@ def change_password():
         return flask.render_template('message.html', message=message)
 
     if current_user.is_ldap:
-        message = 'Your password can be changed only from the EIONET website '  '(http://www.eionet.europa.eu/profile).'
+        message = 'Your password can be changed only from the EIONET website '  '(https://www.eionet.europa.eu/password-reset).'
         return flask.render_template('message.html', message=message)
 
     form = ChangePasswordForm()
@@ -196,7 +197,6 @@ def change_password():
         auth.models.db.session.commit()
         msg = "Your password has been changed. Please log in again."
         flask.flash(msg, 'success')
-        plone_acl_manager.edit(current_user.id, form.new_password.data)
         return flask.redirect(flask.url_for(HOMEPAGE_VIEW_NAME))
 
     return flask.render_template('auth/change_password.html', **{
@@ -244,15 +244,6 @@ def admin_user(user_id):
 
     if flask.request.method == 'POST':
         if flask.request.form.get('btn') == u'delete':
-            if user.is_ldap:
-                # delete from Plone
-                try:
-                    plone_acl_manager.delete(user)
-                except RuntimeError:
-                    flask.flash("Failed to delete user from Plone.", 'error')
-                    return flask.redirect(
-                        flask.url_ufor('.admin_user', user_id=user_id))
-            # delete from local database
             user = auth.models.RegisteredUser.query.get(user_id)
             auth.models.db.session.delete(user)
             auth.models.db.session.commit()
@@ -305,7 +296,7 @@ def admin_user_reset_password(user_id):
 
     if user.is_ldap:
         message = 'The password can be changed only from the EIONET website '\
-                  '(http://www.eionet.europa.eu/profile).'
+                  '(https://www.eionet.europa.eu/password-reset).'
         return flask.render_template('message.html', message=message)
 
     form = ResetPasswordForm()
@@ -315,7 +306,6 @@ def admin_user_reset_password(user_id):
         auth.models.db.session.commit()
         msg = "Your password has been reset successfully"
         flask.flash(msg, 'success')
-        plone_acl_manager.edit(user.id, form.password.data)
 
     return flask.render_template('auth/admin_user_reset_password.html', **{
         'user': user,

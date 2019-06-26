@@ -14,10 +14,10 @@ from art12.common import common, HOMEPAGE_VIEW_NAME
 from art12.utils import inject_static_file
 from art12.factsheet import factsheet_manager
 from art12.management.import_greece import import_greece
-from art12.management.fetch_plone_templates import fetch_plone_templates
 from eea_integration.auth.script import user_manager, role_manager
 from eea_integration.layout import layout
 from eea_integration.auth import UserDatastore, Auth
+from eea_integration.auth.security import login_manager
 
 security_ext = Security(
     datastore=UserDatastore(
@@ -51,7 +51,8 @@ def create_app(config={}, testing=False):
     app.register_blueprint(layout)
     app.register_blueprint(wiki)
     app.register_blueprint(factsheet)
-
+    login_manager.init_app(app)
+    login_manager.login_view = 'login'
     app.add_template_global(inject_static_file)
 
     app.jinja_env.globals['TREND_CLASSES'] = TREND_CLASSES
@@ -93,7 +94,6 @@ def create_manager(app, collect):
     manager.add_command('db', db_manager)
     manager.add_command('user', user_manager)
     manager.add_command('import_greece', import_greece)
-    manager.add_command('fetch_plone_templates', fetch_plone_templates)
     manager.add_command('role', role_manager)
     manager.add_command('factsheet', factsheet_manager)
     collect.init_script(manager)

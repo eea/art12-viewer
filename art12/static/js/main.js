@@ -159,6 +159,30 @@ $(document).ready(function () {
     }));
 });
 
+
+// Flash Messages
+$(document).ready( function () {
+
+    var msg = $('.flashmessage');
+
+    var show_flash = function () {
+        $(msg).addClass('show');
+    }
+
+    var hide_flash = function () {
+        $(msg).removeClass('show');
+    }
+
+    window.setTimeout(show_flash, 600);
+    window.setTimeout(hide_flash, 3600);
+
+    $(msg).on('mouseenter', show_flash);
+
+    $(msg).on('mouseleave', function () {
+        window.setTimeout(hide_flash, 600);
+    });
+});
+
 $(function() {
     $('.close-popup').on('click', function (evt) {
       evt.preventDefault();

@@ -1,9 +1,12 @@
 # coding: utf-8
 import argparse
+import ldap
+
 from datetime import datetime
 from flask.ext.script import Manager
 from flask.ext.security import UserMixin, RoleMixin
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask import current_app as app
 from sqlalchemy import (
     Column, Float, Integer, Numeric, String, Text, ForeignKey, DateTime, text,
     Boolean, SmallInteger,
@@ -20,6 +23,14 @@ db_manager = Manager()
 Base = db.Model
 metadata = Base.metadata
 
+def get_ldap_connection():
+    ldap_url = "{}://{}:{}".format(
+        app.config['EEA_LDAP_PROTOCOL'],
+        app.config['EEA_LDAP_SERVER'],
+        app.config['EEA_LDAP_PORT']
+    )
+    conn = ldap.initialize(ldap_url)
+    return conn
 
 class Dataset(Base):
     __tablename__ = 'datasets'
@@ -392,6 +403,24 @@ class RegisteredUser(Base, UserMixin):
     def has_role(self, role):
         return role in [r.name for r in self.roles]
 
+    @staticmethod
+    def try_login(username, password):
+        conn = get_ldap_connection()
+        conn.simple_bind_s(
+            'uid=%s,ou=Users,o=EIONET,l=Europe' % username,password
+        )
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return unicode(self.id)
 
 class Role(Base, RoleMixin):
     __tablename__ = 'roles'

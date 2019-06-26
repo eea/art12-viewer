@@ -1,19 +1,34 @@
 import json
+import ldap
 
-from flask import request, url_for
+from datetime import datetime
+from flask import (
+    flash, g,
+    redirect, render_template, request,
+    url_for
+)
+from flask import current_app as app
+
 from flask.views import View
 from sqlalchemy.sql.expression import bindparam
-
-from eea_integration.auth.security import current_user
+from flask.ext.login import login_user,login_required, logout_user
+from eea_integration.auth.security import current_user, login_manager, verify, encrypt_password
 
 from art12.common import TemplateView, get_map_path, get_map_url
 from art12.common import get_eu_map_breeding_url, get_eu_map_winter_url
 from art12.definitions import EU_COUNTRY
 from art12.factsheet import get_factsheet_url
-from art12.forms import ProgressFilterForm, ReportsFilterForm, SummaryFilterForm
+from art12.forms import (
+    ProgressFilterForm, ReportsFilterForm,
+    SummaryFilterForm, LoginForm
+)
 from art12.mixins import SpeciesMixin
-from art12.models import Dataset, LuDataBird, LuRestrictedDataBird
+from art12.models import (
+    Dataset, LuDataBird, LuRestrictedDataBird,
+    RegisteredUser, db
+)
 
+from art12.common import HOMEPAGE_VIEW_NAME
 
 class Homepage(TemplateView):
     template_name = 'homepage.html'
@@ -221,3 +236,80 @@ class EuMap(TemplateView):
         map_path = get_map_path(speciescode, suffix)
         map_url = url_for('static', filename=map_path) if map_path else None
         return {'map_url': map_url}
+
+
+@login_manager.user_loader
+def load_user(id=None):
+    return RegisteredUser.query.get(id)
+
+
+def try_local_login(username, password, form):
+    user = RegisteredUser.query.filter_by(id=username).first()
+    if not user or not verify(password, user):
+        flash('Please check your login details and try again.')
+        return render_template('login.html', form=form)
+    login_user(user)
+    g.user = user
+    flash('You have successfully logged in.', 'success')
+    return redirect(url_for(HOMEPAGE_VIEW_NAME))
+
+
+class LoginView(TemplateView):
+    template_name = 'login.html'
+
+    def get(self, *args, **kwargs):
+        if current_user.is_authenticated():
+            flash('You are already logged in.')
+            return redirect(url_for(HOMEPAGE_VIEW_NAME))
+        form = LoginForm(request.form)
+        if form.errors:
+            flash(form.errors, 'danger')
+        return render_template('login.html', form=form)
+
+    def post(self, *args, **kwargs):
+        if current_user.is_authenticated():
+            flash('You are already logged in.')
+            return redirect(url_for(HOMEPAGE_VIEW_NAME))
+        form = LoginForm(request.form)
+        if form.errors:
+            flash(form.errors, 'danger')
+        username = request.form.get('username')
+        password = request.form.get('password')
+        try:
+            RegisteredUser.try_login(username, password)
+        except ldap.INVALID_CREDENTIALS:
+
+            try_local_login(username, password, form)
+            if not current_user.is_authenticated():
+                flash(
+                    'Invalid username or password. Please try again.',
+                    'danger')
+                return render_template('login.html', form=form)
+
+        user = RegisteredUser.query.filter_by(id=username).first()
+
+        if not user:
+            user = RegisteredUser(
+                id=username,
+                password=encrypt_password(password),
+                is_ldap=True,
+                account_date=datetime.now()
+            )
+            db.session.add(user)
+            db.session.commit()
+        login_user(user)
+        g.user = user
+        flash('You have successfully logged in.', 'success')
+        return redirect(url_for(HOMEPAGE_VIEW_NAME))
+
+        if form.errors:
+            flash(form.errors, 'danger')
+
+        return render_template('login.html', form=form)
+
+
+class LogoutView(TemplateView):
+
+    def get(self, *args, **kwargs):
+        logout_user()
+        return redirect(url_for(HOMEPAGE_VIEW_NAME))

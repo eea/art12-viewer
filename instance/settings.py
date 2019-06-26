@@ -32,17 +32,10 @@ COLLECT_STATIC_ROOT =  getenv('STATIC_ROOT', default='/static')
 COLLECT_STORAGE = 'flask_collect.storage.file'
 
 AUTH_LOG_FILE = getenv('AUTH_LOG_FILE', default='/var/local/art12/logs/flask-auth.log')
-AUTH_PLONE = getenv('AUTH_PLONE', type=bool, default=True)
-AUTH_PLONE_WHOAMI_URL = getenv('AUTH_PLONE_WHOAMI_URL', default='http://example.com/art12_api/whoami')
 
-PLONE_URL = getenv('PLONE_URL',
-                    default='https://plone5demo.eionet.europa.eu')
-LAYOUT_PLONE_URL=getenv('LAYOUT_PLONE_URL',
-                        default='https://plone5demo.eionet.europa.eu/external-template-header')
-AUTH_PLONE_ACL_MANAGER_URL = getenv('AUTH_PLONE_ACL_MANAGER_URL', default='http://example.com/acl_manager')
-AUTH_PLONE_ACL_MANAGER_KEY = getenv('AUTH_PLONE_ACL_MANAGER_KEY', default='')
-
+EEA_LDAP_PROTOCOL = getenv('EEA_LDAP_PROTOCOL', default='')
 EEA_LDAP_SERVER = getenv('EEA_LDAP_SERVER', default='')
+EEA_LDAP_PORT = getenv('EEA_LDAP_PORT', default='')
 
 # Set this for correct links in emails.
 if getenv('PUBLIC_SERVER_NAME', default=None) is not None:
