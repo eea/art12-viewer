@@ -293,6 +293,7 @@ class LoginView(TemplateView):
                 id=username,
                 password=encrypt_password(password),
                 is_ldap=True,
+                confirmed_at = datetime.utcnow(),
                 account_date=datetime.now()
             )
             db.session.add(user)

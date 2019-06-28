@@ -6,96 +6,24 @@ from art12.models import db
 from conftest import create_user
 from eea_integration.auth.providers import set_user
 
+def force_login(client, user_id=None):
+    with client.session_transaction() as sess:
+        sess['user_id'] = user_id
+        sess['_fresh'] = True
 
 def _set_config(**kwargs):
     for key in kwargs:
         setattr(get_config(), key, kwargs[key])
     db.session.commit()
 
-
-def test_identity_is_set_from_plone_whoami(app, plone_auth, client):
-    create_user('ze_admin', ['admin'])
-
-    @app.route('/identity')
-    def get_identity():
-        identity = flask.g.identity
-        return flask.jsonify(
-            id=identity.id,
-            provides=sorted(list(identity.provides)),
-        )
-
-    plone_auth.update({'user_id': 'ze_admin', 'is_ldap_user': False})
-
-    identity = client.get('/identity').json
-    assert identity['id'] == 'ze_admin'
-    assert identity['provides'] == [['id', 'ze_admin'], ['role', 'admin']]
-
-
-def test_self_registration_flow(app, plone_auth, client, outbox, ldap_user_info):
-    from .factories import DatasetFactory
-
-    _set_config(admin_email='admin@example.com')
-    create_user('ze_admin', ['admin'])
-    DatasetFactory()
-    models.db.session.commit()
-
-    register_page = client.get(flask.url_for('auth.register_local'))
-    register_page.form['id'] = 'foo'
-    register_page.form['email'] = 'foo@example.com'
-    register_page.form['password'] = 'p455w4rd'
-    register_page.form['name'] = 'foo me'
-    register_page.form['institution'] = 'foo institution'
-    result_page = register_page.form.submit()
-    assert "Confirmation instructions have been sent" in result_page.text
-
-    foo_user = models.RegisteredUser.query.get('foo')
-    assert foo_user.email == 'foo@example.com'
-    assert foo_user.confirmed_at is None
-    assert not foo_user.active
-    assert not foo_user.is_ldap
-    assert foo_user.password.startswith('{SSHA}')
-
-    assert len(outbox) == 1
-    confirm_message = outbox.pop()
-    assert 'Dear foo me,' in confirm_message.body
-    assert 'foo@example.com' in confirm_message.body
-    url = confirm_message.body.splitlines()[4].strip()
-    assert url.startswith("http://localhost/confirm/")
-
-    with patch('eea_integration.auth.plone_acl_manager.create') as create_in_plone:
-        client.get(url)
-        assert create_in_plone.call_count == 1
-
-    foo_user = models.RegisteredUser.query.get('foo')
-    assert foo_user.confirmed_at is not None
-    assert foo_user.active
-
-    assert len(outbox) == 1
-    admin_message = outbox.pop()
-    assert admin_message.recipients == ['admin@example.com']
-    assert "Local user has registered" in admin_message.body
-    url = admin_message.body.split()[-1]
-    assert url == 'http://localhost/auth/users/foo'
-
-    with patch('eea_integration.auth.plone_acl_manager.delete') as delete_in_plone:
-        plone_auth['user_id'] = 'ze_admin'
-        activation_page = client.get(url)
-        activation_page.form['active'] = False
-        activation_page.form.submit()
-        assert delete_in_plone.call_count == 1
-
-    foo_user = models.RegisteredUser.query.get('foo')
-    assert not foo_user.active
-
-
 def test_admin_creates_local(app, plone_auth, client, outbox, ldap_user_info):
     from .factories import DatasetFactory
 
     _set_config(admin_email='admin@example.com')
-    create_user('ze_admin', ['admin'])
-    plone_auth['user_id'] = 'ze_admin'
+    user = create_user('ze_admin', ['admin'])
     DatasetFactory()
     models.db.session.commit()
+    force_login(client, 'ze_admin')
 
     register_page = client.get(flask.url_for('auth.admin_create_local'))
     register_page.form['id'] = 'foo'
@@ -104,10 +32,7 @@ def test_admin_creates_local(app, plone_auth, client, outbox, ldap_user_info):
     register_page.form['name'] = 'foo me'
     register_page.form['institution'] = 'foo institution'
 
-    with patch('eea_integration.auth.plone_acl_manager.create') as create_in_plone:
-        result_page = register_page.form.submit().follow()
-        assert create_in_plone.call_count == 1
-
+    result_page = register_page.form.submit().follow()
     assert "User foo created successfully." in result_page
 
     foo_user = models.RegisteredUser.query.get('foo')
@@ -129,7 +54,7 @@ def test_admin_creates_ldap(app, plone_auth, client, outbox, ldap_user_info):
 
     _set_config(admin_email='admin@example.com')
     create_user('ze_admin', ['admin'])
-    plone_auth['user_id'] = 'ze_admin'
+    force_login(client, 'ze_admin')
     DatasetFactory()
     models.db.session.commit()
 
@@ -173,9 +98,11 @@ def test_ldap_account_activation_flow(
 
     _set_config(admin_email='admin@example.com')
     ldap_user_info['foo'] = {'email': 'foo@example.com', 'full_name': 'foo'}
-    create_user('ze_admin', ['admin'])
+    user=create_user('ze_admin', ['admin'])
     DatasetFactory()
     models.db.session.commit()
+
+    force_login(client)
 
     @app.before_request
     def set_testing_user():
@@ -184,10 +111,7 @@ def test_ldap_account_activation_flow(
     register_page = client.get(flask.url_for('auth.register_ldap'))
     register_page.form['institution'] = 'foo institution'
 
-    with patch('eea_integration.auth.plone_acl_manager.create') as create_in_plone:
-        result_page = register_page.form.submit()
-        assert create_in_plone.call_count == 0
-
+    result_page = register_page.form.submit()
     assert "has been registered" in result_page.text
 
     foo_user = models.RegisteredUser.query.get('foo')
@@ -203,13 +127,13 @@ def test_ldap_account_activation_flow(
     url = admin_message.body.split()[-1]
     assert url == 'http://localhost/auth/users/foo'
 
-    with patch('eea_integration.auth.plone_acl_manager.delete') as delete_in_plone:
-        plone_auth['user_id'] = 'ze_admin'
-        activation_page = client.get(url)
-        activation_page.form['active'] = False
-        activation_page.form.submit()
-        assert delete_in_plone.call_count == 0
+    with client.session_transaction() as sess:
+        sess['user_id'] = 'ze_admin'
+        sess['_fresh'] = True
 
+    activation_page = client.get(url)
+    activation_page.form['active'] = False
+    activation_page.form.submit()
     foo_user = models.RegisteredUser.query.get('foo')
     assert not foo_user.active
 
@@ -225,7 +149,7 @@ def test_view_requires_admin(app, plone_auth, client):
 
     assert client.get(admin_user_url, expect_errors=True).status_code == 403
 
-    plone_auth.update({'user_id': 'ze_admin'})
+    force_login(client, 'ze_admin')
     assert client.get(admin_user_url).status_code == 200
 
 
@@ -236,16 +160,14 @@ def test_change_local_password(app, plone_auth, client):
     foo.password = old_enc_password
     models.db.session.commit()
 
-    plone_auth.update({'user_id': 'foo'})
+    force_login(client, 'foo')
     page = client.get(flask.url_for('auth.change_password'))
     page.form['password'] = 'my old pw'
     page.form['new_password'] = 'the new pw'
     page.form['new_password_confirm'] = 'the new pw'
-    with patch('eea_integration.auth.plone_acl_manager.edit') as edit_user_in_plone:
-        confirmation_page = page.form.submit().follow()
+    confirmation_page = page.form.submit().follow()
 
     assert "password has been changed" in confirmation_page.text
-    assert edit_user_in_plone.call_count == 1
 
     foo = models.RegisteredUser.query.filter_by(id='foo').first()
     assert foo.password != old_enc_password
@@ -260,9 +182,9 @@ def test_change_ldap_password(app, plone_auth, client):
     foo = create_user('foo')
     foo.is_ldap = True
     models.db.session.commit()
-    plone_auth.update({'user_id': 'foo', 'is_ldap_user': True})
+    force_login(client, 'foo')
     page = client.get(flask.url_for('auth.change_password'))
-    assert "Your password can be changed only from the EIONET website (http://www.eionet.europa.eu/profile)." in page
+    assert "Your password can be changed only from the EIONET website (https://www.eionet.europa.eu/password-reset)." in page
 
 
 def test_admin_edit_user_info(app, plone_auth, client, outbox):
@@ -273,7 +195,7 @@ def test_admin_edit_user_info(app, plone_auth, client, outbox):
     foo = create_user('foo', ['etc', 'stakeholder'], name="Foo Person")
     DatasetFactory()
     models.db.session.commit()
-    plone_auth.update({'user_id': 'ze_admin'})
+    force_login(client, 'ze_admin')
 
     page = client.get(flask.url_for('auth.admin_user', user_id='foo'))
     page.form['name'] = "Foo Person"
@@ -314,7 +236,7 @@ def test_email_notification_for_role_changes(app, plone_auth, client, outbox):
     foo = create_user('foo', ['etc', 'stakeholder'], name="Foo Person")
     DatasetFactory()
     models.db.session.commit()
-    plone_auth.update({'user_id': 'ze_admin'})
+    force_login(client, 'ze_admin')
     page = client.get(flask.url_for('auth.admin_user', user_id='foo'))
     page.form['roles'] = ['stakeholder', 'nat']
     page.form['name'] = "Foo Person"

@@ -44,7 +44,7 @@ def create_generic_fixtures():
 def create_testing_app():
     test_config = dict(TEST_CONFIG)
 
-    app = create_app(test_config, testing=True)
+    app, _ = create_app(test_config, testing=True)
     return app
 
 
