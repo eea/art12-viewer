@@ -69,9 +69,7 @@ def test_admin_creates_ldap(app, plone_auth, client, outbox, ldap_user_info):
 
     register_page.form['institution'] = 'foo institution'
 
-    with patch('eea_integration.auth.plone_acl_manager.create') as create_in_plone:
-        result_page = register_page.form.submit().follow()
-        assert create_in_plone.call_count == 0
+    result_page = register_page.form.submit().follow()
 
     assert "User foo created successfully." in result_page
 
@@ -154,7 +152,7 @@ def test_view_requires_admin(app, plone_auth, client):
 
 
 def test_change_local_password(app, plone_auth, client):
-    from flask.ext.security.utils import encrypt_password
+    from flask_security.utils import encrypt_password
     foo = create_user('foo')
     old_enc_password = encrypt_password('my old pw')
     foo.password = old_enc_password
