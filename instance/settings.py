@@ -61,3 +61,5 @@ MAPS_FORMAT = getenv('MAPS_FORMAT', default='{code}_{suffix}.png')
 MAPS_STATIC = getenv('MAPS_STATIC', default='maps')
 
 SCRIPT_NAME = getenv('SCRIPT_NAME', default='/article12')
+
+EEA_PASSWORD_RESET = getenv('EEA_PASSWORD_RESET', default='')

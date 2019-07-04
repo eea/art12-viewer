@@ -1,4 +1,6 @@
 import flask
+import os
+
 from mock import patch
 from art12 import models
 from art12.common import get_config
@@ -182,7 +184,12 @@ def test_change_ldap_password(app, plone_auth, client):
     models.db.session.commit()
     force_login(client, 'foo')
     page = client.get(flask.url_for('auth.change_password'))
-    assert "Your password can be changed only from the EIONET website (https://www.eionet.europa.eu/password-reset)." in page
+    assert (
+            'Your password can be changed only from the EIONET website '
+            + '('
+            + os.environ.get('EEA_PASSWORD_RESET')
+            + ').'
+        ) in page
 
 
 def test_admin_edit_user_info(app, plone_auth, client, outbox):
