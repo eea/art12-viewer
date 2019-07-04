@@ -185,11 +185,10 @@ def test_change_ldap_password(app, plone_auth, client):
     force_login(client, 'foo')
     page = client.get(flask.url_for('auth.change_password'))
     assert (
-            'Your password can be changed only from the EIONET website '
-            + '('
-            + os.environ.get('EEA_PASSWORD_RESET')
-            + ').'
-        ) in page
+        "Your password can be changed only from the EIONET website "
+        "(https://www.eionet.europa.eu/password-reset)."
+    ) in page
+
 
 
 def test_admin_edit_user_info(app, plone_auth, client, outbox):
