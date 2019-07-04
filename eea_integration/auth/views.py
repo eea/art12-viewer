@@ -191,7 +191,7 @@ def change_password():
         message = (
             'Your password can be changed only from the EIONET website '
             + '('
-            + os.environ.get('EEA_PASSWORD_RESET')
+            + os.environ.get('EEA_PASSWORD_RESET', '')
             + ').'
         )
         return flask.render_template('message.html', message=message)
