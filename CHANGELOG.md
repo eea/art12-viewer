@@ -1,5 +1,28 @@
 Changelog
 =========
+
+2.5.3(2019-06-26)
+----------------------
+* Add missing template
+  [dianaboiangiu]
+
+2.5.2(2019-06-26)
+----------------------
+* Remove Eionet header and footer
+* Handle LDAP authentication in application
+  [dianaboiangiu]
+
+2.5.1(2019-09-13)
+----------------------
+* Center align application
+  [dianaboiangiu]
+
+2.5.0(2019-09-12)
+----------------------
+* Add collect static
+* Switch application to new plone header and footer
+  [dianaboiangiu]
+
 2.4.8(2018-09-17)
 ----------------------
 * Disable factsheets download for non-native species which have a native version
