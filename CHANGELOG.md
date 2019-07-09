@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.5.4(2019-06-09)
+* Fix tests
+* Use Eionet password reset link
+  [dianaboiangiu]
+
 2.5.3(2019-06-26)
 ----------------------
 * Add missing template
