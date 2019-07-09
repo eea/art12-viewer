@@ -58,6 +58,9 @@ def create_app(config={}, testing=False):
     app.jinja_env.globals['TREND_CLASSES'] = TREND_CLASSES
     app.jinja_env.globals['SCRIPT_NAME'] = app.config.get('SCRIPT_NAME',
                                                           '/article12')
+    app.jinja_env.globals['EEA_PASSWORD_RESET'] = app.config.get(
+        'EEA_PASSWORD_RESET'
+    )
 
     if not app.testing:
         auth_ext = Auth(models=models, security_ext=security_ext,
