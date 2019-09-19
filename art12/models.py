@@ -467,7 +467,7 @@ def downgrade(revision):
 
 
 @db_manager.command
-def json_dump(model):
+def dumpdata(model):
     thismodule = sys.modules[__name__]
     base_class = getattr(thismodule, model)
 
@@ -477,6 +477,12 @@ def json_dump(model):
 
     objects = []
     primary_keys = []
+
+    for field in model_fields:
+        value = getattr(inspect(base_class).attrs, field)
+
+        if value.columns[0].primary_key:
+            primary_keys.append(field)
 
     for entry in entries:
         kwargs = {
@@ -510,7 +516,7 @@ def json_dump(model):
         objects.append(app_json)
 
     json_dir = os.path.abspath(os.path.dirname('manage.py'))
-    json_name = model + '_dump.json'
+    json_name = model + '.json'
 
     with open(os.path.join(json_dir, json_name), 'w') as f:
         f.write('[' + ','.join(objects) + ']')
