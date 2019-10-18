@@ -173,7 +173,7 @@ def get_config():
 def get_map_url(subject, sensitive=False):
     config = get_config()
 
-    if sensitive and current_user.is_authenticated():
+    if sensitive and current_user.is_authenticated:
         map_href = config.sensitive_species_map_url
     else:
         map_href = config.species_map_url

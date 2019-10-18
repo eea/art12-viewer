@@ -1,8 +1,8 @@
 import flask
 from flask_collect import Collect
-from flask.ext.mail import Mail
-from flask.ext.script import Manager
-from flask.ext.security import Security
+from flask_mail import Mail
+from flask_script import Manager
+from flask_security import Security
 from art12.assets import assets_env
 from art12 import models
 from art12.definitions import TREND_CLASSES

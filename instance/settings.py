@@ -15,6 +15,8 @@ SQLALCHEMY_DATABASE_URI = '{schema}://{user}:{pwd}@{host}/{dbname}'.format(
   host=getenv('DB_HOST', default=''),
   dbname=getenv('DB_NAME', default=''))
 
+SQLALCHEMY_TRACK_MODIFICATIONS=False
+
 SQLALCHEMY_BINDS = {
    'factsheet': '{schema}://{user}:{pwd}@{host}/{bindname}'.format(
         schema=getenv('DB_SCHEMA', default='sqlite'),

@@ -3,10 +3,10 @@ from datetime import datetime
 import os
 import flask
 from flask import current_app
-from flask.ext.principal import PermissionDenied
-from flask.ext.security.forms import ChangePasswordForm, ResetPasswordForm
-from flask.ext.security.changeable import change_user_password
-from flask.ext.security.registerable import register_user, encrypt_password
+from flask_principal import PermissionDenied
+from flask_security.forms import ChangePasswordForm, ResetPasswordForm
+from flask_security.changeable import change_user_password
+from flask_security.registerable import register_user, encrypt_password
 from werkzeug.datastructures import ImmutableMultiDict
 
 from . import current_user, auth

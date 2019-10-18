@@ -1,15 +1,15 @@
 from datetime import datetime
 import flask
-import flask.ext.security.script
-import flask.ext.security as flask_security
-from flask.ext.login import current_user as c_user
-from flask.ext.security import user_registered
-from flask.ext.security import SQLAlchemyUserDatastore, AnonymousUser
-from flask.ext.security.utils import string_types
-from flask.ext.login import LoginManager
+import flask_security.script
+import flask_security as flask_security
+from flask_login import current_user as c_user
+from flask_security import user_registered
+from flask_security import SQLAlchemyUserDatastore, AnonymousUser
+from flask_security.utils import string_types
+from flask_login import LoginManager
 from werkzeug.local import LocalProxy
 from wtforms import ValidationError
-from flask.ext.security.forms import (
+from flask_security.forms import (
     password_length,
 )
 from . import auth
@@ -25,7 +25,7 @@ flask_security.views.current_user = current_user
 flask_security.views.logout_user = lambda: None
 flask_security.views.login_user = lambda new_user: None
 flask_security.views.register = flask_security.views.register
-flask_security.core._get_login_manager = lambda app: None
+flask_security.core._get_login_manager = lambda app, anonymous_user: None
 password_length.min = 1
 
 

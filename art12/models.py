@@ -1,11 +1,17 @@
 # coding: utf-8
-import argparse
+import os
+import sys
+import json
 import ldap
+import argparse
+import sqlalchemy
+from sqlalchemy import inspect
+
 
 from datetime import datetime
-from flask.ext.script import Manager
-from flask.ext.security import UserMixin, RoleMixin
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_script import Manager
+from flask_security import UserMixin, RoleMixin
+from flask_sqlalchemy import SQLAlchemy
 from flask import current_app as app
 from sqlalchemy import (
     Column, Float, Integer, Numeric, String, Text, ForeignKey, DateTime, text,
@@ -458,3 +464,59 @@ def upgrade(revision='head'):
 @db_manager.command
 def downgrade(revision):
     return alembic(['downgrade', revision])
+
+
+@db_manager.command
+def dumpdata(model):
+    thismodule = sys.modules[__name__]
+    base_class = getattr(thismodule, model)
+
+    entries = base_class.query.all()
+    relationship_fields = [rfield for rfield, _ in inspect(base_class).relationships.items()]
+    model_fields = [field for field in inspect(base_class).attrs.keys() if field not in relationship_fields]
+
+    objects = []
+    primary_keys = []
+
+    for field in model_fields:
+        value = getattr(inspect(base_class).attrs, field)
+
+        if value.columns[0].primary_key:
+            primary_keys.append(field)
+
+    for entry in entries:
+        kwargs = {
+            "model": model,
+            "filter_fields": ",".join(primary_keys),
+            "fields": {}
+        }
+
+        for field in model_fields:
+            value = getattr(entry, field)
+
+            if type(value) == datetime:
+                value = value.isoformat()
+
+            kwargs["fields"][field] = value
+
+        for rfield in relationship_fields:
+            class_field = getattr(entry, rfield)
+
+            if isinstance(class_field, sqlalchemy.orm.collections.InstrumentedList):
+                kwargs["fields"][rfield] = []
+                for subfield in class_field:
+                    kwargs["fields"][rfield].append(subfield.id)
+            else:
+                try:
+                    kwargs["fields"][rfield] = class_field.id
+                except AttributeError:
+                    pass
+
+        app_json = json.dumps(kwargs)
+        objects.append(app_json)
+
+    json_dir = os.path.abspath(os.path.dirname('manage.py'))
+    json_name = model + '.json'
+
+    with open(os.path.join(json_dir, json_name), 'w') as f:
+        f.write('[' + ','.join(objects) + ']')

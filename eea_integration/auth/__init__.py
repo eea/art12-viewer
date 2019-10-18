@@ -1,5 +1,5 @@
 import flask
-from flask.ext.security import Security
+from flask_security import Security
 
 auth = flask.Blueprint('auth', __name__, template_folder='templates')
 
