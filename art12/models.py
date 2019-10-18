@@ -9,9 +9,9 @@ from sqlalchemy import inspect
 
 
 from datetime import datetime
-from flask.ext.script import Manager
-from flask.ext.security import UserMixin, RoleMixin
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_script import Manager
+from flask_security import UserMixin, RoleMixin
+from flask_sqlalchemy import SQLAlchemy
 from flask import current_app as app
 from sqlalchemy import (
     Column, Float, Integer, Numeric, String, Text, ForeignKey, DateTime, text,

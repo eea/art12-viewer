@@ -11,7 +11,7 @@ from flask import current_app as app
 
 from flask.views import View
 from sqlalchemy.sql.expression import bindparam
-from flask.ext.login import login_user,login_required, logout_user
+from flask_login import login_user,login_required, logout_user
 from eea_integration.auth.security import current_user, login_manager, verify, encrypt_password
 
 from art12.common import TemplateView, get_map_path, get_map_url
@@ -258,7 +258,7 @@ class LoginView(TemplateView):
     template_name = 'login.html'
 
     def get(self, *args, **kwargs):
-        if current_user.is_authenticated():
+        if current_user.is_authenticated:
             flash('You are already logged in.')
             return redirect(url_for(HOMEPAGE_VIEW_NAME))
         form = LoginForm(request.form)
@@ -267,7 +267,7 @@ class LoginView(TemplateView):
         return render_template('login.html', form=form)
 
     def post(self, *args, **kwargs):
-        if current_user.is_authenticated():
+        if current_user.is_authenticated:
             flash('You are already logged in.')
             return redirect(url_for(HOMEPAGE_VIEW_NAME))
         form = LoginForm(request.form)
@@ -280,7 +280,7 @@ class LoginView(TemplateView):
         except ldap.INVALID_CREDENTIALS:
 
             try_local_login(username, password, form)
-            if not current_user.is_authenticated():
+            if not current_user.is_authenticated:
                 flash(
                     'Invalid username or password. Please try again.',
                     'danger')

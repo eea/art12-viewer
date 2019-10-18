@@ -1,9 +1,9 @@
-from flask.ext.security import ForgotPasswordForm, ConfirmRegisterForm
-from flask.ext.wtf import Form
+from flask_security import ForgotPasswordForm, ConfirmRegisterForm
+from flask_wtf import Form
 from wtforms import SelectField, TextField, BooleanField
 from wtforms.validators import Optional
 from wtforms.widgets import HiddenInput
-from flask.ext.security.forms import (
+from flask_security.forms import (
     Required, email_validator, RegisterFormMixin, unique_user_email,
 )
 from . import auth

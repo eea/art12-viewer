@@ -5,8 +5,8 @@ from smtplib import SMTPException
 import flask
 from flask import current_app
 from flask_principal import Permission, RoleNeed
-from flask.ext.security import signals as security_signals
-from flask.ext.mail import Message
+from flask_security import signals as security_signals
+from flask_mail import Message
 from . import auth
 
 logger = logging.getLogger(__name__)
