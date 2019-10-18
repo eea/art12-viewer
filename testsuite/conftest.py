@@ -20,6 +20,7 @@ TEST_CONFIG = {
     'ASSETS_DEBUG': True,
     'EEA_LDAP_SERVER': 'test_ldap_server',
     'ADMIN_EMAIL': 'admin@example.com',
+    'SQLALCHEMY_TRACK_MODIFICATIONS': False,
 }
 
 alembic_cfg_path = path(__file__).dirname() / '..' / 'alembic.ini'

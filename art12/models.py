@@ -416,12 +416,14 @@ class RegisteredUser(Base, UserMixin):
             'uid=%s,ou=Users,o=EIONET,l=Europe' % username,password
         )
 
+    @property
     def is_authenticated(self):
         return True
 
     def is_active(self):
         return True
 
+    @property
     def is_anonymous(self):
         return False
 
