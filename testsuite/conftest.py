@@ -1,6 +1,6 @@
 import flask
-from flask.ext.security import Security
-from flask.ext.webtest import TestApp
+from flask_security import Security
+from flask_webtest import TestApp
 from pytest import fixture
 from alembic import command, config
 from path import path
@@ -54,7 +54,7 @@ def app(request):
 
     @app.before_request
     def set_identity():
-        from flask.ext.principal import AnonymousIdentity
+        from flask_principal import AnonymousIdentity
 
         flask.g.identity = AnonymousIdentity()
 
