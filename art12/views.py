@@ -73,7 +73,7 @@ class Summary(SpeciesMixin, TemplateView):
                 .all()
             )
             if sensitive_records:
-                if current_user.is_anonymous():
+                if current_user.is_anonymous:
                     map_warning = ', '.join(
                         [s.country for s in sensitive_records]
                     )

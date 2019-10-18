@@ -267,7 +267,7 @@ def config():
 
 @common.route('/auth/details', methods=['GET', 'POST'])
 def change_details():
-    if current_user.is_anonymous():
+    if current_user.is_anonymous:
         flash('You need to login to access this page.')
         return redirect(url_for(HOMEPAGE_VIEW_NAME))
     else:

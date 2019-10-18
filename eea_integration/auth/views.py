@@ -183,7 +183,7 @@ def me():
 @auth.route('/auth/change_password', methods=['GET', 'POST'])
 def change_password():
     HOMEPAGE_VIEW_NAME = auth.HOMEPAGE
-    if current_user.is_anonymous():
+    if current_user.is_anonymous:
         message = "You must log in before changing your password."
         return flask.render_template('message.html', message=message)
 
