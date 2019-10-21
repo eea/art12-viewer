@@ -7,6 +7,7 @@ from art12.common import get_config
 from art12.models import db
 from conftest import create_user
 from eea_integration.auth.providers import set_user
+from flask import current_app
 
 def force_login(client, user_id=None):
     with client.session_transaction() as sess:
@@ -179,13 +180,15 @@ def test_change_anonymous_password(app, plone_auth, client):
 
 
 def test_change_ldap_password(app, plone_auth, client):
+    EEA_PASSWORD_RESET = current_app.config['EEA_PASSWORD_RESET']
     foo = create_user('foo')
     foo.is_ldap = True
     models.db.session.add(foo)
     models.db.session.commit()
     force_login(client, 'foo')
     page = client.get(flask.url_for('auth.change_password'))
-    assert page.context['message'] == 'Your password can be changed only from the EIONET website ().'
+    msg = 'Your password can be changed only from the EIONET website ({}).'.format(EEA_PASSWORD_RESET)
+    assert page.context['message'] == msg
 
 
 def test_admin_edit_user_info(app, plone_auth, client, outbox):

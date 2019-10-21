@@ -21,6 +21,7 @@ TEST_CONFIG = {
     'EEA_LDAP_SERVER': 'test_ldap_server',
     'ADMIN_EMAIL': 'admin@example.com',
     'SQLALCHEMY_TRACK_MODIFICATIONS': False,
+    'EEA_PASSWORD_RESET': 'pw_reset',
 }
 
 alembic_cfg_path = path(__file__).dirname() / '..' / 'alembic.ini'
