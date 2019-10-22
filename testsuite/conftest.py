@@ -28,9 +28,10 @@ TEST_CONFIG = {
     'ADMIN_EMAIL': 'admin@example.com',
     'SQLALCHEMY_TRACK_MODIFICATIONS': False,
     'EEA_PASSWORD_RESET': 'pw_reset',
-    'SQLALCHEMY_DATABASE_URI': 'mysql://{}{}@mysql/{}'.format(getenv('DB_USER_TEST'),
-                                                              db_pass_test,
-                                                              getenv('DB_NAME_TEST')),
+    'SQLALCHEMY_DATABASE_URI': 'mysql://{}{}@{}/{}'.format(getenv('DB_USER_TEST'),
+                                                           db_pass_test,
+                                                           getenv('DB_HOST_TEST'),
+                                                           getenv('DB_NAME_TEST')),
 }
 
 alembic_cfg_path = path(__file__).dirname() / '..' / 'alembic.ini'
