@@ -91,15 +91,24 @@ Tests
        create user 'test'@'%' identified by 'test';
        grant all privileges on art12test.* to 'test'@'%';
        
-4. Access the art12-app container:
+       
+4. Make sure to complete the data for environment variables in docker/art12.env file:
+
+       # test art12
+       DB_NAME_TEST=art12test
+       DB_USER_TEST=test
+       DB_PASSWORD_TEST=test
+       DB_HOST_TEST=mysql
+       
+5. Access the art12-app container:
 
        docker exec -it art12-app bash
        
-5. Install dependencies:
+6. Install dependencies:
 
        pip install -r requirements-dev.txt
        
-6. Run tests:
+7. Run tests:
 
        py.test testsuite
 
