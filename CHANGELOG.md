@@ -1,7 +1,15 @@
 Changelog
 =========
 
+2.5.5(2019-06-09) - unrelesed
+----------------------
+* Fixed security issues
+* Fixed tests
+* Added newer docker-compose installation
+  [dianaboiangiu]
+
 2.5.4(2019-06-09)
+----------------------
 * Fix tests
 * Use Eionet password reset link
   [dianaboiangiu]
