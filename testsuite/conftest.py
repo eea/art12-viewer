@@ -7,12 +7,18 @@ from path import path
 from mock import patch
 from datetime import datetime, date
 import urllib
+from smart_getenv import getenv
 
 from art12.app import create_app
 from art12 import models
 from art12.common import HOMEPAGE_VIEW_NAME
 from eea_integration.auth import UserDatastore, Auth
 
+
+if getenv('DB_PASSWORD_TEST'):
+    db_pass_test = ':'+getenv('DB_PASSWORD_TEST')
+else:
+    db_pass_test = ''
 
 TEST_CONFIG = {
     'SERVER_NAME': 'localhost',
@@ -21,6 +27,11 @@ TEST_CONFIG = {
     'EEA_LDAP_SERVER': 'test_ldap_server',
     'ADMIN_EMAIL': 'admin@example.com',
     'SQLALCHEMY_TRACK_MODIFICATIONS': False,
+    'EEA_PASSWORD_RESET': 'pw_reset',
+    'SQLALCHEMY_DATABASE_URI': 'mysql://{}{}@{}/{}'.format(getenv('DB_USER_TEST'),
+                                                           db_pass_test,
+                                                           getenv('DB_HOST_TEST'),
+                                                           getenv('DB_NAME_TEST')),
 }
 
 alembic_cfg_path = path(__file__).dirname() / '..' / 'alembic.ini'
@@ -46,6 +57,7 @@ def create_testing_app():
     test_config = dict(TEST_CONFIG)
 
     app, _ = create_app(test_config, testing=True)
+    db = models.db.init_app(app)
     return app
 
 

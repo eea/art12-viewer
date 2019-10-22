@@ -24,7 +24,6 @@ from .common import (
     admin_perm,
 )
 
-
 @auth.app_context_processor
 def inject_variables():
     return {
@@ -188,10 +187,11 @@ def change_password():
         return flask.render_template('message.html', message=message)
 
     if current_user.is_ldap:
+        EEA_PASSWORD_RESET = current_app.config['EEA_PASSWORD_RESET']
         message = (
             'Your password can be changed only from the EIONET website '
             + '('
-            + os.environ.get('EEA_PASSWORD_RESET', '')
+            + EEA_PASSWORD_RESET
             + ').'
         )
         return flask.render_template('message.html', message=message)

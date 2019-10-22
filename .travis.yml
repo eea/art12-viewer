@@ -6,6 +6,9 @@ python:
 env:
   global:
     - EEA_PASSWORD_RESET=https://www.example.com/password-reset
+    - DB_NAME_TEST=art12
+    - DB_USER_TEST=root
+    - DB_HOST_TEST=localhost
 install:
   - pip install -r requirements-dev.txt --trusted-host eggshop.eaudeweb.ro
   - pip install pytest-cov==1.8.1 coverage==3.7.1 coveralls==0.5

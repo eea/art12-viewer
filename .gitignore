@@ -14,7 +14,7 @@ deploy/art12-devel/docker-compose.yml
 .secret
 art12.env
 art12.staging.env
-art12.devel.env
+art12.env
 rsync.key
 .skip-db-init
 
