@@ -25,7 +25,11 @@
   {% endif %}
     {% include 'summary/filters.html' %}
 
-    {% set colspan_all=30 %}
+    {% if dataset.id == 3%}
+      {% set colspan_all = 44 %}
+    {% else %}
+      {% set colspan_all=30 %}
+    {% endif %}
 
     {% if current_selection %}
       {% include 'summary/buttons.html' with context %}
@@ -36,44 +40,60 @@
       {% endif %}
       {% set page_type='summary' %}
       {% include 'common/legend.html' with context %}
-      <table class="complex_datatable">
-        <caption>
-          <b>Current selection</b>:
-          {{ current_selection|join(', ') }}.
-          {% set show_all_url=url_for('views.progress') %}
-          <a href="{{ show_all_url }}">Show all</a>
-        </caption>
+      <div style="overflow-x:auto;">
+        <table class="complex_datatable">
+          <caption>
+            <b>Current selection</b>:
+            {{ current_selection|join(', ') }}.
+            {% set show_all_url=url_for('views.progress') %}
+            <a href="{{ show_all_url }}">Show all</a>
+          </caption>
 
-        {% include "common/species_table_header.html" with context %}
+          {% if dataset.id == 3 %}
+            {% include "common/species_table_header_2019.html" with context %}
+          {% else %}
+            {% include "common/species_table_header.html" with context %}
+          {% endif %}
 
-        <tbody>
-        {% for row in objects %}
-          <tr {% if row.is_assesm %}class="assesm"{% endif %}>
+          <tbody>
+            {% for row in objects %}
+              <tr {% if row.is_assesm %}class="assesm"{% endif %}>
+                {% if dataset.id == 3 %}
+                  {% include 'summary/content/content_2019.html' %}
+                {% else %}
+                  {% include 'summary/content/ms.html' %}
+                  {% include 'summary/content/population_bs.html' with context %}
+                  {% include 'summary/content/range.html' with context %}
+                  {% include 'summary/content/population_ws.html' with context %}
+                  {% include 'summary/content/gridded_maps.html' with context %}
+                {% endif %}
+              </tr>
+            {% endfor %}
+          </tbody>
 
-            {% include 'summary/content/ms.html' %}
-            {% include 'summary/content/population_bs.html' with context %}
-            {% include 'summary/content/range.html' with context %}
-            {% include 'summary/content/population_ws.html' with context %}
-            {% include 'summary/content/gridded_maps.html' with context %}
-
-          </tr>
-        {% endfor %}
-        </tbody>
-
-        {# EU assessments #}
-        {% include 'common/species_table_eu_header.html' with context %}
-        <tbody>
-        {% for row in eu_objects %}
-          <tr class="stripe_row {% if row.additional_record %}italic_row{% endif %}">
-            <td {% if row.additional_record %}title="Additional assessment at the subspecies level for subspecies listed in the Annexes of the Birds Directive"{% endif %}>{{ EU_COUNTRY }}</td>
-            {% include 'summary/eu/population_bs.html' with context %}
-            {% include 'summary/eu/range.html' with context %}
-            {% include 'summary/eu/population_ws.html' with context %}
-            {% include 'summary/eu/status.html' with context %}
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
+          {# EU assessments #}
+          {% if dataset.id == 3 %}
+            {% include 'common/species_table_eu_header_2019.html' with context %}
+          {% else %}
+            {% include 'common/species_table_eu_header.html' with context %}
+          {% endif %}
+          <tbody>
+          {% for row in eu_objects %}
+            <tr class="stripe_row {% if row.additional_record %}italic_row{% endif %}">
+              <td {% if row.additional_record %}title="Additional assessment at the subspecies level for subspecies listed in the Annexes of the Birds Directive"{% endif %}>{{ EU_COUNTRY }}</td>
+              {% if dataset.id == 3 %}
+                {% include 'summary/eu/content_2019.html' with context %}
+              {% else %}
+                {% include 'summary/eu/population_bs.html' with context %}
+                {% include 'summary/eu/range.html' with context %}
+                {% include 'summary/eu/population_ws.html' with context %}
+                {% include 'summary/eu/status.html' with context %}
+              {% endif %}
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
       <p>
         The hash sign (#) under Subspecies/subspecific units-Trends or Status
         means that the EU population trends or EU status were not assessed at
