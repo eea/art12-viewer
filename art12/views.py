@@ -13,6 +13,8 @@ from flask.views import View
 from sqlalchemy.sql.expression import bindparam
 from flask_login import login_user,login_required, logout_user
 from eea_integration.auth.security import current_user, login_manager, verify, encrypt_password
+from eea_integration.auth.providers import _get_initial_ldap_data
+from eea_integration.auth.common import set_user_active
 
 from art12.common import TemplateView, get_map_path, get_map_url
 from art12.common import get_eu_map_breeding_url, get_eu_map_winter_url
@@ -289,13 +291,19 @@ class LoginView(TemplateView):
         user = RegisteredUser.query.filter_by(id=username).first()
 
         if not user:
+            initial_data = _get_initial_ldap_data(username)
             user = RegisteredUser(
                 id=username,
+                name=initial_data['name'],
+                email=initial_data['email'],
+                institution=initial_data['institution'],
+                qualification=initial_data['qualification'],
                 password=encrypt_password(password),
                 is_ldap=True,
                 confirmed_at = datetime.utcnow(),
                 account_date=datetime.now()
             )
+            set_user_active(user, True)
             db.session.add(user)
             db.session.commit()
         login_user(user)

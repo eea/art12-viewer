@@ -74,6 +74,9 @@
     </ul>
   {% else %}
     <h2>Accounts</h2>
-    Forgot your password? <a href='{{ EEA_PASSWORD_RESET }}'>Recover password</a>
+    Forgot your EIONET password? <a href='{{ EEA_PASSWORD_RESET }}'>Recover Eionet account password</a>
+    {% if security.recoverable %}
+      <p>Forgot your local account password? <a href="{{ url_for_security('forgot_password') }}">Recover local account password</a></p>
+    {% endif %}
   {% endif %}
 {% endblock content %}

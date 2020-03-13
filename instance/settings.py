@@ -65,3 +65,10 @@ MAPS_STATIC = getenv('MAPS_STATIC', default='maps')
 SCRIPT_NAME = getenv('SCRIPT_NAME', default='/article12')
 
 EEA_PASSWORD_RESET = getenv('EEA_PASSWORD_RESET', default='')
+
+MAIL_SERVER= getenv('MAIL_SERVER', 'postfix')
+MAIL_PORT= getenv('MAIL_PORT', 25)
+MAIL_USE_TLS= getenv('MAIL_USE_TLS')
+MAIL_USE_SSL= getenv('MAIL_USE_SSL')
+MAIL_USERNAME= getenv('MAIL_USERNAME')
+MAIL_PASSWORD= getenv('MAIL_PASSWORD')
