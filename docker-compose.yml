@@ -16,12 +16,7 @@ services:
     env_file:
     - docker/art12.env
     volumes:
-    - ./art12:/var/local/art12/art12/
-    - ./instance:/var/local/art12/instance/
-    - ./eea_integration:/var/local/art12/eea_integration
-    - ./manage.py:/var/local/art12/manage.py
-    - ./testsuite:/var/local/art12/testsuite
-    - ./requirements.txt:/var/local/art12/requirements.txt
+    - .:/var/local/art12
 
     entrypoint: ["/usr/bin/tail", "-f", "/dev/null"]
     # command: ["runserver", "-t", "0.0.0.0", "-p", "5000"]

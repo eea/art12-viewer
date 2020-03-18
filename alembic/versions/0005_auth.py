@@ -1,12 +1,12 @@
 """auth
 
-Revision ID: 24a37d870923
-Revises: 31ed56cad45a
+Revision ID: 0005
+Revises: 0004
 Create Date: 2014-10-08 14:15:12.614723
 
 """
-revision = '24a37d870923'
-down_revision = '31ed56cad45a'
+revision = '0005'
+down_revision = '0004'
 
 from alembic import op
 import sqlalchemy as sa

@@ -66,8 +66,8 @@ SCRIPT_NAME = getenv('SCRIPT_NAME', default='/article12')
 
 EEA_PASSWORD_RESET = getenv('EEA_PASSWORD_RESET', default='')
 
-MAIL_SERVER= getenv('MAIL_SERVER', 'postfix')
-MAIL_PORT= getenv('MAIL_PORT', 25)
+MAIL_SERVER= getenv('MAIL_SERVER', default='postfix')
+MAIL_PORT= getenv('MAIL_PORT', default=25)
 MAIL_USE_TLS= getenv('MAIL_USE_TLS')
 MAIL_USE_SSL= getenv('MAIL_USE_SSL')
 MAIL_USERNAME= getenv('MAIL_USERNAME')

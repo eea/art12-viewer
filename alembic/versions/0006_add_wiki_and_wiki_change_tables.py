@@ -1,29 +1,27 @@
-"""add WikiTrail and WikiTrailChanges
+"""add_wiki_and_wiki_change_tables
 
-Revision ID: 125f18e29d33
-Revises: 41385c05675a
-Create Date: 2014-10-07 18:12:32.559577
+Revision ID: 0006
+Revises: 0005
+Create Date: 2014-10-07 15:52:07.956349
 
 """
-
 # revision identifiers, used by Alembic.
-revision = '125f18e29d33'
-down_revision = '41385c05675a'
+revision = '0006'
+down_revision = '0005'
 
 from alembic import op
 import sqlalchemy as sa
-from sqlalchemy.dialects import mysql
 
 
 def upgrade():
-    op.create_table('wiki_trail',
+    op.create_table('wiki',
         sa.Column('id', sa.Integer(), nullable=False),
-        sa.Column('speciescode', sa.String(length=10), nullable=True),
+        sa.Column('speciescode', sa.String(length=10), nullable=False),
         sa.Column('ext_dataset_id', sa.Integer(), nullable=True),
         sa.ForeignKeyConstraint(['ext_dataset_id'], ['datasets.id'], ),
         sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('wiki_trail_changes',
+    op.create_table('wiki_changes',
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('wiki_id', sa.Integer(), nullable=False),
         sa.Column('body', sa.String(length=6000), nullable=False),
@@ -33,17 +31,12 @@ def upgrade():
         sa.Column('active', sa.Integer(), nullable=True),
         sa.Column('ext_dataset_id', sa.Integer(), nullable=True),
         sa.ForeignKeyConstraint(['ext_dataset_id'], ['datasets.id'], ),
-        sa.ForeignKeyConstraint(['wiki_id'], ['wiki_trail.id'], ),
+        sa.ForeignKeyConstraint(['wiki_id'], ['wiki.id'], ),
         sa.PrimaryKeyConstraint('id')
     )
-    op.alter_column(u'wiki', 'speciescode',
-                    existing_type=mysql.VARCHAR(length=10),
-                    nullable=True)
 
 
 def downgrade():
-    op.alter_column(u'wiki', 'speciescode',
-                    existing_type=mysql.VARCHAR(length=10),
-                    nullable=False)
-    op.drop_table('wiki_trail_changes')
-    op.drop_table('wiki_trail')
+    op.drop_table('wiki_changes')
+    op.drop_table('wiki')
+

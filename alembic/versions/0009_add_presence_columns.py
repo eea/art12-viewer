@@ -1,14 +1,14 @@
 """add_presence_columns
 
-Revision ID: 227c20797e6c
-Revises: 3d53b5906a3d
+Revision ID: 0009
+Revises: 0008
 Create Date: 2014-10-10 15:50:31.567980
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '227c20797e6c'
-down_revision = '3d53b5906a3d'
+revision = '0009'
+down_revision = '0008'
 
 from alembic import op
 import sqlalchemy as sa

@@ -235,8 +235,8 @@ def get_original_url(row):
 
 def get_title_for_species_country(row):
     s_name, s_info, s_type = '', '', ''
-    if row.speciesname != row.assesment_speciesname:
-        s_name = row.speciesname or row.assesment_speciesname or ''
+    if row.speciesname != row.assessment_speciesname:
+        s_name = row.speciesname or row.assessment_speciesname or ''
         s_info = ''
     if row.species_type_asses == 0:
         # s_type = row.species_type_details.SpeciesType \
