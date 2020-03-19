@@ -8,6 +8,14 @@ class SpeciesMixin(object):
 
     def get_subjects(self, dataset):
         model = LuDataBird
+        if dataset.id == 3:
+            result = (
+                model.query.filter_by(dataset=dataset).distinct()
+                .with_entities(model.speciesname, model.speciesname)
+                .order_by(model.speciesname)
+                .all()
+            )
+            return result
         return (
             model.query
             .filter_by(dataset=dataset)
@@ -15,6 +23,24 @@ class SpeciesMixin(object):
             .order_by(model.speciesname)
             .all()
         )
+
+        return result
+
+    def get_reported_name(self, dataset, speciesname):
+        model = EtcDataBird
+        lu_data_bird = LuDataBird.query.filter_by(speciesname=speciesname).first()
+        if not lu_data_bird:
+            speciesname = ''
+        else:
+            speciesname = lu_data_bird.speciesname
+        result = (
+            model.query
+            .filter_by(dataset=dataset, assessment_speciesname=speciesname)
+            .with_entities(model.speciescode, model.reported_name)
+            .order_by(model.reported_name).distinct()
+            .all()
+        )
+        return result
 
     def get_countries(self, dataset):
         if dataset.id == 2:

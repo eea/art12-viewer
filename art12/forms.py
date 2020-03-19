@@ -23,10 +23,16 @@ class CommonFilterForm(Form):
 
 class SummaryFilterForm(SpeciesMixin, CommonFilterForm):
     subject = SelectField('Name...', default='')
+    reported_name = SelectField('Reported name...', default='')
 
     def __init__(self, *args, **kwargs):
         super(SummaryFilterForm, self).__init__(*args, **kwargs)
         self.subject.choices = [('', '-')] + self.get_subjects(self.dataset)
+        reported_name = [('', '-')]
+        reported_names = self.get_reported_name(self.dataset, self.subject.data)
+        if reported_names:
+            reported_name.extend(reported_names)
+        self.reported_name.choices = reported_name
 
     def get_selection(self):
         subject = self.subject.data

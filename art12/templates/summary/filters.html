@@ -11,7 +11,12 @@
 
   <div class="box-col width-240">
     <label>{{ filter_form.subject.label }}</label>
-    {{ filter_form.subject(**{'data-href': subjects_url}) }}
+    {{ filter_form.subject(**{'data-href': url_for('.filter_form_reported_name')}) }}
+  </div>
+
+  <div class="box-col width-240">
+    <label>{{ filter_form.reported_name.label }}</label>
+    {{ filter_form.reported_name() }}
   </div>
 
   <button type="submit" class="btn-blue offset_top_label">Filter</button>

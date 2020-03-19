@@ -135,6 +135,48 @@ $(document).ready(function () {
         }
     });
 
+    $('#subject').on('change', function () {
+        var option = $(this).find(':selected');
+        var subject = option.val();
+        var subject_selected = $('#subject option:selected').val();
+        $('#subject').data('subject', subject_selected);
+
+        if ($('#subject')){
+          var data = {'dataset_id': $('#period').find(':selected').val(),
+                      'subject': subject};
+          var url = $(this).data('href');
+          $.ajax({
+            type: "GET",
+            url: url,
+            data: data,
+            dataType: 'html',
+            success: function(resp) {
+              var data = JSON.parse(resp);
+              var subject_selected = $('#reported_name').data('subject');
+              $('#reported_name').empty();
+              $.each(data, function(index, element) {
+                if (element[0] == subject_selected){
+                  $('#reported_name').append(
+                  $("<option selected></option>")
+                    .text(element[1])
+                    .val(element[0])
+                  );
+                }
+                else{
+                  $('#reported_name').append(
+                  $("<option></option>")
+                    .text(element[1])
+                    .val(element[0])
+                  );
+                }
+              });
+            },
+            error: function(resp) {
+              alert('Error on selection')
+            }
+          });
+        }
+    });
 
     var copy_alert = 'Copying the data is not allowed';
     $('.copy-disabled').bind('contextmenu', function(e){

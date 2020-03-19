@@ -46,6 +46,9 @@ class Homepage(TemplateView):
 class Summary(SpeciesMixin, TemplateView):
     template_name = 'summary/species.html'
 
+    def get_speciescode(self, dataset, speciesname):
+        return LuDataBird.query.filter_by(dataset=dataset, speciesname=speciesname).first().speciescode
+
     def get_context_data(self, **kwargs):
         map_url = ''
         map_warning = ''
@@ -55,9 +58,17 @@ class Summary(SpeciesMixin, TemplateView):
         filter_args = {}
         subject = filter_form.subject.data
         dataset = filter_form.dataset
-
+        speciescode = None
+        reported_name = filter_form.reported_name.data
         if subject:
-            filter_args['speciescode'] = subject
+            if dataset.id == 3:
+                speciescode = self.get_speciescode(dataset, subject)
+                filter_args['assessment_speciesname'] = subject
+                if reported_name:
+                    filter_args['speciescode'] = reported_name
+            else:
+                speciescode = subject
+                filter_args['speciescode'] = subject
         if filter_args:
             filter_args['dataset'] = dataset
             qs = self.model_cls.query.filter_by(**filter_args)
@@ -71,7 +82,7 @@ class Summary(SpeciesMixin, TemplateView):
             sensitive = False
             sensitive_records = (
                 LuRestrictedDataBird.query
-                .filter_by(speciescode=subject, dataset=dataset, show_data=0)
+                .filter_by(speciescode=speciescode, dataset=dataset, show_data=0)
                 .all()
             )
             if sensitive_records:
@@ -83,18 +94,18 @@ class Summary(SpeciesMixin, TemplateView):
                     sensitive = True
 
             map_url = get_map_url(
-                subject=subject,
+                subject=speciescode,
                 sensitive=sensitive,
             )
             eu_map_breeding_url = get_eu_map_breeding_url(
-                subject=subject,
+                subject=speciescode,
                 sensitive=sensitive,
             )
             eu_map_winter_url = get_eu_map_winter_url(
-                subject=subject,
+                subject=speciescode,
                 sensitive=sensitive,
             )
-            factsheet_url = get_factsheet_url(subject=subject, dataset=dataset)
+            factsheet_url = get_factsheet_url(subject=speciescode, dataset=dataset)
         else:
             content_objects = []
             eu_objects = []
@@ -105,6 +116,7 @@ class Summary(SpeciesMixin, TemplateView):
             'eu_objects': eu_objects,
             'current_selection': filter_form.get_selection(),
             'dataset': dataset,
+            'speciescode': speciescode,
             'subject': subject,
             'map_url': map_url,
             'map_warning': map_warning,
@@ -218,6 +230,16 @@ class ConnectedSelectBoxes(View, SpeciesMixin):
         options = [('', '-')] + self.get_subjects(dataset)
         return json.dumps(options)
 
+
+class FilterFormReportedName(View, SpeciesMixin):
+    methods = ['GET']
+
+    def dispatch_request(self):
+        dataset_id = request.args.get('dataset_id', 1)
+        speciesname = request.args.get('subject', '')
+        dataset = Dataset.query.get_or_404(dataset_id)
+        options = [('', '-')] + self.get_reported_name(dataset, speciesname)
+        return json.dumps(options)
 
 class FilterFormCountries(View, SpeciesMixin):
     methods = ['GET']

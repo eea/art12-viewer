@@ -1,7 +1,8 @@
 from flask import Blueprint
 from art12.views import (
     Homepage, Summary, Progress, Reports,
-    ConnectedSelectBoxes, FilterFormCountries, EuMap,
+    ConnectedSelectBoxes, FilterFormCountries,
+    FilterFormReportedName, EuMap,
     LoginView, LogoutView
 )
 from art12.factsheet import factsheet
@@ -13,6 +14,8 @@ views.add_url_rule('/', view_func=Homepage.as_view('homepage'))
 views.add_url_rule('/summary', view_func=Summary.as_view('summary'))
 views.add_url_rule('/summary/filter_form',
                    view_func=ConnectedSelectBoxes.as_view('filter_form'))
+views.add_url_rule('/summary/filter_form/reported_name',
+                   view_func=FilterFormReportedName.as_view('filter_form_reported_name'))
 views.add_url_rule('/summary/filter_form/countries',
                    view_func=FilterFormCountries.as_view('filter_form_countries'))
 views.add_url_rule('/progress', view_func=Progress.as_view('progress'))
