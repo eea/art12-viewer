@@ -36,6 +36,7 @@ class SpeciesMixin(object):
         result = (
             model.query
             .filter_by(dataset=dataset, assessment_speciesname=speciesname)
+            .filter(model.reported_name!='')
             .with_entities(model.speciescode, model.reported_name)
             .order_by(model.reported_name).distinct()
             .all()

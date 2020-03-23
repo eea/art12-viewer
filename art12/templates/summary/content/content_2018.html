@@ -1,0 +1,235 @@
+{# MS #}
+
+{% if not request.args.get('country') %}
+  {% if row.envelope and row.filename %}
+    {% set s_name, s_info, s_type = get_title_for_country(row) %}
+    {% set original_url = get_original_url(row) %}
+    <td class="border" data-tooltip="html">
+      <div class="tooltip-html hidden">
+        <div class="extra-padding">
+          <p class="br width-600 margin-small">
+            {% if s_name %}
+              Scientific name used in original MS report if different than
+              recommended: "{{ s_name|safe }}"<br/>
+            {% endif %}
+            
+            {% if row.presence_bs %}
+              Breeding population presence: {{ row.presence_bs }}
+              <br/>
+            {% endif %}
+            
+            {% if row.presence_ws %}
+              Winter population presence: {{ row.presence_ws }}
+            {% endif %}
+          </p>
+          
+          {% if not row.is_assesm %}
+            <p class="margin-small">
+              <a href="{{ original_url }}">Open Original Report</a>
+              &nbsp;
+              <span class="muted large">
+                <i class="fa fa-external-link"></i>
+              </span>
+            </p>
+          {% endif %}
+        </div>
+      </div>
+      <a class="clipped popup-btn block"
+        data-title="Factsheet" href="{{ original_url }}">
+        {{ row.country }}
+      </a>
+    </td>
+  {% else %}
+    <td class="border">{{ row.country }}</td>
+  {% endif %}
+{% endif %}
+
+{% from 'common/_macros.html' import additional_info %}
+{# Breeding population #}
+{% from 'common/_macros.html' import additional_info %}
+
+<td class="default-td border_right">
+  <div class="first-subcolumn">{{ row.population_minimum_size_bs|int or '' }}</div>
+</td>
+
+<td class="default-td border_right">
+  <div class="first-subcolumn">{{ row.population_maximum_size_bs|int or '' }}</div>
+</td>
+
+<td class="default-td border_right">
+  <div class="first-subcolumn">{{ row.population_size_bs|int or '' }}</div>
+</td>
+
+<td class="default-td border_right">
+  <div class="first-subcolumn">{{ row.population_size_unit_bs or '' }}</div>
+</td>
+
+<td class="default-td border_right">
+  <div class="first-subcolumn">{{ row.population_change_reason_bs or '' }}</div>
+</td>
+
+<td class="default-td border_right">
+  <div class="first-subcolumn">{{ row.population_estimateType_bs or '' }}</div>
+</td>
+
+{{ additional_info(row.population_additional_info_record_bs, row.population_additional_info_bs) }}
+
+<td class="border_right border_left">
+  <div class="first-subcolumn">{{ "%.1f"|format(row.percentage_population_mean_size_bs|float) if row.percentage_population_mean_size_bs != 0 else '' }}</div>
+</td>
+
+<td class="default-td border_right border_left">
+  {{ row.population_trend_period_bs or '' }}
+</td>
+
+<td class="trend-{{ TREND_CLASSES.get(row.population_trend_bs) }} border_right border_left center">
+  <span class="conclusion">
+    {{ row.population_trend_bs or '' }}
+  </span>
+</td>
+
+<td class="default-td border_right border_left">
+  {{ row.population_trend_magnitude_bs or '' }}
+</td>
+
+<td class="default-td border_right">
+  {{ row.population_trend_long_period_bs or '' }}
+</td>
+
+<td class="trend-{{ TREND_CLASSES.get(row.population_trend_long_bs) }} border_right">
+  <span class="conclusion">
+    {{ row.population_trend_long_bs or '' }}
+  </span>
+</td>
+
+<td class="default-td border_right">
+  {{ row.population_trend_long_magnitude_bs or '' }}
+</td>
+
+{{ additional_info(row.population_trend_additional_info_record_bs, row.population_trend_additional_info_bs) }}
+
+
+{# Breeding distribution #}
+
+<td class="default-td border_left border_right">
+  {{ row.distribution_surface_area_bs|int or '' }}
+</td>
+
+{{ additional_info(row.distribution_additional_info_record_bs, row.distribution_additional_info_bs) }}
+
+<td class="border_left border_right">
+  {{ "%.1f"|format(row.percentage_distribution_surface_area_bs|float) if row.percentage_distribution_surface_area_bs != '0' else '' }}
+</td>
+
+<td class="default-td border_left border_right">
+  {{ row.distribution_trend_period_bs or '' }}
+</td>
+
+<td class="trend-{{ TREND_CLASSES.get(row.distribution_trend_bs) }} border_right">
+  <span class="conclusion">
+    {{ row.distribution_trend_bs or '' }}
+  </span>
+</td>
+
+<td class="default-td border_right">
+  {{ row.distribution_trend_magnitude_bs or '' }}
+</td>
+
+<td class="default-td border_right">
+  {{ row.distribution_trend_long_period_bs or '' }}
+</td>
+
+<td class="trend-{{ TREND_CLASSES.get(row.distribution_trend_long_bs) }} border_right">
+  <span class="conclusion">
+    {{ row.distribution_trend_long_bs or '' }}
+  </span>
+</td>
+
+<td class="default-td border_right">
+  {{ row.distribution_trend_long_magnitude_bs }}
+</td>
+
+{{ additional_info(row.distribution_trend_additional_info_record_bs, row.distribution_trend_additional_info_bs) }}
+
+
+{# Winter population #}
+
+<td class="default-td border_right border_left">
+  {{ row.population_minimum_size_ws|int or '' }}
+</td>
+
+<td class="default-td border_right border_left">
+  {{ row.population_maximum_size_ws|int or '' }}
+</td>
+
+<td class="default-td border_right border_left">
+  {{ row.population_size_ws|int or '' }}
+</td>
+
+<td class="default-td border_right border_left">
+  {{ row.population_size_unit_ws or '' }}
+</td>
+
+<td class="default-td border_right border_left">
+  {{ row.population_estimateType_ws or '' }}
+</td>
+
+<td class="default-td border_right border_left">
+  {{ row.population_change_reason_ws or '' }}
+</td>
+
+{{ additional_info(row.population_additional_info_record_ws, row.population_additional_info_ws) }}
+
+<td class="center border_right border_left">
+  {{ "%.1f"|format(row.percentage_population_mean_size_ws|float) if row.percentage_population_mean_size_ws != 0 else '' }}
+</td>
+
+<td class="default-td border_right border_left">
+  {{ row.population_trend_period_ws or '' }}
+</td>
+
+<td class="trend-{{ TREND_CLASSES.get(row.population_trend_ws) }}"
+    title="{{ row.population_trend_quality_ws or '' }}">
+  <span class="conclusion">
+    {{ row.population_trend_ws or '' }}
+  </span>
+</td>
+
+<td class="default-td border_right border_left">
+  {{ row.population_trend_magnitude_ws }}
+</td>
+
+<td class="default-td border_right border_left">
+  {{ row.population_trend_long_period_ws }}
+</td>
+
+<td class="trend-{{ TREND_CLASSES.get(row.population_trend_long_ws) }}"
+    title="{{ row.population_trend_quality_ws or '' }}">
+  <span class="conclusion">
+    {{ row.population_trend_long_ws or '' }}
+  </span>
+</td>
+
+<td class="default-td border_right border_left">
+  {{ row.population_trend_long_magnitude_ws }}
+</td>
+
+{{ additional_info(row.population_trend_additional_info_record_ws, row.population_trend_additional_info_ws) }}
+
+<td class="default-td border_right border_left">
+  {{ row.status_ws }}
+</td>
+
+{# Breeding area/gridded maps #}
+
+<td class="center border_right">
+  {{ row.distribution_grid_area|int or '' }}
+</td>
+
+<td class="center border_right">
+  {{ "%.1f"|format(row.percentage_distribution_grid_area|float) if row.percentage_distribution_grid_area != 0 else '' }}
+</td>
+
+<td class="center">
+  {{ row.subspecies_name or '' }}
+</td>

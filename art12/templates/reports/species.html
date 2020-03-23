@@ -42,7 +42,7 @@
 
           {% set is_reports = true %}
           {% if dataset.id == 3 %}
-            {% include "common/species_table_header_2019.html" with context %}
+            {% include "common/species_table_header_2018.html" with context %}
           {% else %}
             {% include "common/species_table_header.html" with context %}
           {% endif %}
@@ -58,7 +58,7 @@
                 </a>
               </td>
               {% if dataset.id == 3 %}
-                {% include 'summary/content/content_2019.html' %}
+                {% include 'summary/content/content_2018.html' %}
               {% else %}
                 {% include 'summary/content/population_bs.html' with context %}
                 {% include 'summary/content/range.html' with context %}

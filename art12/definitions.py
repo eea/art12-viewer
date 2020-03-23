@@ -18,6 +18,7 @@ TREND_CLASSES = {
     '+': 'inc',
     '-': 'dec',
     '0': 'eq',
+    '=': 'eq',
     'x': 'xx',
     'F': 'f',
     'n': 'n',

@@ -25,8 +25,8 @@
   {% endif %}
     {% include 'summary/filters.html' %}
 
-    {% if dataset.id == 3%}
-      {% set colspan_all = 44 %}
+    {% if dataset.id == 3 %}
+      {% set colspan_all = 45 %}
     {% else %}
       {% set colspan_all=30 %}
     {% endif %}
@@ -50,7 +50,7 @@
           </caption>
 
           {% if dataset.id == 3 %}
-            {% include "common/species_table_header_2019.html" with context %}
+            {% include "common/species_table_header_2018.html" with context %}
           {% else %}
             {% include "common/species_table_header.html" with context %}
           {% endif %}
@@ -59,7 +59,7 @@
             {% for row in objects %}
               <tr {% if row.is_assesm %}class="assesm"{% endif %}>
                 {% if dataset.id == 3 %}
-                  {% include 'summary/content/content_2019.html' %}
+                  {% include 'summary/content/content_2018.html' %}
                 {% else %}
                   {% include 'summary/content/ms.html' %}
                   {% include 'summary/content/population_bs.html' with context %}
@@ -73,7 +73,7 @@
 
           {# EU assessments #}
           {% if dataset.id == 3 %}
-            {% include 'common/species_table_eu_header_2019.html' with context %}
+            {% include 'common/species_table_eu_header_2018.html' with context %}
           {% else %}
             {% include 'common/species_table_eu_header.html' with context %}
           {% endif %}
@@ -82,7 +82,7 @@
             <tr class="stripe_row {% if row.additional_record %}italic_row{% endif %}">
               <td {% if row.additional_record %}title="Additional assessment at the subspecies level for subspecies listed in the Annexes of the Birds Directive"{% endif %}>{{ EU_COUNTRY }}</td>
               {% if dataset.id == 3 %}
-                {% include 'summary/eu/content_2019.html' with context %}
+                {% include 'summary/eu/content_2018.html' with context %}
               {% else %}
                 {% include 'summary/eu/population_bs.html' with context %}
                 {% include 'summary/eu/range.html' with context %}
