@@ -7,31 +7,11 @@
     <td class="border" data-tooltip="html">
       <div class="tooltip-html hidden">
         <div class="extra-padding">
-          <p class="br width-600 margin-small">
-            {% if s_name %}
-              Scientific name used in original MS report if different than
-              recommended: "{{ s_name|safe }}"<br/>
-            {% endif %}
-            
-            {% if row.presence_bs %}
-              Breeding population presence: {{ row.presence_bs }}
-              <br/>
-            {% endif %}
-            
-            {% if row.presence_ws %}
-              Winter population presence: {{ row.presence_ws }}
-            {% endif %}
-          </p>
-          
-          {% if not row.is_assesm %}
-            <p class="margin-small">
-              <a href="{{ original_url }}">Open Original Report</a>
-              &nbsp;
-              <span class="muted large">
-                <i class="fa fa-external-link"></i>
-              </span>
-            </p>
-          {% endif %}
+          <span class="br margin-small">{{ row.further_information|format_info|safe }}</span>
+          &nbsp;
+          <span class="margin-small"><a href="{{ original_url }}"><span class="muted large">
+            <i class="fa fa-external-link"></i>
+          </span></a></span>
         </div>
       </div>
       <a class="clipped popup-btn block"

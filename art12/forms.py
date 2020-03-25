@@ -41,9 +41,12 @@ class SummaryFilterForm(SpeciesMixin, CommonFilterForm):
 
         choices_dict = dict(self.subject.choices)
         subject_name = choices_dict.get(subject, subject)
-
-        return super(SummaryFilterForm, self).get_selection() + [subject_name]
-
+        reported_name = self.reported_name.data
+        if reported_name:
+            reported_name =dict(self.reported_name.choices).get(reported_name)
+            return super(SummaryFilterForm, self).get_selection() + [subject_name] + [reported_name]
+        else:
+            return super(SummaryFilterForm, self).get_selection() + [subject_name]
 
 class ProgressFilterForm(CommonFilterForm):
     CONCLUSION_TYPE = (

@@ -32,6 +32,9 @@ def format_subpopulation(subpopulation):
         .replace('all others', '</i>all others<i>')
     )
 
+@factsheet.app_template_filter('format_info')
+def format_info(value):
+    return value.replace('|', '<br>')
 
 @factsheet.app_template_global('get_map_url')
 def get_map_url(code, suffix):

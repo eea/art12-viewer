@@ -10,7 +10,7 @@
     {% if is_reports %}
       <th rowspan="3">Species</th>
     {% else %}
-      <th rowspan="3" title="Member states">MS</th>
+      <th rowspan="3" title="Member States">MS</th>
     {% endif %}
     <th colspan="15">Breeding population</th>
     <th colspan="10">Breeding distribution</th>
@@ -31,13 +31,39 @@
   <tr>
     {# Breeding Population #}
     <th>Min</th>
-    <th>Max</th>
+    <th>
+      <div class="popout-wrapper hover">
+        <div class="popout size_unit_th right caret">
+          <table class="popout-table">
+            <tr style="text-align:left !important;">
+              <th colspan="2">Mouse-over texts for entries below show "Method used" reported for population size as a whole:<br>
+               estimatePartial - based mainly on extrapolation from limited amount of data<br>
+               estimateExpert - based mainly on expert opinion, with very limited data<br>
+               absentData - insufficient or no data available<br>
+               completeSurvey - complete survey or statistically robust estimate</th>
+            </tr>
+            <tr>
+              <th>Country</th>
+              <th>Method used</th>
+            </tr>
+            {% for row in objects %}
+              <tr>
+                <td>{{ row.country }}</td>
+                <td>{{ row.population_size_method_bs }}</td>
+              </tr>
+            {% endfor %}
+          </table>
+        </div>
+        Max
+      </div>
+    </th>
     <th>Best value</th>
     <th title="Population size unit: 
-               bfemales - breeding females
-               cmales - calling (or lekking) males
-               i - individuals
-               p - breeding pairs">Unit</th>
+               bfemales - number of breeding females
+               cmales - number of calling (or lekking) males
+               i - number of individuals
+               males - number of males
+               p - number of breeding pairs">Unit</th>
     <th title="Type of estimate: 
                estimate - best estimate
                interval - 95% confidence interval
@@ -60,7 +86,7 @@
                f: fluctuating
                u: uncertain
                x: unknown">ST direction</th>
-    <th title="Short-term trend magnitude (%) - min – max (best single value)">ST magnitude</th>
+    <th title="Short-term trend magnitude (%) - min | max | (best single value)">ST magnitude</th>
     <th title="Long-term trend period">LT period</th>
     <th title="Long-term trend direction:
                -: decreasing
@@ -69,17 +95,37 @@
                f: fluctuating
                u: uncertain
                x: unknown">LT direction</th>
-    <th title="Long-term trend magnitude (%) - min – max (best single value)">LT magnitude</th>
+    <th title="Long-term trend magnitude (%) - min | max | (best single value)">LT magnitude</th>
     <th title='Additional population trend information available, if "#"'>&#8505;</th>
 
     {# Breeding distribution #}
-    <th title='Breeding distribution surface area, in km².
-               Mouse-over texts for entries below show "Method used" reported for distribution surface area: 
-               estimatePartial - based mainly on extrapolation from limited amount of data
-               estimateExpert - based mainly on expert opinion, with very limited data
-               absentData - insufficient or no data available
-               completeSurvey - complete survey or statistically robust estimate'>Area</th>
-    <th title="Additional distribution information available, if '#'">&#8505;</th>
+    <th>
+      <div class="popout-wrapper hover">
+        <div class="popout size_unit_th right caret">
+          <table class="popout-table">
+            <tr style="text-align:left !important;">
+              <th colspan="2">Mouse-over texts for entries below show "Method used" reported for distribution surface area (in km²):
+               <br>estimatePartial - based mainly on extrapolation from limited amount of data
+               <br>estimateExpert - based mainly on expert opinion, with very limited data
+               <br>absentData - insufficient or no data available
+               <br>completeSurvey - complete survey or statistically robust estimate
+            </tr>
+            <tr>
+              <th>Country</th>
+              <th>Method used</th>
+            </tr>
+            {% for row in objects %}
+              <tr>
+                <td>{{ row.country }}</td>
+                <td>{{ row.distribution_surface_area_method_bs }}</td>
+              </tr>
+            {% endfor %}
+          </table>
+        </div>
+        Area
+      </div>
+    </th>
+    <th title='Additional distribution information available, if "#"'>&#8505;</th>
     <th title="Percentage of overall EU28 distribution per Member State" class="gray-cell">% MS</th>
 
     <th title="Short-term trend period">ST period</th>
@@ -90,7 +136,7 @@
                f: fluctuating
                u: uncertain
                x: unknown">ST direction</th>
-    <th title="Short-term trend magnitude (%) - min – max (best single value)">ST magnitude</th>
+    <th title="Short-term trend magnitude (%) - min | max | (best single value)">ST magnitude</th>
     <th title="Long-term trend period">LT period</th>
     <th title="Long-term trend direction:
                -: decreasing
@@ -99,20 +145,45 @@
                f: fluctuating
                u: uncertain
                x: unknown">LT direction</th>
-    <th title="Long-term trend magnitude (%) - min – max (best single value)">LT magnitude</th>
+    <th title="Long-term trend magnitude (%) - min | max | (best single value)">LT magnitude</th>
     <th title='Additional distribution trend information available, if "#"'>&#8505;</th>
 
     {# Winter population #}
     <th>Min</th>
-    <th title='Mouse-over texts below show "Method used" reported for population size value(s): 
-               estimatePartial - based mainly on extrapolation from limited amount of data
-               estimateExpert - based mainly on expert opinion, with very limited data
-               absentData - insufficient or no data available
-               completeSurvey - complete survey or statistically robust estimate'>Max</th>
+    <th>
+      <div class="popout-wrapper hover">
+        <div class="popout size_unit_th right caret">
+          <table class="popout-table">
+            <tr style="text-align:left !important;">
+              <th colspan="2">Mouse-over texts below show "Method used" reported for population size value(s):
+                <br>estimatePartial - based mainly on extrapolation from limited amount of data
+                <br>estimateExpert - based mainly on expert opinion, with very limited data
+                <br>absentData - insufficient or no data available
+                <br>completeSurvey - complete survey or statistically robust estimate</th>
+            </tr>
+            <tr>
+              <th>Country</th>
+              <th>Method used</th>
+            </tr>
+            {% for row in objects %}
+              <tr>
+                <td>{{ row.country }}</td>
+                <td>{{ row.population_size_method_ws }}</td>
+              </tr>
+            {% endfor %}
+          </table>
+        </div>
+        Max
+      </div>
+    </th>
     <th>Best value</th>
-    <th title="Population size unit: 
+    <th title="Population size unit:
                i - individuals">Unit</th>
-    <th title="Long-term trend magnitude (%) - min – max (best single value)">Type est.</th>
+    <th title="Type of estimate:
+               estimate - best estimate
+               interval - 95% confidence interval
+               mean - multi-year mean
+               minimum - minimum value">Type est.</th>
     <th title="Main reason for change (if any) since previous reporting period:
                genuine - genuine change
                knowledge - improved knowledge / more accurate data
@@ -120,8 +191,7 @@
                noChange - no change
                noInfo - no information on nature of change">Change</th>
     <th title='Additional population size information available, if "#"'>&#8505;</th>
-    <th title="Percentage of overall
-               EU28 population per Member State" class="gray-cell">% MS</th>
+    <th title="Percentage of overall EU28 population per Member State" class="gray-cell">% MS</th>
 
     <th title="Short-term trend period">ST period</th>
     <th title="Short-term trend direction:
@@ -131,7 +201,7 @@
                f: fluctuating
                u: uncertain
                x: unknown">ST direction</th>
-    <th title="Short-term trend magnitude (%) - min – max (best single value)">ST magnitude</th>
+    <th title="Short-term trend magnitude (%) - min | max | (best single value)">ST magnitude</th>
     <th title="Long-term trend period">LT period</th>
     <th title="Long-term trend direction:
                -: decreasing
@@ -140,9 +210,9 @@
                f: fluctuating
                u: uncertain
                x: unknown">LT direction</th>
-    <th title="Long-term trend magnitude (%) - min – max (best single value)">LT magnitude</th>
+    <th title="Long-term trend magnitude (%) - min | max | (best single value)">LT magnitude</th>
     <th title='Additional population trend information available, if "#"'>&#8505;</th>
-    <th title=''>Status</th>
+    <th>Status</th>
 
     {# Breeding area from gridded maps (km²) #}
     <th data-tooltip-place="sw" title="Area of breeding distribution from GIS data, in km<sup>2</sup>" class="gray-cell">Distrib.</th>
