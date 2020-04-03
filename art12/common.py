@@ -221,9 +221,12 @@ def get_original_url(row):
     )
     url_format = CONVERTER_URL
     info = urlparse(row.envelope)
-    convertor = 343
-    if row.country == 'CZ':
-        convertor = 345
+    if row.dataset.id == 3:
+        convertor = 612
+    else:
+        convertor = 343
+        if row.country == 'CZ':
+            convertor = 345
 
     return url_format.format(
         scheme=info.scheme, host=info.netloc, path=info.path,
