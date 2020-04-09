@@ -80,10 +80,10 @@
           <tbody>
           {% for row in eu_objects %}
             <tr class="stripe_row {% if row.additional_record %}italic_row{% endif %}">
-              <td {% if row.additional_record %}title="Additional assessment at the subspecies level for subspecies listed in the Annexes of the Birds Directive"{% endif %}>{{ EU_COUNTRY }}</td>
               {% if dataset.id == 3 %}
                 {% include 'summary/eu/content_2018.html' with context %}
               {% else %}
+                <td {% if row.additional_record %}title="Additional assessment at the subspecies level for subspecies listed in the Annexes of the Birds Directive"{% endif %}>{{ EU_COUNTRY }}</td>
                 {% include 'summary/eu/population_bs.html' with context %}
                 {% include 'summary/eu/range.html' with context %}
                 {% include 'summary/eu/population_ws.html' with context %}
