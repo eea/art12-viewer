@@ -2,11 +2,11 @@
 
 {# Breeding population #}
 <td colspan="3" class="default-td border_left">
-  {{ row.br_population_minimum_size or '' }}
+  {{ row.br_population_minimum_size|int or '' }}
 </td>
 
 <td colspan="3" class="default-td border_left text-center">
-  {{ row.br_population_maximum_size or '' }}
+  {{ row.br_population_maximum_size|int or '' }}
 </td>
 
 <td colspan="3" class="default-td border_left text-center">
@@ -45,15 +45,15 @@
 </td>
 
 {# Winter population #}
-<td colspan="3" class="default-td border_left">
-  {{ row.wi_population_minimum_size or '' }}
+<td colspan="4" class="default-td border_left">
+  {{ row.wi_population_minimum_size|int or '' }}
 </td>
 
-<td colspan="3" class="default-td border_left">
-  {{ row.wi_population_maximum_size or '' }}
+<td colspan="4" class="default-td border_left">
+  {{ row.wi_population_maximum_size|int or '' }}
 </td>
 
-<td colspan="2" class="default-td border_left">
+<td colspan="4" class="default-td border_left">
   {{ row.wi_population_size_unit or '' }}
 </td>
 
@@ -81,18 +81,18 @@
 
 {# Contribution to Target 1 #}
 
-<td colspan="2" class="default-td border_left">
+<td class="default-td border_left">
   {{ row.contribution_target1 or '' }}
 </td>
 
 {# Season #}
 
-<td colspan="2" class="default-td border_left">
+<td class="default-td border_left">
   {{ row.conclusion_status_br_wi or '' }}
 </td>
 
 {# Previous status #}
-<td class="trend-{{ TREND_CLASSES.get(row.conclusion_status_label_prev) }} border_left">
+<td class="center border_left status-{{ STATUS_CLASSES.get(row.conclusion_status_label_prev) }} text-center">
   <span class="conclusion">
     {{ row.conclusion_status_label_prev or '' }}
   </span>
@@ -100,6 +100,6 @@
 
 {# Ssp. /subsp. unit #}
 
-<td colspan="2" class="default-td border_left">
+<td class="default-td border_left">
   {{ row.speciesname_subpopulation or '' }}
 </td>

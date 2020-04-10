@@ -1,5 +1,18 @@
 {% extends 'layout.html' %}
 
+{% block extra_style %}
+<style>
+  table.complex_datatable {
+    border-left: none !important;
+  }
+
+  .complex_datatable .table-separator:after {
+    content: none !important;
+  }
+
+</style>
+{% endblock %}
+
 {% block breadcrumbs %}
   {% from 'common/_macros.html' import breadcrumbs %}
   {{ breadcrumbs(APP_BREADCRUMBS + [
@@ -73,6 +86,7 @@
 
           {# EU assessments #}
           {% if dataset.id == 3 %}
+            {% set colspan_all=47 %}
             {% include 'common/species_table_eu_header_2018.html' with context %}
           {% else %}
             {% include 'common/species_table_eu_header.html' with context %}
