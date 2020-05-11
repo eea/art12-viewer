@@ -34,7 +34,11 @@
 
         <tbody>
         {% for row in species %}
-          <tr class="stripe_row {% if row.additional_record %}italic_row{% endif %}">
+          {% if dataset.id == 3 %}
+            <tr class="stripe_row {% if row.use_for_statistics  == 0 %}italic_row{% endif %}"></tr>
+          {% else %}
+            <tr class="stripe_row {% if row.additional_record %}italic_row{% endif %}">
+          {% endif %}
             <td class="th">
               {% set summary_url = url_for('views.summary', period=dataset.id, subject=row.code) %}
               <a href="{{ summary_url }}">{{ row.name }}</a>
