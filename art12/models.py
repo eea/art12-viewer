@@ -201,7 +201,7 @@ class EtcDataBird(Base):
     further_information_english = Column(Text)
     range_grid_area = Column(Float(asdecimal=True))
     percentage_range_grid_area = Column(Float(asdecimal=True))
-    distribution_grid_area = Column(Float(asdecimal=True))
+    distribution_grid_area = Column(String(20))
     percentage_distribution_grid_area = Column(Float(asdecimal=True))
     use_for_statistics = Column(Text)
     dataset_id = Column('ext_dataset_id', ForeignKey('datasets.id'),
