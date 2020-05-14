@@ -29,11 +29,11 @@
 {% from 'common/_macros.html' import additional_info %}
 
 <td class="default-td border_right">
-  <div class="first-subcolumn">{{ row.population_minimum_size_bs|int or '' }}</div>
+  <div class="first-subcolumn">{{ row.population_minimum_size_bs }}</div>
 </td>
 
 <td class="default-td border_right">
-  <div class="first-subcolumn">{{ row.population_maximum_size_bs|int or '' }}</div>
+  <div class="first-subcolumn">{{ row.population_maximum_size_bs }}</div>
 </td>
 
 <td class="default-td border_right">
@@ -55,7 +55,13 @@
 {{ additional_info(row.population_additional_info_record_bs, row.population_additional_info_bs) }}
 
 <td class="border_right border_left">
-  <div class="first-subcolumn">{{ "%.1f"|format(row.percentage_population_mean_size_bs|float) if row.percentage_population_mean_size_bs != 0 else '' }}</div>
+  <div class="first-subcolumn">
+    {% if row.percentage_population_mean_size_bs != 0 and row.percentage_population_mean_size_bs != 'N/A' %}
+      {{ "%.1f"|format(row.percentage_population_mean_size_bs|float) }}
+    {% else %}
+      {{ row.percentage_population_mean_size_bs }}
+    {% endif %}
+  </div>
 </td>
 
 <td class="default-td border_right border_left">
@@ -92,13 +98,17 @@
 {# Breeding distribution #}
 
 <td class="default-td border_left border_right">
-  {{ row.distribution_surface_area_bs|int or '' }}
+  {{ row.distribution_surface_area_bs|int or row.distribution_surface_area_bs }}
 </td>
 
 {{ additional_info(row.distribution_additional_info_record_bs, row.distribution_additional_info_bs) }}
 
 <td class="border_left border_right">
-  {{ "%.1f"|format(row.percentage_distribution_surface_area_bs|float) if row.percentage_distribution_surface_area_bs != '0' else '' }}
+  {% if row.percentage_distribution_surface_area_bs != 0 and row.percentage_distribution_surface_area_bs != 'N/A' %}
+    {{ "%.1f"|format(row.percentage_distribution_surface_area_bs|float) }}
+  {% else %}
+    {{ row.percentage_distribution_surface_area_bs }}
+  {% endif %}
 </td>
 
 <td class="default-td border_left border_right">
@@ -135,15 +145,15 @@
 {# Winter population #}
 
 <td class="default-td border_right border_left">
-  {{ row.population_minimum_size_ws|int or '' }}
+  {{ row.population_minimum_size_ws }}
 </td>
 
 <td class="default-td border_right border_left">
-  {{ row.population_maximum_size_ws|int or '' }}
+  {{ row.population_maximum_size_ws }}
 </td>
 
 <td class="default-td border_right border_left">
-  {{ row.population_size_ws|int or '' }}
+  {{ row.population_size_ws }}
 </td>
 
 <td class="default-td border_right border_left">
@@ -161,7 +171,11 @@
 {{ additional_info(row.population_additional_info_record_ws, row.population_additional_info_ws) }}
 
 <td class="center border_right border_left">
-  {{ "%.1f"|format(row.percentage_population_mean_size_ws|float) if row.percentage_population_mean_size_ws != 0 else '' }}
+  {% if row.percentage_population_mean_size_ws != 0 and row.percentage_population_mean_size_ws != 'N/A' %}
+    {{ "%.1f"|format(row.percentage_population_mean_size_ws|float) }}
+  {% else %}
+    {{ row.percentage_population_mean_size_ws }}
+  {% endif %}
 </td>
 
 <td class="default-td border_right border_left">
@@ -207,7 +221,11 @@
 </td>
 
 <td class="center border_right">
-  {{ "%.1f"|format(row.percentage_distribution_grid_area|float) if row.percentage_distribution_grid_area != 0 else '' }}
+  {% if row.percentage_distribution_grid_area != 0 and row.percentage_distribution_grid_area != 'N/A' %}
+    {{ "%.1f"|format(row.percentage_distribution_grid_area|float) }}
+  {% else %}
+    {{ row.percentage_distribution_grid_area }}
+  {% endif %}
 </td>
 
 <td class="center">

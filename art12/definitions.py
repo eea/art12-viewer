@@ -54,6 +54,12 @@ SEASON_FIELDS = [
     'conclusion_population',
 ]
 
+SEASON_FIELDS_CONVERT = [
+    'population_minimum_size',
+    'population_maximum_size',
+    'percentage_population_mean_size'
+]
+
 CONTRIB_OPTIONS = [
     ('A', 'Secure population status'),
     ('B', 'Improving'),

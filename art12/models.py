@@ -19,7 +19,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
-from art12.definitions import SEASON_FIELDS
+from art12.definitions import SEASON_FIELDS, SEASON_FIELDS_CONVERT
 
 alembic_ignore_tables = []
 
@@ -95,9 +95,9 @@ class EtcDataBird(Base):
     range_yearly_magnitude_bs = Column(Float(asdecimal=True))
     complementary_favourable_range_op_bs = Column(String(2))
     complementary_favourable_range_bs = Column(Float(asdecimal=True))
-    population_minimum_size_bs = Column(Float(asdecimal=True))
+    population_minimum_size_bs = Column(String(30))
     percentage_population_minimum_size_bs = Column(Float(asdecimal=True))
-    population_maximum_size_bs = Column(Float(asdecimal=True))
+    population_maximum_size_bs = Column(String(30))
     percentage_population_maximum_size_bs = Column(Float(asdecimal=True))
     population_size_bs = Column(Text)
     population_size_method_bs = Column(String(255))
@@ -109,7 +109,7 @@ class EtcDataBird(Base):
     population_change_reason_bs = Column(String(200))
     number_of_different_population_units_bs = Column(Integer)
     different_population_percentage_bs = Column(Integer)
-    percentage_population_mean_size_bs = Column(Float(asdecimal=True))
+    percentage_population_mean_size_bs = Column(String(30))
     population_additional_info_record_bs = Column(String(1))
     population_additional_info_bs = Column(Text)
     population_trend_period_bs = Column(String(255))
@@ -145,23 +145,21 @@ class EtcDataBird(Base):
     distribution_trend_long_magnitude_bs = Column(String(131))
     distribution_trend_additional_info_record_bs = Column(String(1))
     distribution_trend_additional_info_bs = Column(Text)
-    population_minimum_size_ws = Column(Float(asdecimal=True))
+    population_minimum_size_ws = Column(String(30))
     percentage_population_minimum_size_ws = Column(Float(asdecimal=True))
-    population_maximum_size_ws = Column(Float(asdecimal=True))
+    population_maximum_size_ws = Column(String(30))
     percentage_population_maximum_size_ws = Column(Float(asdecimal=True))
     population_size_ws = Column(Text)
     population_size_method_ws = Column(String(255))
     filled_population_ws = Column(String(3))
     population_size_unit_ws = Column(String(255))
-
-
     population_units_agreed_ws = Column(String(10))
     population_units_other_ws =Column(String(10))
     population_estimateType_ws = Column(String(255))
     population_change_reason_ws = Column(String(200))
     number_of_different_population_units_ws = Column(Integer)
     different_population_percentage_ws = Column(Integer)
-    percentage_population_mean_size_ws = Column(Float(asdecimal=True))
+    percentage_population_mean_size_ws = Column(String(30))
     population_additional_info_record_ws = Column(String(1))
     population_additional_info_ws = Column(Text)
     population_trend_period_ws = Column(String(255))
@@ -202,16 +200,24 @@ class EtcDataBird(Base):
     range_grid_area = Column(Float(asdecimal=True))
     percentage_range_grid_area = Column(Float(asdecimal=True))
     distribution_grid_area = Column(String(20))
-    percentage_distribution_grid_area = Column(Float(asdecimal=True))
+    percentage_distribution_grid_area = Column(String(30))
     use_for_statistics = Column(Text)
     dataset_id = Column('ext_dataset_id', ForeignKey('datasets.id'),
                         primary_key=True, nullable=False,
                         server_default=text("'0'"))
     dataset = relationship(Dataset)
 
+    def convert_to_float(self, value, field):
+        if field in SEASON_FIELDS_CONVERT:
+            try:
+                if value:
+                    return float(value)
+            except:
+                    return value
+        return value
 
     def _season(self, season):
-        return {field: getattr(self, field + season, None) for field in
+        return {field: self.convert_to_float(getattr(self, field + season, None), field) for field in
                 SEASON_FIELDS}
 
     @property
