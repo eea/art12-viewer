@@ -2,11 +2,11 @@
 
 {# Breeding population #}
 <td colspan="3" class="default-td border_left">
-  {{ row.br_population_minimum_size|int or '' }}
+  {{ row.br_population_minimum_size_downrounded|int or '' }}
 </td>
 
 <td colspan="3" class="default-td border_left text-center">
-  {{ row.br_population_maximum_size|int or '' }}
+  {{ row.br_population_maximum_size_uprounded|int or '' }}
 </td>
 
 <td colspan="3" class="default-td border_left text-center">
@@ -46,11 +46,11 @@
 
 {# Winter population #}
 <td colspan="4" class="default-td border_left">
-  {{ row.wi_population_minimum_size|int or '' }}
+  {{ row.wi_population_minimum_size_downrounded|int or '' }}
 </td>
 
 <td colspan="4" class="default-td border_left">
-  {{ row.wi_population_maximum_size|int or '' }}
+  {{ row.wi_population_maximum_size_uprounded|int or '' }}
 </td>
 
 <td colspan="4" class="default-td border_left">
@@ -73,9 +73,17 @@
 
 {# EU population status	#}
 
-<td class="center border_left status-{{ STATUS_CLASSES.get(row.conclusion_status_label) }} text-center">
-  <span class="conclusion">
-  {{ row.conclusion_status_label or '' }}
+<td class="center border_left status-{{ STATUS_CLASSES.get(row.br_conclusion_status_label) }} text-center"
+    title="{{ row.br_red_list_cat }}">
+  <span class="conclusion {% if row.conclusion_status_br_wi == 'B' %} bold-font {% endif %}">
+  {{ row.br_conclusion_status_label or '' }}
+  </span>
+</td>
+
+<td class="center border_left status-{{ STATUS_CLASSES.get(row.wi_conclusion_status_label) }} text-center"
+    title="{{ row.wi_red_list_cat }}">
+  <span class="conclusion {% if row.conclusion_status_br_wi  == 'W' %} bold-font {% endif %}">
+  {{ row.wi_conclusion_status_label or '' }}
   </span>
 </td>
 
@@ -92,7 +100,8 @@
 </td>
 
 {# Previous status #}
-<td class="center border_left status-{{ STATUS_CLASSES.get(row.conclusion_status_label_prev) }} text-center">
+<td class="center border_left status-{{ STATUS_CLASSES.get(row.conclusion_status_label_prev) }} text-center"
+    title="{{ row.red_list_cat_prev }}">
   <span class="conclusion">
     {{ row.conclusion_status_label_prev or '' }}
   </span>

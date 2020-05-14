@@ -245,7 +245,7 @@ class EtcBirdsEu(Base):
     br_range_surface_area_downrounded = Column(String(35))
     br_range_trend = Column(String(25))
     br_range_trend_long = Column(String(25))
-    br_population_size = Column(String(35))
+    br_population_size = Column(String(255))
     br_distribution_surface_area = Column(Integer)
     br_distribution_trend = Column(String(3))
     br_distribution_trend_long = Column(String(3))
@@ -256,6 +256,9 @@ class EtcBirdsEu(Base):
     br_population_size_unit = Column(String(20))
     br_population_trend = Column(String(25))
     br_population_trend_long = Column(String(25))
+    br_conclusion_status_label = Column(String(255))
+    br_contribution_target1 = Column(String(50))
+    br_red_list_cat = Column(String(255))
     wi_population_size = Column(String(255))
     wi_population_minimum_size = Column(Numeric(18, 5))
     wi_population_minimum_size_downrounded = Column(Numeric(18, 5))
@@ -264,6 +267,9 @@ class EtcBirdsEu(Base):
     wi_population_size_unit = Column(String(20))
     wi_population_trend = Column(String(25))
     wi_population_trend_long = Column(String(25))
+    wi_conclusion_status_label = Column(String(255))
+    wi_contribution_target1 = Column(String(50))
+    wi_red_list_cat = Column(String(255))
     conclusion_status_label = Column(String(50))
     conclusion_status_improving = Column(String(50))
     conclusion_status_br_wi = Column(String(20))
@@ -278,8 +284,6 @@ class EtcBirdsEu(Base):
     conclusion_population_maximum_size_uprounded = Column(Numeric(18, 5))
     conclusion_population_trend = Column(String(30))
     conclusion_population_trend_long = Column(String(30))
-    conclusion_status_label_prev = Column(String(50))
-    conclusion_status_br_wi_prev = Column(String(20))
     contribution_target1 = Column(String(20))
     contribution_target1_label = Column(String(30))
     user = Column(String(50))
@@ -294,6 +298,10 @@ class EtcBirdsEu(Base):
                         server_default=text("'0'"))
     dataset = relationship(Dataset)
     use_for_statistics = Column(Text)
+    conclusion_status_label_prev = Column(String(50))
+    conclusion_status_br_wi_prev = Column(String(20))
+    red_list_cat_prev = Column(String(255))
+
     lu_bird = relationship(
         u'LuDataBird',
         primaryjoin="and_(EtcBirdsEu.speciescode==LuDataBird.speciescode,"
