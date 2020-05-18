@@ -37,7 +37,7 @@
 </td>
 
 <td class="default-td border_right">
-  <div class="first-subcolumn">{{ row.population_size_bs|int or '' }}</div>
+  <div class="first-subcolumn">{{ row.population_size_bs }}</div>
 </td>
 
 <td class="default-td border_right">
@@ -56,10 +56,10 @@
 
 <td class="border_right border_left">
   <div class="first-subcolumn">
-    {% if row.percentage_population_mean_size_bs != 0 and row.percentage_population_mean_size_bs != 'N/A' %}
-      {{ "%.1f"|format(row.percentage_population_mean_size_bs|float) }}
-    {% else %}
+    {% if row.percentage_population_mean_size_bs == 'N/A' %}
       {{ row.percentage_population_mean_size_bs }}
+    {% elif row.percentage_population_mean_size_bs|float >= 0.1 %}
+      {{ "%.1f"|format(row.percentage_population_mean_size_bs|float) }}
     {% endif %}
   </div>
 </td>
@@ -104,10 +104,10 @@
 {{ additional_info(row.distribution_additional_info_record_bs, row.distribution_additional_info_bs) }}
 
 <td class="border_left border_right">
-  {% if row.percentage_distribution_surface_area_bs != 0 and row.percentage_distribution_surface_area_bs != 'N/A' %}
-    {{ "%.1f"|format(row.percentage_distribution_surface_area_bs|float) }}
-  {% else %}
+  {% if row.percentage_distribution_surface_area_bs == 'N/A' %}
     {{ row.percentage_distribution_surface_area_bs }}
+  {% elif row.percentage_distribution_surface_area_bs|float >= 0.1 %}
+    {{ "%.1f"|format(row.percentage_distribution_surface_area_bs|float) }}
   {% endif %}
 </td>
 
@@ -171,10 +171,10 @@
 {{ additional_info(row.population_additional_info_record_ws, row.population_additional_info_ws) }}
 
 <td class="center border_right border_left">
-  {% if row.percentage_population_mean_size_ws != 0 and row.percentage_population_mean_size_ws != 'N/A' %}
-    {{ "%.1f"|format(row.percentage_population_mean_size_ws|float) }}
-  {% else %}
+  {% if row.percentage_population_mean_size_ws == 'N/A' %}
     {{ row.percentage_population_mean_size_ws }}
+  {% elif row.percentage_population_mean_size_ws|float >= 0.1 %}
+    {{ "%.1f"|format(row.percentage_population_mean_size_ws|float) }}
   {% endif %}
 </td>
 
@@ -221,10 +221,10 @@
 </td>
 
 <td class="center border_right">
-  {% if row.percentage_distribution_grid_area != 0 and row.percentage_distribution_grid_area != 'N/A' %}
-    {{ "%.1f"|format(row.percentage_distribution_grid_area|float) }}
-  {% else %}
+  {% if row.percentage_distribution_grid_area == 'N/A' %}
     {{ row.percentage_distribution_grid_area }}
+  {% elif row.percentage_distribution_grid_area|float >= 0.1 %}
+    {{ "%.1f"|format(row.percentage_distribution_grid_area|float) }}
   {% endif %}
 </td>
 
