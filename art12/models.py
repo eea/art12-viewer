@@ -241,6 +241,7 @@ class EtcBirdsEu(Base):
     id = Column('ID', Integer, primary_key=True, autoincrement=True)
     speciescode = Column(String(10), nullable=False, server_default=text("''"))
     speciesname = Column(String(255))
+    reported_name = Column(Text)
     speciesname_subpopulation = Column(String(255))
     assessment_speciescode = Column(String(10))
     assessment_speciesname = Column(String(255))
