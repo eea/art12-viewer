@@ -8,13 +8,14 @@ from art12.models import Dataset, EtcDataBird
 
 
 class CommonFilterForm(Form):
-    period = SelectField('Period...')
+    period = SelectField('Period...', default=3)
     model_cls = EtcDataBird
 
     def __init__(self, *args, **kwargs):
         super(CommonFilterForm, self).__init__(*args, **kwargs)
         self.period.choices = [(d.id, d.name) for d in Dataset.query.all()]
         dataset_id = request.args.get('period', get_default_period())
+        self.period.default = dataset_id
         self.dataset = Dataset.query.get_or_404(dataset_id)
 
     def get_selection(self):

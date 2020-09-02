@@ -107,6 +107,7 @@ class Summary(SpeciesMixin, TemplateView):
             )
             factsheet_url = get_factsheet_url(subject=speciescode, dataset=dataset)
         else:
+            filter_args['dataset'] = dataset
             content_objects = []
             eu_objects = []
 
@@ -225,7 +226,7 @@ class ConnectedSelectBoxes(View, SpeciesMixin):
     methods = ['GET']
 
     def dispatch_request(self):
-        dataset_id = request.args.get('dataset_id', 1)
+        dataset_id = request.args.get('dataset_id', 3)
         dataset = Dataset.query.get_or_404(dataset_id)
         options = [('', '-')] + self.get_subjects(dataset)
         return json.dumps(options)
@@ -235,7 +236,7 @@ class FilterFormReportedName(View, SpeciesMixin):
     methods = ['GET']
 
     def dispatch_request(self):
-        dataset_id = request.args.get('dataset_id', 1)
+        dataset_id = request.args.get('dataset_id', 3)
         speciesname = request.args.get('subject', '')
         dataset = Dataset.query.get_or_404(dataset_id)
         options = [('', '-')] + self.get_reported_name(dataset, speciesname)
@@ -245,7 +246,7 @@ class FilterFormCountries(View, SpeciesMixin):
     methods = ['GET']
 
     def dispatch_request(self):
-        dataset_id = request.args.get('dataset_id', 1)
+        dataset_id = request.args.get('dataset_id', 3)
         dataset = Dataset.query.get_or_404(dataset_id)
         options = [('', '-')] + self.get_countries(dataset)
         return json.dumps(options)
