@@ -27,7 +27,7 @@
 
         <tbody class="thead">
         <tr>
-          <th>Species</th>
+          <th>Species / sub-specific</th>
           <th>Assessment</th>
         </tr>
         </tbody>
@@ -40,7 +40,11 @@
             <tr class="stripe_row {% if row.additional_record %}italic_row{% endif %}">
           {% endif %}
             <td class="th">
-              {% set summary_url = url_for('views.summary', period=dataset.id, subject=row.code) %}
+              {% if dataset.id == 3 %}
+                {% set summary_url = url_for('views.summary', period=dataset.id, subject=row.name) %}
+              {% else %}
+                {% set summary_url = url_for('views.summary', period=dataset.id, subject=row.code) %}
+              {% endif %}
               <a href="{{ summary_url }}">{{ row.name }}</a>
             </td>
             {% if label_type == 'status' %}

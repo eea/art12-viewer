@@ -7,29 +7,19 @@
   </h1>
 
   <p class="documentDescription">
-    This page gives access to information reported by the Member States and
-    the EU assessments of birds population status made by the European Red List
-    of Birds Consortium (under contract with the European Commission).
+    This page gives access to information reported by the Member States and the EU assessments
+    of birds population status and trends made by the European Commission contractors (European
+    Red List Consortium in 2014 and Stichting BirdLife Europe with BirdLife International and IUCN in 2020)
   </p>
 
-  <div class="warning">
-    <small>
-      <a href="http://eea.europa.eu" rel="external">EEA</a> is not responsible
-      or liable for information on this site. Content does not necessarily
-      reflect the official opinion of
-      <a href="http://eea.europa.eu" rel="external">EEA</a> or other European
-      Communities bodies and institutions.
-    </small>
-  </div>
-
   <p>
-    The methods used for the assessment of EU population status are described
-    <a href="https://circabc.europa.eu/d/a/workspace/SpacesStore/4b101339-6e13-4379-ada5-400e5d1ec8ac/Point 3 - Background-Paper- 21 Nov 2013 .pdf" rel="external">here</a>.
+    A summary of the methodologies used for the EU population status assessments can be found
+    <a href="">here</a> and a step-by-step guide for using the tool can be found <a href="">here</a>.
   </p>
 
   <p>
     <strong>
-      Birds population status and trends at EU 27 and Member State level (species by species filter):
+      Birds population status and trends at EU and Member State level (species by species filter):
     </strong>
   </p>
   <ul>
@@ -49,7 +39,7 @@
 
   <p>
     <strong>
-      Birds population status and trends at EU 27 level (overview of results) :
+      Birds population status and trends at EU level (overview of results) :
     </strong>
   </p>
   <ul>
@@ -73,10 +63,13 @@
       <li><a href="{{ url_for('auth.change_password') }}">Change password</a></li>
     </ul>
   {% else %}
-    <h2>Accounts</h2>
+    <!-- <h2>Accounts</h2>
     Forgot your EIONET password? <a href='{{ EEA_PASSWORD_RESET }}'>Recover Eionet account password</a>
     {% if security.recoverable %}
       <p>Forgot your local account password? <a href="{{ url_for_security('forgot_password') }}">Recover local account password</a></p>
-    {% endif %}
+    {% endif %} -->
   {% endif %}
+
+  <p>If there are issues with using the tool, please contact <a href="mailto:nature.helpbesk@eionet.europa.eu">nature.helpbesk@eionet.europa.eu</a>.</p>
+
 {% endblock content %}

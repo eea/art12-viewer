@@ -16,20 +16,16 @@
     <button type="button" class="disabled">Map</button>
   {% endif %}
 
-  {% if eu_map_breeding_url and dataset.id != 2 %}
+  {% if eu_map_breeding_url and dataset.id == 1 %}
     <button type="button" id="show-eu-map" data-url="{{ eu_map_breeding_url }}">
       EU map of Breeding population trend
     </button>
-  {% else %}
-    <button type="button" class="disabled">EU map of Breeding population trend</button>
   {% endif %}
 
-  {% if eu_map_winter_url and dataset.id != 2 %}
+  {% if eu_map_winter_url and dataset.id == 1 %}
     <button type="button" id="show-eu-map" data-url="{{ eu_map_winter_url }}">
       EU map of Winter population trend
     </button>
-  {% else %}
-    <button type="button" class="disabled">EU map of Winter population trend</button>
   {% endif %}
   
   {% if dataset.id != 2 %}

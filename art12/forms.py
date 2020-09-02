@@ -22,8 +22,8 @@ class CommonFilterForm(Form):
 
 
 class SummaryFilterForm(SpeciesMixin, CommonFilterForm):
-    subject = SelectField('Name...', default='')
-    reported_name = SelectField('Reported name...', default='')
+    subject = SelectField('Species name...', default='')
+    reported_name = SelectField('Sub-specific unit...', default='')
 
     def __init__(self, *args, **kwargs):
         super(SummaryFilterForm, self).__init__(*args, **kwargs)
