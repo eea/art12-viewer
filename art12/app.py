@@ -34,7 +34,7 @@ security_ext = Security(
 DEFAULT_CONFIG = {
     'WTF_CSRF_ENABLED': False,
     'PDF_DESTINATION': '.',
-    'DEFAULT_PERIOD': 1,
+    'DEFAULT_PERIOD': 3,
 }
 
 

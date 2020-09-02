@@ -56,7 +56,7 @@ class TemplateView(MethodView):
 
 
 def get_default_period():
-    return 1  # FIXME
+    return 3  # FIXME
 
 
 def get_zero(value):
