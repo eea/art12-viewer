@@ -1,7 +1,12 @@
 Changelog
 =========
 
-2.5.5(2019-06-09) - unrelesed
+2.6.0(2020-09-03)
+-----------------
+* Prepared for period 2013-2018
+  [dianaboiangiu]
+
+2.5.5(2019-06-09)
 ----------------------
 * Fixed security issues
 * Fixed tests
