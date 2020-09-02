@@ -1,10 +1,23 @@
 {% extends 'layout.html' %}
 
+{% block extra_style %}
+  <style>
+    table.complex_datatable {
+      border-left: none !important;
+    }
+
+    .complex_datatable .table-separator:after {
+      content: none !important;
+    }
+  </style>
+{% endblock %}
+
 {% block breadcrumbs %}
   {% from 'common/_macros.html' import breadcrumbs %}
   {{ breadcrumbs(APP_BREADCRUMBS + [
       ('Species summary', None),
-    ]) }}
+    ])
+  }}
 {% endblock %}
 
 
@@ -12,20 +25,31 @@
   <div tabindex="1">
     <h1>Population status and trends at the EU and Member State levels</h1>
 
-    <p>
-      Choose a period and a species.
+    <p>The Article 12 web tool provides an access to EU assessments and Member States’ data compiled
+       as part of the Habitats Directive - Article 12 reporting process. The EU assessments have been
+       carried out in EU 27 for the period 2008-2012 and in EU28 for the period 2013-2018.
     </p>
-  {% if dataset.id == 2 %}
-  <p class="note">
-    IMPORTANT: 2008-2012bis reporting period displays data from the delayed delivery by Greece
-    (where relevant) together with data from other Member States used for the EU population status
-    assessment in 2014. EU population status assessment is not available for 2008-2012bis period.
-    Where relevant the map includes the information from the delayed delivery by Greece.
-  </p>
-  {% endif %}
+    <p>Choose period, species and if relevant sub-specific unit.</p>
+    <p>Once a selection has been made the breeding distribution of the species can be visualized in a map.</p>
+    <p>The ‘Data sheet info’ includes notes for each assessment per species.</p>
+    <p>The ‘Audit trail’ includes the methods used for the EU assessment and justifications for decisions made by the assessors.</p>
+
+    {% if dataset.id == 2 %}
+      <p class="note">
+        IMPORTANT: 2008-2012bis reporting period displays data from the delayed delivery by Greece
+        (where relevant) together with data from other Member States used for the EU population status
+        assessment in 2014. EU population status assessment is not available for 2008-2012bis period.
+        Where relevant the map includes the information from the delayed delivery by Greece.
+      </p>
+    {% endif %}
+
     {% include 'summary/filters.html' %}
 
-    {% set colspan_all=30 %}
+    {% if dataset.id == 3 %}
+      {% set colspan_all=45 %}
+    {% else %}
+      {% set colspan_all=30 %}
+    {% endif %}
 
     {% if current_selection %}
       {% include 'summary/buttons.html' with context %}
@@ -36,56 +60,74 @@
       {% endif %}
       {% set page_type='summary' %}
       {% include 'common/legend.html' with context %}
-      <table class="complex_datatable">
-        <caption>
-          <b>Current selection</b>:
-          {{ current_selection|join(', ') }}.
-          {% set show_all_url=url_for('views.progress') %}
-          <a href="{{ show_all_url }}">Show all</a>
-        </caption>
+      <div style="overflow-x:auto;">
+        <table class="complex_datatable">
+          <caption>
+            <b>Current selection</b>:
+            {{ current_selection|join(', ') }}.
+            {% set show_all_url=url_for('views.progress') %}
+            <a href="{{ show_all_url }}">Show all</a>
+          </caption>
 
-        {% include "common/species_table_header.html" with context %}
+          {% if dataset.id == 3 %}
+            {% include "common/species_table_header_2018.html" with context %}
+          {% else %}
+            {% include "common/species_table_header.html" with context %}
+          {% endif %}
 
-        <tbody>
-        {% for row in objects %}
-          <tr {% if row.is_assesm %}class="assesm"{% endif %}>
+          <tbody>
+            {% for row in objects %}
+              <tr {% if row.is_assesm %}class="assesm"{% endif %}>
+                {% if dataset.id == 3 %}
+                  {% include 'summary/content/content_2018.html' %}
+                {% else %}
+                  {% include 'summary/content/ms.html' %}
+                  {% include 'summary/content/population_bs.html' with context %}
+                  {% include 'summary/content/range.html' with context %}
+                  {% include 'summary/content/population_ws.html' with context %}
+                  {% include 'summary/content/gridded_maps.html' with context %}
+                {% endif %}
+              </tr>
+            {% endfor %}
+          </tbody>
 
-            {% include 'summary/content/ms.html' %}
-            {% include 'summary/content/population_bs.html' with context %}
-            {% include 'summary/content/range.html' with context %}
-            {% include 'summary/content/population_ws.html' with context %}
-            {% include 'summary/content/gridded_maps.html' with context %}
-
-          </tr>
-        {% endfor %}
-        </tbody>
-
-        {# EU assessments #}
-        {% include 'common/species_table_eu_header.html' with context %}
-        <tbody>
-        {% for row in eu_objects %}
-          <tr class="stripe_row {% if row.additional_record %}italic_row{% endif %}">
-            <td {% if row.additional_record %}title="Additional assessment at the subspecies level for subspecies listed in the Annexes of the Birds Directive"{% endif %}>{{ EU_COUNTRY }}</td>
-            {% include 'summary/eu/population_bs.html' with context %}
-            {% include 'summary/eu/range.html' with context %}
-            {% include 'summary/eu/population_ws.html' with context %}
-            {% include 'summary/eu/status.html' with context %}
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
-      <p>
-        The hash sign (#) under Subspecies/subspecific units-Trends or Status
-        means that the EU population trends or EU status were not assessed at
-        the same level as the current selection (species and subspecific unit).
-      </p>
-      <p>
-        In italics, additional assessment at the subspecies or population
-        level (available only for subspecies listed in the Annexes of
-        the Birds Directive).
-      </p>
-    {% else %}
-      <p><b>Please select a species.</b></p>
+          {# EU assessments #}
+          {% if dataset.id == 3 %}
+            {% set colspan_all=48 %}
+            {% include 'common/species_table_eu_header_2018.html' with context %}
+          {% else %}
+            {% include 'common/species_table_eu_header.html' with context %}
+          {% endif %}
+          <tbody>
+          {% for row in eu_objects %}
+              {% if dataset.id == 3 %}
+                <tr class="stripe_row {% if row.use_for_statistics == 0 %}italic_row{% endif %}">
+                  {% include 'summary/eu/content_2018.html' with context %}
+              {% else %}
+                <tr class="stripe_row {% if row.additional_record %}italic_row{% endif %}">
+                  <td {% if row.additional_record %}title="Additional assessment at the subspecies level for subspecies listed in the Annexes of the Birds Directive"{% endif %}>{{ EU_COUNTRY }}</td>
+                  {% include 'summary/eu/population_bs.html' with context %}
+                  {% include 'summary/eu/range.html' with context %}
+                  {% include 'summary/eu/population_ws.html' with context %}
+                  {% include 'summary/eu/status.html' with context %}
+              {% endif %}
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% if dataset.id != 3 %}
+        <p>
+          The hash sign (#) under Subspecies/subspecific units-Trends or Status
+          means that the EU population trends or EU status were not assessed at
+          the same level as the current selection (species and subspecific unit).
+        </p>
+        <p>
+          In italics, additional assessment at the subspecies or population
+          level (available only for subspecies listed in the Annexes of
+          the Birds Directive).
+        </p>
+      {% endif %}
     {% endif %}
   </div>
 {% endblock %}

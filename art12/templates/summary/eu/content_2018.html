@@ -1,0 +1,114 @@
+<td>EU28</td>
+
+{# Breeding population #}
+<td colspan="3" class="default-td border_left">
+  {{ row.br_population_minimum_size_downrounded|int or '' }}
+</td>
+
+<td colspan="3" class="default-td border_left text-center">
+  {{ row.br_population_maximum_size_uprounded|int or '' }}
+</td>
+
+<td colspan="3" class="default-td border_left text-center">
+  {{ row.br_population_size_unit or '' }}
+</td>
+
+<td colspan="3" class="trend-{{ TREND_CLASSES.get(row.br_population_trend) }} border_left">
+  <span class="conclusion">
+    {{ row.br_population_trend or '' }}
+  </span>
+</td>
+
+<td colspan="3" class="trend-{{ TREND_CLASSES.get(row.br_population_trend_long) }} border_left">
+  <span class="conclusion">
+    {{ row.br_population_trend_long or '' }}
+  </span>
+</td>
+
+{# Breeding distribution #}
+<td colspan="3" class="center border_left">
+  {{ row.br_distribution_surface_area or '' }}
+</td>
+
+<td colspan="3"
+    class="trend-{{ TREND_CLASSES.get(row.br_distribution_trend) }} text-center border_left">
+  <span class="conclusion">
+    {{ row.br_distribution_trend or '' }}
+  </span>
+</td>
+
+<td colspan="4"
+    class="trend-{{ TREND_CLASSES.get(row.br_distribution_trend_long) }} text-center border_left">
+  <span class="conclusion">
+    {{ row.br_distribution_trend_long or '' }}
+  </span>
+</td>
+
+{# Winter population #}
+<td colspan="4" class="default-td border_left">
+  {{ row.wi_population_minimum_size_downrounded|int or '' }}
+</td>
+
+<td colspan="4" class="default-td border_left">
+  {{ row.wi_population_maximum_size_uprounded|int or '' }}
+</td>
+
+<td colspan="4" class="default-td border_left">
+  {{ row.wi_population_size_unit or '' }}
+</td>
+
+<td colspan="2"
+    class="trend-{{ TREND_CLASSES.get(row.wi_population_trend) }} text-center border_left">
+  <span class="conclusion">
+    {{ row.wi_population_trend or  '' }}
+  </span>
+</td>
+
+<td colspan="2"
+    class="trend-{{ TREND_CLASSES.get(row.wi_population_trend_long) }} text-center border_left">
+  <span class="conclusion">
+    {{ row.wi_population_trend_long or  '' }}
+  </span>
+</td>
+
+{# EU population status	#}
+
+<td class="center border_left status-{{ STATUS_CLASSES.get(row.br_conclusion_status_label) }} text-center"
+    title="{{ row.br_red_list_cat }}">
+  <span class="conclusion {% if row.conclusion_status_br_wi == 'B' %} bold-font {% endif %}">
+  {{ row.br_conclusion_status_label or '' }}
+  </span>
+</td>
+
+<td class="center border_left status-{{ STATUS_CLASSES.get(row.wi_conclusion_status_label) }} text-center"
+    title="{{ row.wi_red_list_cat }}">
+  <span class="conclusion {% if row.conclusion_status_br_wi  == 'W' %} bold-font {% endif %}">
+  {{ row.wi_conclusion_status_label or '' }}
+  </span>
+</td>
+
+{# Contribution to Target 1 #}
+
+<td class="default-td border_left">
+  {{ row.contribution_target1 or '' }}
+</td>
+
+{# Season #}
+
+<td class="default-td border_left">
+  {{ row.conclusion_status_br_wi or '' }}
+</td>
+
+{# Previous status #}
+<td class="center border_left status-{{ STATUS_CLASSES.get(row.conclusion_status_label_prev) }} text-center"
+    title="{{ row.red_list_cat_prev }}">
+  <span class="conclusion">
+    {{ row.conclusion_status_label_prev or '' }}
+  </span>
+</td>
+
+{# Ssp. /subsp. unit #}
+
+<td class="default-td border_left">
+  {{ row.reported_name or '' }}
+</td>

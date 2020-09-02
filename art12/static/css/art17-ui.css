@@ -281,7 +281,7 @@ a.conclusion:hover {
   color: #000;
 }
 td .conclusion {
-  width: 100%;
+  width: 90%;
 }
 a.conclusion:hover {
   border-color: blue;
@@ -1413,6 +1413,11 @@ hr {
 .text-left {
   text-align: left;
 }
+
+td {
+ text-align: center;
+}
+
 .h2 {
   font-size: 18px;
   font-weight: bold;

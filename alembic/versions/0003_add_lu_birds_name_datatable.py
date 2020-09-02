@@ -1,14 +1,14 @@
 """Add lu_birds_name datatable
 
-Revision ID: 3c8e31fa45ca
-Revises: 2d01aa511d91
+Revision ID: 0003
+Revises: 0002
 Create Date: 2014-10-03 13:56:57.588352
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '3c8e31fa45ca'
-down_revision = '2d01aa511d91'
+revision = '0003'
+down_revision = '0002'
 
 import os
 from alembic import op

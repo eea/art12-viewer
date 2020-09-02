@@ -2,14 +2,14 @@
 #powerTip {
 	cursor: default;
 	background: #fff;
-  font-family: 'Roboto Condensed';
-  font-weight: 300;
-  font-size: 12px;
+    font-family: 'Roboto Condensed';
+    font-weight: 300;
+	font-size: 12px;
+	max-width: 300px;
 	display: none;
 	border: 1px solid #bbb;
 	padding: 3px 6px;
 	position: absolute;
-	white-space: nowrap;
 	z-index: 2147483647;
   -webkit-box-shadow: 0 0px 3px 0px rgba(0,0,0,0.2);
   box-shadow: 0 0px 3px 0px rgba(0,0,0,0.2);

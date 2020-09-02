@@ -115,6 +115,10 @@ th.gray-cell {
     color: #666 !important;
 }
 
+.bold-font {
+  font-weight: 700;
+  font-family: 'Roboto';
+}
 .italic_row td {
     font-style: italic;
 }

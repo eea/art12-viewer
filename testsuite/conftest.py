@@ -49,7 +49,7 @@ def create_generic_fixtures():
         "('nat', 'National expert')"
     )
     models.db.session.execute(
-        "insert into config(default_dataset_id) values (1)"
+        "insert into config(default_dataset_id) values (3)"
     )
 
 

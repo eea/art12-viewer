@@ -7,7 +7,7 @@ The Project Name is `Art 12 Consultation Tool`
 
 Prerequisites - System packages
 -------------------------------
- 
+
 These packages should be installed as superuser (root).
 
 ### Debian based systems ###
@@ -78,20 +78,20 @@ Tests
 ----------------
 
 1. Run the application by starting docker containers:
-   
+
        docker-compose up -d
-       
+
 2. Access the art12-mysql container:
 
        docker exec -it art12-mysql bash
-       
+
 3. Create the test database and grant all the privileges to the test user:
 
        create database art12test character set utf8 collate utf8_general_ci;
        create user 'test'@'%' identified by 'test';
        grant all privileges on art12test.* to 'test'@'%';
-       
-       
+
+
 4. Make sure to complete the data for environment variables in docker/art12.env file:
 
        # test art12
@@ -99,15 +99,15 @@ Tests
        DB_USER_TEST=test
        DB_PASSWORD_TEST=test
        DB_HOST_TEST=mysql
-       
+
 5. Access the art12-app container:
 
        docker exec -it art12-app bash
-       
+
 6. Install dependencies:
 
        pip install -r requirements-dev.txt
-       
+
 7. Run tests:
 
        py.test testsuite

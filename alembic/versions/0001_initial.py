@@ -1,12 +1,12 @@
 """
 
-Revision ID: 45e69fac91b3
+Revision ID: 0001
 Revises: None
 Create Date: 2014-09-29 16:37:24.292676
 
 """
 # revision identifiers, used by Alembic.
-revision = '45e69fac91b3'
+revision = '0001'
 down_revision = None
 
 import os

@@ -1,14 +1,14 @@
 """add_columns_for_eu_map_urls
 
-Revision ID: 43b182bdca5d
-Revises: 227c20797e6c
+Revision ID: 0010
+Revises: 0009
 Create Date: 2014-10-13 12:45:09.922799
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '43b182bdca5d'
-down_revision = '227c20797e6c'
+revision = '0010'
+down_revision = '0009'
 
 from alembic import op
 import sqlalchemy as sa

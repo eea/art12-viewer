@@ -7,7 +7,7 @@ SECRET_KEY = 'secret is secret'
 GOOGLE_ANALYTICS = True
 
 # Default period to be used in factsheet generation
-DEFAULT_PERIOD = 1
+DEFAULT_PERIOD = 3
 
 # Folder where factsheet documents are sent
 PDF_DESTINATION = 'pdf'

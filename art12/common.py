@@ -56,7 +56,7 @@ class TemplateView(MethodView):
 
 
 def get_default_period():
-    return 1  # FIXME
+    return 3  # FIXME
 
 
 def get_zero(value):
@@ -221,9 +221,12 @@ def get_original_url(row):
     )
     url_format = CONVERTER_URL
     info = urlparse(row.envelope)
-    convertor = 343
-    if row.country == 'CZ':
-        convertor = 345
+    if row.dataset.id == 3:
+        convertor = 612
+    else:
+        convertor = 343
+        if row.country == 'CZ':
+            convertor = 345
 
     return url_format.format(
         scheme=info.scheme, host=info.netloc, path=info.path,
@@ -235,8 +238,8 @@ def get_original_url(row):
 
 def get_title_for_species_country(row):
     s_name, s_info, s_type = '', '', ''
-    if row.speciesname != row.assesment_speciesname:
-        s_name = row.speciesname or row.assesment_speciesname or ''
+    if row.speciesname != row.assessment_speciesname:
+        s_name = row.speciesname or row.assessment_speciesname or ''
         s_info = ''
     if row.species_type_asses == 0:
         # s_type = row.species_type_details.SpeciesType \

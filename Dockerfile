@@ -9,7 +9,7 @@ RUN runDeps="curl gcc vim build-essential netcat default-mysql-client default-li
 	&& apt-get install -y --no-install-recommends $runDeps \
 	&& rm -vrf /var/lib/apt/lists/*
 
-RUN curl -OL https://downloads.wkhtmltopdf.org/0.12/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
+RUN curl -OL https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
 	&& tar -xvf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
 	&& cp -r wkhtmltox/* /usr/local/ \
 	&& rm -R wkhtmltox \

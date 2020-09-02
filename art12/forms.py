@@ -8,13 +8,14 @@ from art12.models import Dataset, EtcDataBird
 
 
 class CommonFilterForm(Form):
-    period = SelectField('Period...')
+    period = SelectField('Period...', default=3)
     model_cls = EtcDataBird
 
     def __init__(self, *args, **kwargs):
         super(CommonFilterForm, self).__init__(*args, **kwargs)
         self.period.choices = [(d.id, d.name) for d in Dataset.query.all()]
         dataset_id = request.args.get('period', get_default_period())
+        self.period.default = dataset_id
         self.dataset = Dataset.query.get_or_404(dataset_id)
 
     def get_selection(self):
@@ -22,11 +23,17 @@ class CommonFilterForm(Form):
 
 
 class SummaryFilterForm(SpeciesMixin, CommonFilterForm):
-    subject = SelectField('Name...', default='')
+    subject = SelectField('Species name...', default='')
+    reported_name = SelectField('Sub-specific unit...', default='')
 
     def __init__(self, *args, **kwargs):
         super(SummaryFilterForm, self).__init__(*args, **kwargs)
         self.subject.choices = [('', '-')] + self.get_subjects(self.dataset)
+        reported_name = [('', '-')]
+        reported_names = self.get_reported_name(self.dataset, self.subject.data)
+        if reported_names:
+            reported_name.extend(reported_names)
+        self.reported_name.choices = reported_name
 
     def get_selection(self):
         subject = self.subject.data
@@ -35,9 +42,12 @@ class SummaryFilterForm(SpeciesMixin, CommonFilterForm):
 
         choices_dict = dict(self.subject.choices)
         subject_name = choices_dict.get(subject, subject)
-
-        return super(SummaryFilterForm, self).get_selection() + [subject_name]
-
+        reported_name = self.reported_name.data
+        if reported_name:
+            reported_name =dict(self.reported_name.choices).get(reported_name)
+            return super(SummaryFilterForm, self).get_selection() + [subject_name] + [reported_name]
+        else:
+            return super(SummaryFilterForm, self).get_selection() + [subject_name]
 
 class ProgressFilterForm(CommonFilterForm):
     CONCLUSION_TYPE = (

@@ -1,13 +1,13 @@
 """add to Config for winter eu map
 
-Revision ID: 54c814967b52
-Revises: 43b182bdca5d
+Revision ID: 0011
+Revises: 0010
 Create Date: 2014-10-24 15:15:17.055466
 
 """
 
-revision = '54c814967b52'
-down_revision = '43b182bdca5d'
+revision = '0011'
+down_revision = '0010'
 
 from alembic import op
 import sqlalchemy as sa

@@ -1,14 +1,14 @@
 """add restricted birds table
 
-Revision ID: 3d53b5906a3d
-Revises: 125f18e29d33
+Revision ID: 0008
+Revises: 0007
 Create Date: 2014-10-10 14:53:51.163684
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '3d53b5906a3d'
-down_revision = '125f18e29d33'
+revision = '0008'
+down_revision = '0007'
 
 from alembic import op
 import sqlalchemy as sa

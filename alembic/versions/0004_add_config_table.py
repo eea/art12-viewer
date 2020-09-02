@@ -1,14 +1,14 @@
 """add Config table
 
-Revision ID: 31ed56cad45a
-Revises: 3c8e31fa45ca
+Revision ID: 0004
+Revises: 0003
 Create Date: 2014-10-06 12:22:07.478672
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '31ed56cad45a'
-down_revision = '3c8e31fa45ca'
+revision = '0004'
+down_revision = '0003'
 
 from alembic import op
 import sqlalchemy as sa

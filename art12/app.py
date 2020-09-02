@@ -14,6 +14,10 @@ from art12.common import common, HOMEPAGE_VIEW_NAME
 from art12.utils import inject_static_file
 from art12.factsheet import factsheet_manager
 from art12.management.import_greece import import_greece
+from art12.management.generate_lu_data_bird import generate_lu_data_bird
+from art12.management.import_new_data import import_new_data
+from art12.management.generate_new_period import generate_new_period
+
 from eea_integration.auth.script import user_manager, role_manager
 from eea_integration.layout import layout
 from eea_integration.auth import UserDatastore, Auth
@@ -30,7 +34,7 @@ security_ext = Security(
 DEFAULT_CONFIG = {
     'WTF_CSRF_ENABLED': False,
     'PDF_DESTINATION': '.',
-    'DEFAULT_PERIOD': 1,
+    'DEFAULT_PERIOD': 3,
 }
 
 
@@ -97,6 +101,9 @@ def create_manager(app, collect):
     manager.add_command('db', db_manager)
     manager.add_command('user', user_manager)
     manager.add_command('import_greece', import_greece)
+    manager.add_command('generate_new_period', generate_new_period)
+    manager.add_command('import_new_data', import_new_data)
+    manager.add_command('generate_lu_data_bird', generate_lu_data_bird)
     manager.add_command('role', role_manager)
     manager.add_command('factsheet', factsheet_manager)
     collect.init_script(manager)

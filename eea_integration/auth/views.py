@@ -308,9 +308,9 @@ def admin_user_reset_password(user_id):
     form = ResetPasswordForm()
 
     if form.validate_on_submit():
-        change_user_password(user, form.password.data)
+        user.password = encrypt_password(form.password.data)
         auth.models.db.session.commit()
-        msg = "Your password has been reset successfully"
+        msg = "The password for user {} has been reset successfully".format(user.id)
         flask.flash(msg, 'success')
 
     return flask.render_template('auth/admin_user_reset_password.html', **{

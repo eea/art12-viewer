@@ -13,49 +13,62 @@
     <h1>Species trends at the Member State level</h1>
 
     <p>
-      Choose a period and a species.
+      Choose a period and a country:
     </p>
 
     {% if dataset.id == 2 %}
-    <p class="note">
-    IMPORTANT: 2008-2012bis reporting period displays data from the delayed delivery by Greece.
-    </p>
+      <p class="note">
+        IMPORTANT: 2008-2012bis reporting period displays data from the delayed delivery by Greece.
+      </p>
     {% endif %}
+
     {% include 'reports/filters.html' %}
 
-    {% set colspan_all=30 %}
+    {% if dataset.id == 3 %}
+      {% set colspan_all = 45 %}
+    {% else %}
+      {% set colspan_all=30 %}
+    {% endif %}
 
     {% if current_selection %}
       {% set page_type='report' %}
       {% include 'common/legend.html' with context %}
-      <table class="complex_datatable">
-        <caption>
-          <b>Current selection</b>:
-          {{ current_selection|join(', ') }}.
-        </caption>
+      <div style="overflow-x:auto;min-height: 500px;">
+        <table class="complex_datatable">
+          <caption>
+            <b>Current selection</b>:
+            {{ current_selection|join(', ') }}.
+          </caption>
 
-        {% set is_reports = true %}
-        {% include "common/species_table_header.html" with context %}
+          {% set is_reports = true %}
+          {% if dataset.id == 3 %}
+            {% include "common/species_table_header_2018.html" with context %}
+          {% else %}
+            {% include "common/species_table_header.html" with context %}
+          {% endif %}
 
-        <tbody class="stripe_3rd">
-        {% for row in objects %}
-          <tr {% if row.is_assesm %}class="assesm"{% endif %}>
-            <td class="border">
-              {% set original_url=get_original_url(row) %}
-              <a class="clipped popup-btn block" data-title="Factsheet"
-                 href="{{ original_url }}" title="{{ title }}">
-                {{ row.speciesname }}
-              </a>
-            </td>
-            {% include 'summary/content/population_bs.html' with context %}
-            {% include 'summary/content/range.html' with context %}
-            {% include 'summary/content/population_ws.html' with context %}
-            {% include 'summary/content/gridded_maps.html' with context %}
-
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
+          <tbody class="stripe_3rd">
+          {% for row in objects %}
+            <tr {% if row.is_assesm %}class="assesm"{% endif %}>
+              <td class="border">
+                {% set original_url=get_original_url(row) %}
+                <a class="clipped popup-btn block" data-title="Factsheet"
+                  href="{{ original_url }}" title="{{ title }}">
+                  {{ row.speciesname }}
+                </a>
+              </td>
+              {% if dataset.id == 3 %}
+                {% include 'summary/content/content_2018.html' %}
+              {% else %}
+                {% include 'summary/content/population_bs.html' with context %}
+                {% include 'summary/content/range.html' with context %}
+                {% include 'summary/content/population_ws.html' with context %}
+                {% include 'summary/content/gridded_maps.html' with context %}
+              {% endif %}
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
     {% else %}
       <p><b>Please select a country.</b></p>
     {% endif %}

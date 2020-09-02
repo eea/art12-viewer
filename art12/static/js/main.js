@@ -135,6 +135,48 @@ $(document).ready(function () {
         }
     });
 
+    $('#subject').on('change', function () {
+        var option = $(this).find(':selected');
+        var subject = option.val();
+        var subject_selected = $('#subject option:selected').val();
+        $('#subject').data('subject', subject_selected);
+
+        if ($('#subject')){
+          var data = {'dataset_id': $('#period').find(':selected').val(),
+                      'subject': subject};
+          var url = $(this).data('href');
+          $.ajax({
+            type: "GET",
+            url: url,
+            data: data,
+            dataType: 'html',
+            success: function(resp) {
+              var data = JSON.parse(resp);
+              var subject_selected = $('#reported_name').data('subject');
+              $('#reported_name').empty();
+              $.each(data, function(index, element) {
+                if (element[0] == subject_selected){
+                  $('#reported_name').append(
+                  $("<option selected></option>")
+                    .text(element[1])
+                    .val(element[0])
+                  );
+                }
+                else{
+                  $('#reported_name').append(
+                  $("<option></option>")
+                    .text(element[1])
+                    .val(element[0])
+                  );
+                }
+              });
+            },
+            error: function(resp) {
+              alert('Error on selection')
+            }
+          });
+        }
+    });
 
     var copy_alert = 'Copying the data is not allowed';
     $('.copy-disabled').bind('contextmenu', function(e){
@@ -230,4 +272,93 @@ $(function() {
             window.open(url, title, params).focus();
         }
     });
+});
+
+
+$(document).ready(function () {
+  var popouts = $(".popout");
+  var popoutButtons = $("[data-popout]");
+
+  // Open popout
+  $(popoutButtons).on('click', function (event) {
+      event.stopPropagation();
+      var similar = $(this).data('popout');
+      var intendedTarget = $(this).closest('.popout-wrapper').find(".popout");
+      if ( $(intendedTarget).hasClass('open') ) {
+          $(intendedTarget).removeClass('open');
+      } else {
+          // $(".popout." + similar).removeClass('open'); // to close similar
+          $(".popout").removeClass('open');
+          $(intendedTarget).addClass('open');
+      }
+  });
+
+  // Close popout
+  $('.popout').on('click', '.close', function () {
+      $(this).closest('.popout').toggleClass('open');
+  });
+  $('.popout').on('click', function (event) {
+      event.stopPropagation();
+  });
+  $('html').on('click', function() {
+      $(popouts).removeClass('open');
+  });
+
+  // Assesment
+  $('.popout.assesment').each(function () {
+      var method = $(this).find("select");
+      var radios = $(this).find("input[type='radio']");
+      var preview = $(this).closest('.popout-wrapper').find(".conclusion.select");
+      var previewValue = $(preview).data('value');
+      var prevSecondClick = $(radios).filter(':checked');
+      var currentClass = $(preview).data('initial');
+
+      var updateSelect = function () {
+          if ($(this).val()) {
+              $(preview).children('.selected-value').removeClass('hidden').html( $(this).val() );
+          } else {
+              $(preview).children('.selected-value').addClass('hidden').html( $(this).val() );
+          }
+      };
+
+      var updateRadio = function (event) {
+          event.stopPropagation();
+          conclusionClass = $(this).data('class');
+          // Match selected conclusion
+          $(preview).removeClass(currentClass);
+          if (currentClass != conclusionClass) {
+              currentClass = conclusionClass;
+              $(preview).addClass(currentClass);
+          } else {
+              currentClass = false;
+              $(preview).removeClass(currentClass);
+          }
+          // Uncheck radio button
+          var secondClick = $(this).attr('secondClick');
+          if (secondClick == "false" || secondClick == undefined) {
+              $(prevSecondClick).attr('secondClick', false);
+              $(this).attr('secondClick', true);
+          } else {
+              $(this).attr('secondClick', false);
+              this.checked = false;
+          }
+          // update value
+          if (previewValue == 'radio') {
+              var checked = $(radios).filter(':checked');
+              if ($(checked).val())
+                  $(preview).children('.selected-value').removeClass('hidden').html($(checked).val());
+              else
+                  $(preview).children('.selected-value').addClass('hidden').html('');
+          }
+          prevSecondClick = this;
+      };
+
+      // Value
+      if (previewValue == 'method') {
+          $(method).on('change', updateSelect);
+      }
+
+      // Radios
+      $(radios).on('click', updateRadio);
+  });
 });

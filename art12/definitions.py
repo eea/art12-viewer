@@ -18,6 +18,7 @@ TREND_CLASSES = {
     '+': 'inc',
     '-': 'dec',
     '0': 'eq',
+    '=': 'eq',
     'x': 'xx',
     'F': 'f',
     'n': 'n',
@@ -51,6 +52,12 @@ SEASON_FIELDS = [
     'population_trend_long_quality',
 
     'conclusion_population',
+]
+
+SEASON_FIELDS_CONVERT = [
+    'population_minimum_size',
+    'population_maximum_size',
+    'percentage_population_mean_size'
 ]
 
 CONTRIB_OPTIONS = [
