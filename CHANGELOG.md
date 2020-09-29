@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.6.1 (2020-09-29)
+-----------------
+* Fix progress page links to summary
+  [dianaboiangiu]
+
 2.6.0(2020-09-03)
 -----------------
 * Prepared for period 2013-2018
