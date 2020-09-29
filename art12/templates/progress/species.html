@@ -41,7 +41,13 @@
           {% endif %}
             <td class="th">
               {% if dataset.id == 3 %}
-                {% set summary_url = url_for('views.summary', period=dataset.id, subject=row.name) %}
+                {% set url_subject = row.url_name or row.name %}
+                {% if row.reported_name != url_subject %}
+                  {% set reported_name = row.code %}
+                {% else %}
+                  {% set reported_name = '' %}
+                {% endif %}
+                {% set summary_url = url_for('views.summary', period=dataset.id, subject=url_subject, reported_name=reported_name) %}
               {% else %}
                 {% set summary_url = url_for('views.summary', period=dataset.id, subject=row.code) %}
               {% endif %}

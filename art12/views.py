@@ -133,6 +133,7 @@ class Progress(SpeciesMixin, TemplateView):
     STATUS_LABEL = 'status'
 
     def get_species_qs(self, dataset, conclusion_value, status_level):
+
         return (
             self.model_eu_cls.query
                 .filter_by(dataset=dataset)
@@ -141,7 +142,9 @@ class Progress(SpeciesMixin, TemplateView):
                                self.model_eu_cls.speciesname.label('name'),
                                conclusion_value.label('conclusion'),
                                status_level.label('status'),
-                               self.model_eu_cls.additional_record)
+                               self.model_eu_cls.additional_record,
+                               self.model_eu_cls.assessment_speciesname.label('url_name'),
+                               self.model_eu_cls.reported_name.label('reported_name'))
         )
 
     def get_context_data(self, **kwargs):
@@ -183,7 +186,9 @@ class Progress(SpeciesMixin, TemplateView):
                                LuDataBird.speciesname.label('name'),
                                bindparam('conclution', ''),
                                bindparam('status', ''),
-                               bindparam('additional_record', 0))
+                               bindparam('additional_record', 0),
+                               bindparam('', ''),
+                               bindparam('', ''))
             )
 
             species = sorted(eu_species.union(ms_species),

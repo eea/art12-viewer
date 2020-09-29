@@ -36,20 +36,11 @@ class SpeciesMixin(object):
         etc_data_bird_results = (
             model.query
             .filter_by(dataset=dataset, assessment_speciesname=speciesname)
-            .filter(model.reported_name!='')
             .with_entities(model.speciescode, model.reported_name)
             .order_by(model.reported_name).distinct()
             .all()
         )
-        etc_birds_eu_results = (
-            EtcBirdsEu.query
-            .filter_by(dataset=dataset, assessment_speciesname=speciesname)
-            .filter(EtcBirdsEu.reported_name!='')
-            .with_entities(EtcBirdsEu.speciescode, EtcBirdsEu.reported_name)
-            .order_by(EtcBirdsEu.reported_name).distinct()
-            .all()
-        )
-        return list(set(etc_data_bird_results + etc_birds_eu_results))
+        return etc_data_bird_results
 
     def get_countries(self, dataset):
         if dataset.id == 2:
