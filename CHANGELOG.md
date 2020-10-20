@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.6.2 (2020-10-20)
+-----------------
+* Insert audit trails for 2013 period
+* Add methodolgy and guideline/add note for period 2013
+  [dianaboiangiu]
+
 2.6.1 (2020-09-29)
 -----------------
 * Fix progress page links to summary
