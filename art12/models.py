@@ -403,7 +403,9 @@ class WikiTrail(Base):
     __tablename__ = 'wiki_trail'
 
     id = Column(Integer, primary_key=True)
-    speciescode = Column(String(10))
+    speciescode = Column(String(50))
+    reported_name = Column(String(100))
+    reported_name_code = Column(String(100))
     dataset_id = Column(
         'ext_dataset_id',
         ForeignKey('datasets.id'),

@@ -119,6 +119,7 @@ class Summary(SpeciesMixin, TemplateView):
             'dataset': dataset,
             'speciescode': speciescode,
             'subject': subject,
+            'reported_name': reported_name,
             'map_url': map_url,
             'map_warning': map_warning,
             'eu_map_breeding_url': eu_map_breeding_url,

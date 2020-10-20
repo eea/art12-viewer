@@ -2,19 +2,21 @@
 
 {% block content %}
 
-	<div class="title-section clearfix">
-		<h2 class="no-margins pull-left">{{ page_title }}</h2>
-	</div>
+<div class="title-section clearfix">
+  <h2 class="no-margins pull-left">{{ page_title }}</h2>
+</div>
 
-	<div class="wiki">
-
-		<div id="active-wiki">
-			{% for body in wiki_body %}
-				{{ body | safe }}
-			{% endfor %}
-		</div>
-		<div id="preview-wiki" style="display: none;">
-		</div>
-
-	</div>
+<div class="wiki">
+  <div id="active-wiki">
+    {% for body in wiki_body %}
+      {% if dataset == '3' %}
+        {{ break_audit_text(body) | safe }}
+      {% else %}
+        {{ body | safe }}
+      {% endif %}
+    {% endfor %}
+  </div>
+  <div id="preview-wiki" style="display: none;">
+  </div>
+</div>
 {% endblock %}

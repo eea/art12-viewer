@@ -23,7 +23,7 @@ wiki = Blueprint('wiki', __name__)
 class CommonSection(object):
 
     def get_req_args(self):
-        return {arg: request.args.get(arg, '') for arg in ['subject', 'period']}
+        return {arg: request.args.get(arg, '') for arg in ['subject', 'period', 'reported_name']}
 
     def get_wiki(self):
         r = self.get_req_args()
@@ -95,6 +95,35 @@ class AuditView(views.View):
     def __init__(self, section):
         self.section = section()
 
+    def get_wiki_changes_for_period_2018(self, rq, wikis):
+
+        if len(wikis) > 1 and rq['reported_name'] == '':
+            return ['only available at subspecific level']
+        else:
+            wikis = self.section.wiki_cls.query.filter(
+                    self.section.wiki_cls.subject == rq['subject'],
+                    self.section.wiki_cls.dataset_id == rq['period'],
+                )
+            if rq['reported_name']:
+                wikis = (wikis.filter(self.section.wiki_cls.reported_name_code == rq['reported_name']).all())
+            else:
+                wikis = (wikis.all())
+
+            wiki_body = []
+
+            for wiki in wikis:
+                change = (
+                    self.section.wiki_change_cls.query
+                    .filter_by(
+                        wiki=wiki,
+                        active=1,
+                    ).first()
+                )
+                if change:
+                    wiki_body.append(change.body)
+            return wiki_body
+
+
     def dispatch_request(self):
         rq = self.section.get_req_args()
 
@@ -106,21 +135,25 @@ class AuditView(views.View):
             )
             .all()
         )
-        wiki_body = []
+        if rq['period'] ==  u'3':
+            wiki_body = self.get_wiki_changes_for_period_2018(rq, wikis)
+        else:
+            wiki_body = []
 
-        for wiki in wikis:
-            change = (
-                self.section.wiki_change_cls.query
-                .filter_by(
-                    wiki=wiki,
-                    active=1,
-                ).first()
-            )
-            if change:
-                wiki_body.append(change.body)
+            for wiki in wikis:
+                change = (
+                    self.section.wiki_change_cls.query
+                    .filter_by(
+                        wiki=wiki,
+                        active=1,
+                    ).first()
+                )
+                if change:
+                    wiki_body.append(change.body)
 
         return render_template(self.template_name,
                                page_title=self.section.page_title,
+                               dataset=rq['period'],
                                wiki_body=wiki_body)
 
 

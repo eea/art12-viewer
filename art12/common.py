@@ -36,6 +36,7 @@ def inject_globals():
         'population_size_unit': population_size_unit,
         'population_trend': population_trend,
         'population_trend_long': population_trend_long,
+        'break_audit_text': break_audit_text,
         'range_trend': range_trend,
         'range_trend_long': range_trend_long,
         'get_conclusion': get_conclusion,
@@ -119,6 +120,8 @@ def population_trend_long(season):
 
     return '%s %s' % (trend, trend_values)
 
+def break_audit_text(audit_text):
+    return audit_text.replace('\n', '<br>')
 
 def range_trend(range_trend_bs, range_trend_magnitude_min_bs,
                 range_trend_magnitude_max_bs):
