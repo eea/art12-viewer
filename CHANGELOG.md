@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.6.3 (2020-10-26)
+-----------------
+* Disable download factsheets for period 2013
+  [dianaboiangiu]
+
 2.6.2 (2020-10-20)
 -----------------
 * Insert audit trails for 2013 period
