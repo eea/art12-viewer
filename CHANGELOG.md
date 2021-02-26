@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.6.4 (2021-02-26)
+-----------------
+* Change warning for Romania
+  [dianaboiangiu]
+
 2.6.3 (2020-10-26)
 -----------------
 * Disable download factsheets for period 2013
