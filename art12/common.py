@@ -173,18 +173,26 @@ def get_config():
     return rows[0]
 
 
-def get_map_url(subject, sensitive=False):
+def get_map_url(subject, reported_name, dataset, sensitive=False):
     config = get_config()
-
+    code = subject
     if sensitive and current_user.is_authenticated:
         map_href = config.sensitive_species_map_url
     else:
         map_href = config.species_map_url
+    if dataset.id == 1:
+        # setting layer for period 2008-2012
+        map_href = map_href.format(0, 1)
+    elif dataset.id == 3:
+        # setting layer for period 2013-2018
+        map_href = map_href.format(2, 3)
+        if reported_name:
+            code = reported_name
 
     if not map_href:
         return ''
 
-    return map_href + '&CCode=' + subject
+    return map_href + "&code={}&zoomto=true&embed=true".format(code)
 
 
 def get_eu_map_breeding_url(subject, sensitive=False):

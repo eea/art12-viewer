@@ -58,6 +58,9 @@
           The map does not show the distribution for sensitive species in {{ map_warning }}
         </p>
       {% endif %}
+      {% if not map_available %}
+        <p class="warning">Map is only available at subspecific level.</p>
+      {% endif %}
       {% set page_type='summary' %}
       {% include 'common/legend.html' with context %}
       {% if dataset.id == 3 %}

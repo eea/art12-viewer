@@ -52,6 +52,7 @@ class Summary(SpeciesMixin, TemplateView):
     def get_context_data(self, **kwargs):
         map_url = ''
         map_warning = ''
+        map_available = True
         eu_map_breeding_url, eu_map_winter_url = '', ''
         factsheet_url = ''
         filter_form = SummaryFilterForm(request.args)
@@ -66,6 +67,9 @@ class Summary(SpeciesMixin, TemplateView):
                 filter_args['assessment_speciesname'] = subject
                 if reported_name:
                     filter_args['speciescode'] = reported_name
+                else:
+                    if len(self.get_reported_name(dataset, subject)) > 1:
+                        map_available = False
             else:
                 speciescode = subject
                 filter_args['speciescode'] = subject
@@ -95,6 +99,8 @@ class Summary(SpeciesMixin, TemplateView):
 
             map_url = get_map_url(
                 subject=speciescode,
+                reported_name=reported_name,
+                dataset=dataset,
                 sensitive=sensitive,
             )
             eu_map_breeding_url = get_eu_map_breeding_url(
@@ -122,6 +128,7 @@ class Summary(SpeciesMixin, TemplateView):
             'reported_name': reported_name,
             'map_url': map_url,
             'map_warning': map_warning,
+            'map_available': map_available,
             'eu_map_breeding_url': eu_map_breeding_url,
             'eu_map_winter_url': eu_map_winter_url,
             'factsheet_url': factsheet_url,

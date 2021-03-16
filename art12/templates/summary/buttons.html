@@ -10,7 +10,7 @@
     Audit trail
   </button>
 
-  {% if map_url and dataset.id != 2 %}
+  {% if map_url and dataset.id != 2 and map_available %}
     <button type="button" id="show-map" data-url="{{ map_url }}">Map</button>
   {% else %}
     <button type="button" class="disabled">Map</button>
