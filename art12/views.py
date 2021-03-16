@@ -53,6 +53,7 @@ class Summary(SpeciesMixin, TemplateView):
         map_url = ''
         map_warning = ''
         map_available = True
+        sensitive = False
         eu_map_breeding_url, eu_map_winter_url = '', ''
         factsheet_url = ''
         filter_form = SummaryFilterForm(request.args)
@@ -83,19 +84,17 @@ class Summary(SpeciesMixin, TemplateView):
                 .order_by(self.model_eu_cls.additional_record.desc())
             )
 
-            sensitive = False
+
             sensitive_records = (
                 LuRestrictedDataBird.query
                 .filter_by(speciescode=speciescode, dataset=dataset, show_data=0)
                 .all()
             )
             if sensitive_records:
-                if current_user.is_anonymous:
-                    map_warning = ', '.join(
-                        [s.country for s in sensitive_records]
-                    )
-                else:
-                    sensitive = True
+                map_warning = ', '.join(
+                    [s.country for s in sensitive_records]
+                )
+                sensitive = True
 
             map_url = get_map_url(
                 subject=speciescode,
@@ -116,7 +115,6 @@ class Summary(SpeciesMixin, TemplateView):
             filter_args['dataset'] = dataset
             content_objects = []
             eu_objects = []
-
         return {
             'filter_form': filter_form,
             'objects': content_objects,
@@ -125,6 +123,7 @@ class Summary(SpeciesMixin, TemplateView):
             'dataset': dataset,
             'speciescode': speciescode,
             'subject': subject,
+            'sensitive': sensitive,
             'reported_name': reported_name,
             'map_url': map_url,
             'map_warning': map_warning,

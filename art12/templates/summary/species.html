@@ -53,13 +53,13 @@
 
     {% if current_selection %}
       {% include 'summary/buttons.html' with context %}
-      {% if map_warning %}
+      {% if map_warning and map_available %}
         <p class="note"><strong>Warning</strong>:
           The map does not show the distribution for sensitive species in {{ map_warning }}
         </p>
       {% endif %}
       {% if not map_available %}
-        <p class="warning">Map is only available at subspecific level.</p>
+        <p class="note">Map is only available at subspecific level.</p>
       {% endif %}
       {% set page_type='summary' %}
       {% include 'common/legend.html' with context %}
@@ -76,6 +76,9 @@
       {% endif %}
       <div style="overflow-x:auto;">
         <table class="complex_datatable">
+          {% if sensitive and map_available %}
+            <caption>Sensitive spatial information for this species is not shown in the map.</caption>
+          {% endif %}
           <caption>
             <b>Current selection</b>:
             {{ current_selection|join(', ') }}.
