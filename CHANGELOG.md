@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.6.5 (2021-03-16)
+-----------------
+* Update maps
+  [dianaboiangiu]
+
 2.6.4 (2021-02-26)
 -----------------
 * Change warning for Romania
