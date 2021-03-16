@@ -1,5 +1,9 @@
 Changelog
 =========
+2.6.6 (2021-03-16)
+------------------
+* Add import script for sensitive data
+  [dianaboiangiu]
 
 2.6.5 (2021-03-16)
 -----------------
