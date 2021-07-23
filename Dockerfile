@@ -1,4 +1,4 @@
-FROM python:2.7-slim
+FROM python:3.8-slim
 LABEL maintainer="EEA: IDM2 C-TEAM <eea-edw-c-team-alerts@googlegroups.com>"
 
 ENV WORK_DIR=/var/local/art12

@@ -1,8 +1,8 @@
 from flask import Blueprint
 from flask import render_template, request, current_app as app, url_for
-from flask_script import Manager
+from flask.cli import AppGroup
 from flask.views import MethodView
-from path import path
+from path import Path
 import jinja2
 import subprocess
 import urllib
@@ -18,13 +18,13 @@ from art12.queries import (
     SPA_TRIGGER_Q, PRESS_THRE_Q, N2K_Q, CONS_MEASURES_Q)
 from art12.utils import slugify
 
-factsheet_manager = Manager()
+factsheet_manager = AppGroup('factsheet')
 factsheet = Blueprint('factsheet', __name__)
 
 
 @factsheet.app_template_filter('format_subpopulation')
 def format_subpopulation(subpopulation):
-    subpopulation = '<i>{}</i>'.format(subpopulation)
+    subpopulation = f'<i>{subpopulation}</i>'
     return jinja2.Markup(
         subpopulation
         .replace('[', '</i>[')
@@ -55,7 +55,7 @@ def get_query_result(engine, query, subject):
 
 class DummyCls(object):
     def __init__(self, **kwargs):
-        for k, v in kwargs.iteritems():
+        for k, v in kwargs.items():
             setattr(self, k, v)
 
 
@@ -73,7 +73,7 @@ class BirdFactsheet(MethodView):
         return render_template('factsheet/list_all.html', objects=objects)
 
     def set_properties(self, obj):
-        for prop_name, query in self.property_to_query.iteritems():
+        for prop_name, query in self.property_to_query.items():
             value = get_query_result(self.engine, query, self.subject)
             setattr(obj, prop_name, value)
 
@@ -142,7 +142,7 @@ class BirdFactsheet(MethodView):
                 'n2k': N2K_Q,
                 'cons_measures': CONS_MEASURES_Q,
             }
-            for prop, query in spa_properties.iteritems():
+            for prop, query in spa_properties.items():
                 self.set_list_property(bird_obj, prop, query)
 
         return {'obj': bird_obj}
@@ -217,9 +217,9 @@ class FactsheetFooter(MethodView):
 
 
 def get_pdf_path(subject):
-    pdf_path = path(app.config['PDF_DESTINATION']) / (
+    pdf_path = Path(app.config['PDF_DESTINATION']) / (
         BirdFactsheet.get_pdf_file_name(subject) + '.pdf')
-    real_path = path(app.static_folder) / pdf_path
+    real_path = Path(app.static_folder) / pdf_path
     if real_path.exists():
         return pdf_path
 
@@ -256,7 +256,7 @@ def species(subject, period):
     fs = BirdFactsheet()
     renderer = fs.get_pdf(subject=subject, period=period)
     renderer._generate()
-    print "Generated for {}: {}".format(subject, renderer.pdf_path)
+    print(f"Generated for {subject}: {renderer.pdf_path}")
 
 
 @factsheet_manager.command
@@ -267,5 +267,5 @@ def genall(period, overwrite_existing=False):
         try:
             species(obj.speciescode, period)
         except subprocess.CalledProcessError:
-            print "Error occured for: {}".format(obj.speciescode)
-    print "Done"
+            print(f"Error occured for: {obj.speciescode}")
+    print("Done")

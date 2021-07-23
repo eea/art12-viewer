@@ -3,7 +3,7 @@ from flask_security import Security
 from flask_webtest import TestApp
 from pytest import fixture
 from alembic import command, config
-from path import path
+from path import Path
 from mock import patch
 from datetime import datetime, date
 import urllib
@@ -34,7 +34,7 @@ TEST_CONFIG = {
                                                            getenv('DB_NAME_TEST')),
 }
 
-alembic_cfg_path = path(__file__).dirname() / '..' / 'alembic.ini'
+alembic_cfg_path = Path((__file__)).dirname() / '..' / 'alembic.ini'
 alembic_cfg = config.Config(alembic_cfg_path.abspath())
 
 
@@ -56,7 +56,7 @@ def create_generic_fixtures():
 def create_testing_app():
     test_config = dict(TEST_CONFIG)
 
-    app, _ = create_app(test_config, testing=True)
+    app = create_app(test_config, testing=True)
     db = models.db.init_app(app)
     return app
 
@@ -154,9 +154,9 @@ def create_user(user_id, role_names=[], name='', institution='', ms=''):
 
 
 def get_request_params(request_type, request_args, post_params=None):
-    request_args[0] = urllib.quote(request_args[0])
+    request_args[0] = urllib.parse.quote(request_args[0])
     if request_type == 'post':
-        query_string = urllib.urlencode(request_args[1])
+        query_string = urllib.parse.urlencode(request_args[1])
         final_url = '?'.join((request_args[0], query_string))
         request_args = [final_url, post_params]
     return request_args

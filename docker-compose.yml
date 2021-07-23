@@ -3,7 +3,9 @@ version: '2'
 services:
 
   art12-app:
-    image: eeacms/art12-viewer:latest
+    # image: eeacms/art12-viewer:latest
+    build:
+      context: .
     container_name: art12.app
     environment:
     - COLLECT_STATIC=yes

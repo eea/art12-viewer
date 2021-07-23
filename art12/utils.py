@@ -2,7 +2,7 @@
 import re
 from decimal import Decimal
 from markupsafe import Markup
-from path import path
+from path import Path
 from flask import current_app as app
 
 patt = re.compile(r"(?<!\d)(\d+)(\.0*)?(?!\d)")
@@ -20,7 +20,7 @@ def str2num(s, default='', number_format='%.2f'):
     if isinstance(s, Decimal):
         buffer = number_format % s
     else:
-        buffer = unicode(s)
+        buffer = str(s)
     if buffer:
         return re.sub(patt, r"\1", buffer)
     else:
@@ -58,7 +58,7 @@ def validate_ref(s):
 
 def inject_static_file(filepath):
     data = None
-    with open(path(app.static_folder) / filepath, 'r') as f:
+    with open(Path(app.static_folder) / filepath, 'r') as f:
         data = f.read()
     return Markup(data)
 
@@ -78,7 +78,7 @@ def slugify(value):
     import unicodedata
 
     if not isinstance(value, unicode):
-        value = unicode(value)
+        value = str(value)
     value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
-    value = unicode(_slugify_strip_re.sub(' ', value).strip().lower())
+    value = str(_slugify_strip_re.sub(' ', value).strip().lower())
     return _slugify_hyphenate_re.sub('-', value)

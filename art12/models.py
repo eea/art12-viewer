@@ -9,7 +9,6 @@ from sqlalchemy import inspect
 
 
 from datetime import datetime
-from flask_script import Manager
 from flask_security import UserMixin, RoleMixin
 from flask_sqlalchemy import SQLAlchemy
 from flask import current_app as app
@@ -24,7 +23,6 @@ from art12.definitions import SEASON_FIELDS, SEASON_FIELDS_CONVERT
 alembic_ignore_tables = []
 
 db = SQLAlchemy()
-db_manager = Manager()
 
 Base = db.Model
 metadata = Base.metadata
@@ -493,7 +491,7 @@ class RegisteredUser(Base, UserMixin):
         return False
 
     def get_id(self):
-        return unicode(self.id)
+        return str(self.id)
 
 class Role(Base, RoleMixin):
     __tablename__ = 'roles'
@@ -503,37 +501,6 @@ class Role(Base, RoleMixin):
     description = db.Column(db.String(255), nullable=False, unique=True)
 
 
-@db_manager.option('alembic_args', nargs=argparse.REMAINDER)
-def alembic(alembic_args):
-    from alembic.config import CommandLine
-
-    CommandLine().main(argv=alembic_args)
-
-
-@db_manager.command
-def init():
-    db.create_all()
-    alembic(['stamp', 'head'])
-
-
-@db_manager.command
-def revision(message=None):
-    if message is None:
-        message = raw_input('revision name: ')
-    return alembic(['revision', '--autogenerate', '-m', message])
-
-
-@db_manager.command
-def upgrade(revision='head'):
-    return alembic(['upgrade', revision])
-
-
-@db_manager.command
-def downgrade(revision):
-    return alembic(['downgrade', revision])
-
-
-@db_manager.command
 def dumpdata(model):
     thismodule = sys.modules[__name__]
     base_class = getattr(thismodule, model)

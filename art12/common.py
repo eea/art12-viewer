@@ -1,5 +1,5 @@
-from path import path
-from urlparse import urlparse
+from path import Path
+from urllib.parse import urlparse
 from flask import Blueprint, url_for, render_template, redirect, request, flash
 from flask import current_app as app
 from flask.views import MethodView
@@ -302,6 +302,6 @@ def change_details():
 def get_map_path(code, suffix):
     maps_format = app.config['MAPS_FORMAT']
     filename = maps_format.format(code=code, suffix=suffix)
-    maps_path = path(app.static_folder) / app.config['MAPS_STATIC'] / filename
+    maps_path = Path(app.static_folder) / app.config['MAPS_STATIC'] / filename
     if maps_path.exists():
-        return path(app.config['MAPS_STATIC']) / filename
+        return Path(app.config['MAPS_STATIC']) / filename

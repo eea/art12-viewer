@@ -42,7 +42,7 @@ def register_local():
     form = EeaLocalRegisterForm(flask.request.form)
 
     if form.validate_on_submit():
-        register_user(**form.to_dict())
+        register_user(**form.to_dict(only_user=True))
         return flask.render_template('message.html', message="")
 
     return flask.render_template('auth/register_local.html', **{
@@ -56,7 +56,7 @@ def admin_create_local():
     form = EeaLocalRegisterForm(flask.request.form)
 
     if form.validate_on_submit():
-        kwargs = form.to_dict()
+        kwargs = form.to_dict(only_user=True)
         plaintext_password = kwargs['password']
         encrypted_password = encrypt_password(plaintext_password)
         datastore = flask.current_app.extensions['security'].datastore
@@ -110,7 +110,7 @@ def register_ldap():
                 is_ldap=True,
                 password='',
                 confirmed_at=datetime.utcnow(),
-                **form.to_dict()
+                **form.to_dict(only_user=True)
             )
             datastore.commit()
             flask.flash(
@@ -153,7 +153,7 @@ def admin_create_ldap():
         form.name.data = initial_data.get('name', '')
         form.email.data = initial_data.get('email') or flask.request.form['email']
         if form.validate():
-            kwargs = form.to_dict()
+            kwargs = form.to_dict(only_user=True)
             kwargs['id'] = user_id
             kwargs['is_ldap'] = True
             datastore = flask.current_app.extensions['security'].datastore

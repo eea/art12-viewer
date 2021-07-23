@@ -43,6 +43,7 @@ class Auth(object):
             'SECURITY_FORGOT_PASSWORD_TEMPLATE': 'auth/forgot_password.html',
             'SECURITY_RESET_PASSWORD_TEMPLATE': 'auth/reset_password.html',
             'SECURITY_PASSWORD_SCHEMES': ['ldap_salted_sha1'],
+            'SECURITY_PASSWORD_SINGLE_HASH': ['ldap_salted_sha1'],
         })
         Security.init_app(self.security_ext, app)
         security_state = app.extensions['security']

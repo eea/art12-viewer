@@ -1,17 +1,13 @@
 from datetime import datetime
 import flask
-import flask_security.script
+import flask_security.utils
 import flask_security as flask_security
 from flask_login import current_user as c_user
 from flask_security import user_registered
 from flask_security import SQLAlchemyUserDatastore, AnonymousUser
-from flask_security.utils import string_types
 from flask_login import LoginManager
 from werkzeug.local import LocalProxy
 from wtforms import ValidationError
-from flask_security.forms import (
-    password_length,
-)
 from . import auth
 
 login_manager = LoginManager()
@@ -23,10 +19,9 @@ flask_security.forms.current_user = current_user
 flask_security.decorators.current_user = current_user
 flask_security.views.current_user = current_user
 flask_security.views.logout_user = lambda: None
-flask_security.views.login_user = lambda new_user: None
+flask_security.views.login_user = lambda new_user, authn_via: None
 flask_security.views.register = flask_security.views.register
 flask_security.core._get_login_manager = lambda app, anonymous_user: None
-password_length.min = 1
 
 
 def encrypt_password(password):
@@ -41,7 +36,7 @@ def verify(password, user):
 
 # override encrypt_password with our simplified version
 flask_security.registerable.encrypt_password = encrypt_password
-flask_security.script.encrypt_password = encrypt_password
+flask_security.utils.encrypt_password = encrypt_password
 flask_security.recoverable.encrypt_password = encrypt_password
 flask_security.utils.encrypt_password = encrypt_password
 flask_security.changeable.encrypt_password = encrypt_password
@@ -55,9 +50,9 @@ class UserDatastore(SQLAlchemyUserDatastore):
         return super(UserDatastore, self).create_user(**kwargs)
 
     def _prepare_role_modify_args(self, user, role):
-        if isinstance(user, string_types):
+        if isinstance(user, str):
             user = self.find_user(id=user)
-        if isinstance(role, string_types):
+        if isinstance(role, str):
             role = self.find_role(role)
         return user, role
 

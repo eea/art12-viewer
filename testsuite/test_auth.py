@@ -5,13 +5,13 @@ from mock import patch
 from art12 import models
 from art12.common import get_config
 from art12.models import db
-from conftest import create_user
+from .conftest import create_user
 from eea_integration.auth.providers import set_user
 from flask import current_app
 
 def force_login(client, user_id=None):
     with client.session_transaction() as sess:
-        sess['user_id'] = user_id
+        sess['_user_id'] = user_id
         sess['_fresh'] = True
 
 def _set_config(**kwargs):
@@ -129,7 +129,7 @@ def test_ldap_account_activation_flow(
     assert url == 'http://localhost/auth/users/foo'
 
     with client.session_transaction() as sess:
-        sess['user_id'] = 'ze_admin'
+        sess['_user_id'] = 'ze_admin'
         sess['_fresh'] = True
 
     activation_page = client.get(url)

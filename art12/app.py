@@ -1,12 +1,11 @@
 import flask
-from flask_collect import Collect
 from flask_mail import Mail
-from flask_script import Manager
+from flask_migrate import Migrate
 from flask_security import Security
 from art12.assets import assets_env
 from art12 import models
 from art12.definitions import TREND_CLASSES
-from art12.models import db, db_manager
+from art12.models import db
 from art12.urls import views
 from art12.wiki import wiki
 from art12.factsheet import factsheet
@@ -48,9 +47,13 @@ def create_app(config={}, testing=False):
     else:
         app.config.from_pyfile('settings.py', silent=True)
     app.config.update(config)
+    create_cli_commands(app)
+    assets_env.init_app(app)
+    migrate = Migrate()
 
     db.init_app(app)
-    assets_env.init_app(app)
+    migrate.init_app(app, db)
+
     app.register_blueprint(common)
     app.register_blueprint(views)
     app.register_blueprint(layout)
@@ -81,10 +84,8 @@ def create_app(config={}, testing=False):
         from raven.contrib.flask import Sentry
 
         Sentry(app)
-    collect = Collect()
-    collect.init_app(app)
-    return (app, collect)
 
+    return app
 
 def create_url_prefix_middleware(wsgi_app, url_prefix):
     def middleware(environ, start_response):
@@ -97,16 +98,12 @@ def create_url_prefix_middleware(wsgi_app, url_prefix):
     return middleware
 
 
-def create_manager(app, collect):
-    manager = Manager(app)
-    manager.add_command('db', db_manager)
-    manager.add_command('user', user_manager)
-    manager.add_command('import_greece', import_greece)
-    manager.add_command('generate_new_period', generate_new_period)
-    manager.add_command('import_new_data', import_new_data)
-    manager.add_command('generate_lu_data_bird', generate_lu_data_bird)
-    manager.add_command('generate_wiki_trail', generate_wiki_trail)
-    manager.add_command('role', role_manager)
-    manager.add_command('factsheet', factsheet_manager)
-    collect.init_script(manager)
-    return manager
+def create_cli_commands(app):
+    app.cli.add_command(user_manager)
+    app.cli.add_command(import_greece)
+    app.cli.add_command(generate_new_period)
+    app.cli.add_command(import_new_data)
+    app.cli.add_command(generate_lu_data_bird)
+    app.cli.add_command(generate_wiki_trail)
+    app.cli.add_command(role_manager)
+    app.cli.add_command(factsheet_manager)
