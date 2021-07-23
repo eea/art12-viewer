@@ -53,7 +53,7 @@ if [ -z "$1" ]; then
 fi
 
 if [[ $COMMANDS == *"$1"* ]]; then
-  exec python manage.py "$@"
+  exec python -m flask "$@"
 fi
 
 exec "$@"

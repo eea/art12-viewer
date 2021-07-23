@@ -13,7 +13,7 @@ from art12.definitions import (
 )
 from art12.utils import str2num
 from art12.models import Config, db
-from eea_integration.auth import current_user
+from eea_integration.auth.security import current_user
 from eea_integration.auth.common import admin_perm
 
 common = Blueprint("common", __name__)

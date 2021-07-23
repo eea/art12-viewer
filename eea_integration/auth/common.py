@@ -7,7 +7,7 @@ from flask import current_app
 from flask_principal import Permission, RoleNeed
 from flask_security import signals as security_signals
 from flask_mail import Message
-from . import auth
+from .auth import auth
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

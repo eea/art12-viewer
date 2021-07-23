@@ -1,9 +1,10 @@
 import logging
 import ldap
+import requests
 import flask
 from eea.usersdb import UsersDB, UserNotFound
 from .security import current_user
-from . import auth
+from .auth import auth
 
 logger = logging.getLogger(__name__)
 

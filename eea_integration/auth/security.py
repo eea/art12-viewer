@@ -8,7 +8,7 @@ from flask_security import SQLAlchemyUserDatastore, AnonymousUser
 from flask_login import LoginManager
 from werkzeug.local import LocalProxy
 from wtforms import ValidationError
-from . import auth
+from .auth import auth
 
 login_manager = LoginManager()
 

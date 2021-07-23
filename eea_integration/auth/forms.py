@@ -9,7 +9,7 @@ from flask_security.forms import (
     RegisterFormMixin,
     unique_user_email,
 )
-# from . import auth
+# from .auth import auth
 from .security import (
     no_ldap_user,
     custom_unique_user_email,

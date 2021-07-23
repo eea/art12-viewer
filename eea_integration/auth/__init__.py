@@ -1,13 +1,10 @@
-import flask
 from flask_security import Security
 
 from .security import UserDatastore, current_user
 from .providers import DebugAuthProvider
 from .forms import EeaForgotPasswordForm
 from .common import ugly_fix
-
-auth = flask.Blueprint("auth", __name__, template_folder="templates")
-
+from .auth import auth
 
 class Auth(object):
     def __init__(self, models, security_ext, homepage):

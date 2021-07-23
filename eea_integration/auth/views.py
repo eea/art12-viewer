@@ -8,7 +8,8 @@ from flask_security.changeable import change_user_password
 from flask_security.registerable import register_user, encrypt_password
 from werkzeug.datastructures import ImmutableMultiDict
 
-from . import current_user, auth
+from .auth import auth
+from .security import current_user
 from .forms import EeaAdminEditUserForm, EeaLDAPRegisterForm, EeaLocalRegisterForm
 from .providers import _get_initial_ldap_data
 from .common import (
