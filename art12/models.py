@@ -3,7 +3,6 @@ import os
 import sys
 import json
 import ldap
-import argparse
 import sqlalchemy
 from sqlalchemy import inspect
 
@@ -13,8 +12,17 @@ from flask_security import UserMixin, RoleMixin
 from flask_sqlalchemy import SQLAlchemy
 from flask import current_app as app
 from sqlalchemy import (
-    Column, Float, Integer, Numeric, String, Text, ForeignKey, DateTime, text,
-    Boolean, SmallInteger,
+    Column,
+    Float,
+    Integer,
+    Numeric,
+    String,
+    Text,
+    ForeignKey,
+    DateTime,
+    text,
+    Boolean,
+    SmallInteger,
 )
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
@@ -27,24 +35,26 @@ db = SQLAlchemy()
 Base = db.Model
 metadata = Base.metadata
 
+
 def get_ldap_connection():
     ldap_url = "{}://{}:{}".format(
-        app.config['EEA_LDAP_PROTOCOL'],
-        app.config['EEA_LDAP_SERVER'],
-        app.config['EEA_LDAP_PORT']
+        app.config["EEA_LDAP_PROTOCOL"],
+        app.config["EEA_LDAP_SERVER"],
+        app.config["EEA_LDAP_PORT"],
     )
     conn = ldap.initialize(ldap_url)
     return conn
 
+
 class Dataset(Base):
-    __tablename__ = 'datasets'
+    __tablename__ = "datasets"
 
     id = Column(Integer, primary_key=True, unique=True)
     name = Column(String(255), nullable=False)
 
 
 class EtcDataBird(Base):
-    __tablename__ = 'etc_data_birds'
+    __tablename__ = "etc_data_birds"
 
     country = Column(String(8), primary_key=True, nullable=False)
     country_isocode = Column(String(4))
@@ -59,8 +69,9 @@ class EtcDataBird(Base):
     redlist = Column(Integer)
     euringcode = Column(String(30))
     code = Column(String(50))
-    speciescode = Column(String(255), primary_key=True, nullable=False,
-                         server_default=text("''"))
+    speciescode = Column(
+        String(255), primary_key=True, nullable=False, server_default=text("''")
+    )
     speciesname = Column(String(255))
     species_name_different = Column(Integer)
     subspecies_name = Column(String(255))
@@ -152,7 +163,7 @@ class EtcDataBird(Base):
     filled_population_ws = Column(String(3))
     population_size_unit_ws = Column(String(255))
     population_units_agreed_ws = Column(String(10))
-    population_units_other_ws =Column(String(10))
+    population_units_other_ws = Column(String(10))
     population_estimateType_ws = Column(String(255))
     population_change_reason_ws = Column(String(200))
     number_of_different_population_units_ws = Column(Integer)
@@ -200,9 +211,13 @@ class EtcDataBird(Base):
     distribution_grid_area = Column(String(20))
     percentage_distribution_grid_area = Column(String(30))
     use_for_statistics = Column(Text)
-    dataset_id = Column('ext_dataset_id', ForeignKey('datasets.id'),
-                        primary_key=True, nullable=False,
-                        server_default=text("'0'"))
+    dataset_id = Column(
+        "ext_dataset_id",
+        ForeignKey("datasets.id"),
+        primary_key=True,
+        nullable=False,
+        server_default=text("'0'"),
+    )
     dataset = relationship(Dataset)
 
     def convert_to_float(self, value, field):
@@ -210,33 +225,35 @@ class EtcDataBird(Base):
             try:
                 if value:
                     return float(value)
-            except:
-                    return value
+            except ValueError:
+                return value
         return value
 
     def _season(self, season):
-        return {field: self.convert_to_float(getattr(self, field + season, None), field) for field in
-                SEASON_FIELDS}
+        return {
+            field: self.convert_to_float(getattr(self, field + season, None), field)
+            for field in SEASON_FIELDS
+        }
 
     @property
     def bs(self):
-        return self._season('_bs')
+        return self._season("_bs")
 
     @property
     def ws(self):
-        return self._season('_ws')
+        return self._season("_ws")
 
     @property
     def is_assesm(self):
         if self.dataset.id == 3:
-            return self.use_for_statistics == '0'
+            return self.use_for_statistics == "0"
         return self.species_type_asses == 0
 
 
 class EtcBirdsEu(Base):
-    __tablename__ = 'etc_birds_eu_view'
+    __tablename__ = "etc_birds_eu_view"
 
-    id = Column('ID', Integer, primary_key=True, autoincrement=True)
+    id = Column("ID", Integer, primary_key=True, autoincrement=True)
     speciescode = Column(String(10), nullable=False, server_default=text("''"))
     speciesname = Column(String(255))
     reported_name = Column(Text)
@@ -297,10 +314,14 @@ class EtcBirdsEu(Base):
     decision = Column(String(20))
     user_decision = Column(String(50))
     last_update_decision = Column(String(50))
-    additional_record = Column('addtionnal_record', Integer)
-    dataset_id = Column('ext_dataset_id', ForeignKey('datasets.id'),
-                        primary_key=True, nullable=False,
-                        server_default=text("'0'"))
+    additional_record = Column("addtionnal_record", Integer)
+    dataset_id = Column(
+        "ext_dataset_id",
+        ForeignKey("datasets.id"),
+        primary_key=True,
+        nullable=False,
+        server_default=text("'0'"),
+    )
     dataset = relationship(Dataset)
     use_for_statistics = Column(Text)
     conclusion_status_label_prev = Column(String(50))
@@ -308,23 +329,28 @@ class EtcBirdsEu(Base):
     red_list_cat_prev = Column(String(255))
 
     lu_bird = relationship(
-        u'LuDataBird',
+        u"LuDataBird",
         primaryjoin="and_(EtcBirdsEu.speciescode==LuDataBird.speciescode,"
-                    "EtcBirdsEu.dataset_id==LuDataBird.dataset_id)",
+        "EtcBirdsEu.dataset_id==LuDataBird.dataset_id)",
         foreign_keys=[speciescode, dataset_id],
-        backref='eu_objects',
+        backref="eu_objects",
     )
 
 
 class LuDataBird(Base):
-    __tablename__ = 'lu_birds_name'
+    __tablename__ = "lu_birds_name"
 
-    speciescode = Column(String(10), primary_key=True, nullable=False,
-                         server_default=text("''"))
+    speciescode = Column(
+        String(10), primary_key=True, nullable=False, server_default=text("''")
+    )
     speciesname = Column(String(128))
-    dataset_id = Column('ext_dataset_id', ForeignKey('datasets.id'),
-                        primary_key=True, nullable=False,
-                        server_default=text("'0'"))
+    dataset_id = Column(
+        "ext_dataset_id",
+        ForeignKey("datasets.id"),
+        primary_key=True,
+        nullable=False,
+        server_default=text("'0'"),
+    )
     dataset = relationship(Dataset)
 
     def has_additional_record(self):
@@ -332,19 +358,23 @@ class LuDataBird(Base):
 
 
 class LuRestrictedDataBird(Base):
-    __tablename__ = 'lu_restricted_birds'
+    __tablename__ = "lu_restricted_birds"
 
     speciescode = Column(String(10), nullable=False, primary_key=True)
     country = Column(String(8), nullable=False, primary_key=True)
     show_data = Column(SmallInteger(), nullable=False)
-    dataset_id = Column('ext_dataset_id', ForeignKey('datasets.id'),
-                        primary_key=True, nullable=False,
-                        server_default=text("'0'"))
+    dataset_id = Column(
+        "ext_dataset_id",
+        ForeignKey("datasets.id"),
+        primary_key=True,
+        nullable=False,
+        server_default=text("'0'"),
+    )
     dataset = relationship(Dataset)
 
 
 class Config(Base):
-    __tablename__ = 'config'
+    __tablename__ = "config"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     default_dataset_id = Column(Integer, default=1)
@@ -357,14 +387,14 @@ class Config(Base):
 
 
 class Wiki(Base):
-    __tablename__ = 'wiki'
+    __tablename__ = "wiki"
 
     id = Column(Integer, primary_key=True)
     speciescode = Column(String(10))
 
     dataset_id = Column(
-        'ext_dataset_id',
-        ForeignKey('datasets.id'),
+        "ext_dataset_id",
+        ForeignKey("datasets.id"),
     )
     dataset = relationship(Dataset)
 
@@ -374,39 +404,38 @@ class Wiki(Base):
 
 
 class WikiChange(Base):
-    __tablename__ = 'wiki_changes'
+    __tablename__ = "wiki_changes"
 
     id = Column(Integer, primary_key=True)
-    wiki_id = Column(ForeignKey('wiki.id'), nullable=False)
+    wiki_id = Column(ForeignKey("wiki.id"), nullable=False)
     body = Column(String(6000), nullable=False)
     editor = Column(String(60), nullable=False)
-    changed = Column(DateTime, nullable=False,
-                     default=datetime.now)
+    changed = Column(DateTime, nullable=False, default=datetime.now)
     active = Column(Integer, default=0)
     dataset_id = Column(
-        'ext_dataset_id',
-        ForeignKey('datasets.id'),
+        "ext_dataset_id",
+        ForeignKey("datasets.id"),
     )
     dataset = relationship(Dataset)
     wiki = relationship(
-        u'Wiki',
+        u"Wiki",
         primaryjoin="and_(WikiChange.wiki_id==Wiki.id,"
-                    "WikiChange.dataset_id==Wiki.dataset_id)",
+        "WikiChange.dataset_id==Wiki.dataset_id)",
         foreign_keys=[wiki_id, dataset_id],
-        backref='changes',
+        backref="changes",
     )
 
 
 class WikiTrail(Base):
-    __tablename__ = 'wiki_trail'
+    __tablename__ = "wiki_trail"
 
     id = Column(Integer, primary_key=True)
     speciescode = Column(String(50))
     reported_name = Column(String(100))
     reported_name_code = Column(String(100))
     dataset_id = Column(
-        'ext_dataset_id',
-        ForeignKey('datasets.id'),
+        "ext_dataset_id",
+        ForeignKey("datasets.id"),
     )
     dataset = relationship(Dataset)
 
@@ -416,41 +445,41 @@ class WikiTrail(Base):
 
 
 class WikiTrailChange(Base):
-    __tablename__ = 'wiki_trail_changes'
+    __tablename__ = "wiki_trail_changes"
 
     id = Column(Integer, primary_key=True)
-    wiki_id = Column(ForeignKey('wiki_trail.id'), nullable=False)
+    wiki_id = Column(ForeignKey("wiki_trail.id"), nullable=False)
     body = Column(String(6000), nullable=False)
     editor = Column(String(60), nullable=False)
-    changed = Column(DateTime, nullable=False,
-                     default=datetime.now)
+    changed = Column(DateTime, nullable=False, default=datetime.now)
     active = Column(Integer, default=0)
     dataset_id = Column(
-        'ext_dataset_id',
-        ForeignKey('datasets.id'),
+        "ext_dataset_id",
+        ForeignKey("datasets.id"),
     )
     dataset = relationship(Dataset)
     wiki = relationship(
-        u'WikiTrail',
+        u"WikiTrail",
         primaryjoin="and_(WikiTrailChange.wiki_id==WikiTrail.id,"
-                    "WikiTrailChange.dataset_id==WikiTrail.dataset_id)",
+        "WikiTrailChange.dataset_id==WikiTrail.dataset_id)",
         foreign_keys=[wiki_id, dataset_id],
-        backref='changes',
+        backref="changes",
     )
 
 
 roles_users = db.Table(
-    'roles_users',
-    db.Column('registered_users_user', db.String(50),
-              db.ForeignKey('registered_users.user')),
-    db.Column('role_id', db.Integer(), db.ForeignKey('roles.id')),
+    "roles_users",
+    db.Column(
+        "registered_users_user", db.String(50), db.ForeignKey("registered_users.user")
+    ),
+    db.Column("role_id", db.Integer(), db.ForeignKey("roles.id")),
 )
 
 
 class RegisteredUser(Base, UserMixin):
-    __tablename__ = 'registered_users'
+    __tablename__ = "registered_users"
 
-    id = Column('user', String(50), primary_key=True)
+    id = Column("user", String(50), primary_key=True)
     name = Column(String(255))
     institution = Column(String(45))
     abbrev = Column(String(10))
@@ -463,9 +492,9 @@ class RegisteredUser(Base, UserMixin):
     confirmed_at = db.Column(db.DateTime())
     is_ldap = db.Column(Boolean, nullable=False, default=False)
     roles = db.relationship(
-        'Role',
+        "Role",
         secondary=roles_users,
-        backref=db.backref('users', lazy='dynamic'),
+        backref=db.backref("users", lazy="dynamic"),
     )
     password = db.Column(String(60))
 
@@ -475,9 +504,7 @@ class RegisteredUser(Base, UserMixin):
     @staticmethod
     def try_login(username, password):
         conn = get_ldap_connection()
-        conn.simple_bind_s(
-            'uid=%s,ou=Users,o=EIONET,l=Europe' % username,password
-        )
+        conn.simple_bind_s("uid=%s,ou=Users,o=EIONET,l=Europe" % username, password)
 
     @property
     def is_authenticated(self):
@@ -493,8 +520,9 @@ class RegisteredUser(Base, UserMixin):
     def get_id(self):
         return str(self.id)
 
+
 class Role(Base, RoleMixin):
-    __tablename__ = 'roles'
+    __tablename__ = "roles"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
@@ -506,8 +534,14 @@ def dumpdata(model):
     base_class = getattr(thismodule, model)
 
     entries = base_class.query.all()
-    relationship_fields = [rfield for rfield, _ in inspect(base_class).relationships.items()]
-    model_fields = [field for field in inspect(base_class).attrs.keys() if field not in relationship_fields]
+    relationship_fields = [
+        rfield for rfield, _ in inspect(base_class).relationships.items()
+    ]
+    model_fields = [
+        field
+        for field in inspect(base_class).attrs.keys()
+        if field not in relationship_fields
+    ]
 
     objects = []
     primary_keys = []
@@ -519,11 +553,7 @@ def dumpdata(model):
             primary_keys.append(field)
 
     for entry in entries:
-        kwargs = {
-            "model": model,
-            "filter_fields": ",".join(primary_keys),
-            "fields": {}
-        }
+        kwargs = {"model": model, "filter_fields": ",".join(primary_keys), "fields": {}}
 
         for field in model_fields:
             value = getattr(entry, field)
@@ -549,8 +579,8 @@ def dumpdata(model):
         app_json = json.dumps(kwargs)
         objects.append(app_json)
 
-    json_dir = os.path.abspath(os.path.dirname('manage.py'))
-    json_name = model + '.json'
+    json_dir = os.path.abspath(os.path.dirname("manage.py"))
+    json_name = model + ".json"
 
-    with open(os.path.join(json_dir, json_name), 'w') as f:
-        f.write('[' + ','.join(objects) + ']')
+    with open(os.path.join(json_dir, json_name), "w") as f:
+        f.write("[" + ",".join(objects) + "]")

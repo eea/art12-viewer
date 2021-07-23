@@ -2,7 +2,7 @@ from factory.alchemy import SQLAlchemyModelFactory
 
 from art12 import models
 
-DATE_FORMAT = '%Y-%m-%d'
+DATE_FORMAT = "%Y-%m-%d"
 
 
 class DatasetFactory(SQLAlchemyModelFactory):
@@ -11,6 +11,4 @@ class DatasetFactory(SQLAlchemyModelFactory):
         sqlalchemy_session = models.db.session
 
     id = 1
-    name = 'import-from-2006'
-
-
+    name = "import-from-2006"

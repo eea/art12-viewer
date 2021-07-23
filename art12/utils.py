@@ -6,11 +6,11 @@ from path import Path
 from flask import current_app as app
 
 patt = re.compile(r"(?<!\d)(\d+)(\.0*)?(?!\d)")
-valid_numeric = re.compile("^\s*" + "(" + "(\d\.)?\d+\s*-\s*(\d\.)?\d+" +
-                           u"|(>|>>|≈|<)?\s*((\d\.)?\d+)" + ")" + "\s*$")
-valid_ref = re.compile("^\s*" + "(" + "(\d\.)?\d+\s*-\s*(\d\.)?\d+" +
-                       u"|(>|>>|≈|<)?\s*((\d\.)?\d+)?|x" + ")" + "\s*$")
-empty_str = re.compile("^\s*$")
+valid_numeric = re.compile(r"^\s*" + "(" + r"(\d\.)?\d+\s*-\s*(\d\.)?\d+" +
+                           r"|(>|>>|≈|<)?\s*((\d\.)?\d+)" + ")" + r"\s*$")
+valid_ref = re.compile(r"^\s*" + "(" + r"(\d\.)?\d+\s*-\s*(\d\.)?\d+" +
+                       r"|(>|>>|≈|<)?\s*((\d\.)?\d+)?|x" + ")" + r"\s*$")
+empty_str = re.compile(r"^\s*$")
 
 
 def str2num(s, default='', number_format='%.2f'):
@@ -77,7 +77,7 @@ def slugify(value):
     """
     import unicodedata
 
-    if not isinstance(value, unicode):
+    if not isinstance(value, str):
         value = str(value)
     value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
     value = str(_slugify_strip_re.sub(' ', value).strip().lower())

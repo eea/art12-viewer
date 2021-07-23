@@ -12,25 +12,26 @@ from . import auth
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-DEFAULT_ROLE = 'stakeholder'
+DEFAULT_ROLE = "stakeholder"
 
-admin_perm = Permission(RoleNeed('admin'))
+admin_perm = Permission(RoleNeed("admin"))
 
 
 def safe_send_mail(app, msg):
     try:
-        app.extensions['mail'].send(msg)
+        app.extensions["mail"].send(msg)
     except SMTPException:
         flask.flash(
             "The mail could not be sent to the specified email address."
-            "Please contact the administrator.")
+            "Please contact the administrator."
+        )
 
 
 @security_signals.user_confirmed.connect
 def activate_and_notify_admin(app, user, **extra):
     set_user_active(user, True)
     auth.models.db.session.commit()
-    admin_email = current_app.config.get('ADMIN_EMAIL')
+    admin_email = current_app.config.get("ADMIN_EMAIL")
 
     if not admin_email:
         logger.warn("No admin_email is configured; not sending email")
@@ -38,14 +39,14 @@ def activate_and_notify_admin(app, user, **extra):
     else:
         msg = Message(
             subject="User has registered",
-            sender=app.extensions['security'].email_sender,
+            sender=app.extensions["security"].email_sender,
             recipients=admin_email.split(),
         )
         msg.body = flask.render_template(
-            'auth/email_admin_new_user.txt',
+            "auth/email_admin_new_user.txt",
             user=user,
             activation_link=flask.url_for(
-                'auth.admin_user',
+                "auth.admin_user",
                 user_id=user.id,
                 _external=True,
             ),
@@ -69,22 +70,19 @@ def set_user_active(user, new_active):
 
 
 def add_default_role(user):
-    datastore = flask.current_app.extensions['security'].datastore
+    datastore = flask.current_app.extensions["security"].datastore
     default_role = datastore.find_role(DEFAULT_ROLE)
     datastore.add_role_to_user(user, default_role)
     auth.models.db.session.commit()
 
 
 def get_roles_for_all_users():
-    roles_query = (
-        auth.models.db.session.query(
-            auth.models.roles_users.c.registered_users_user,
-            auth.models.Role.name,
-        )
-        .join(
-            auth.models.Role,
-            auth.models.roles_users.c.role_id == auth.models.Role.id,
-        )
+    roles_query = auth.models.db.session.query(
+        auth.models.roles_users.c.registered_users_user,
+        auth.models.Role.name,
+    ).join(
+        auth.models.Role,
+        auth.models.roles_users.c.role_id == auth.models.Role.id,
     )
 
     rv = defaultdict(list)
@@ -98,13 +96,16 @@ def send_role_change_notification(user, new_roles):
     role_description = {row.name: row.description for row in auth.models.Role.query}
     msg = Message(
         subject="Role update on the Biological Diversity website",
-        sender=app.extensions['security'].email_sender,
+        sender=app.extensions["security"].email_sender,
         recipients=[user.email],
     )
-    msg.body = flask.render_template('auth/email_user_role_change.txt', **{
-        'user': user,
-        'new_roles': [role_description[r] for r in new_roles],
-    })
+    msg.body = flask.render_template(
+        "auth/email_user_role_change.txt",
+        **{
+            "user": user,
+            "new_roles": [role_description[r] for r in new_roles],
+        }
+    )
     safe_send_mail(app, msg)
 
 
@@ -112,16 +113,19 @@ def send_welcome_email(user, plaintext_password=None):
     app = flask.current_app
     msg = Message(
         subject="Role update on the Biological Diversity website",
-        sender=app.extensions['security'].email_sender,
+        sender=app.extensions["security"].email_sender,
         recipients=[user.email],
     )
-    msg.body = flask.render_template('auth/email_user_welcome.txt', **{
-        'user': user,
-        'plaintext_password': plaintext_password,
-        'home_url': flask.url_for(auth.HOMEPAGE, _external=True),
-    })
+    msg.body = flask.render_template(
+        "auth/email_user_welcome.txt",
+        **{
+            "user": user,
+            "plaintext_password": plaintext_password,
+            "home_url": flask.url_for(auth.HOMEPAGE, _external=True),
+        }
+    )
     safe_send_mail(app, msg)
 
 
 def ugly_fix(value):
-    return value.replace('art12.eionet', 'bd.eionet')
+    return value.replace("art12.eionet", "bd.eionet")

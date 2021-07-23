@@ -13,7 +13,9 @@ from . import auth
 login_manager = LoginManager()
 
 # current_user = LocalProxy(lambda: flask.g.get('user') or AnonymousUser())
-current_user = LocalProxy(lambda: AnonymousUser() if not hasattr(c_user, "id")  else c_user)
+current_user = LocalProxy(
+    lambda: AnonymousUser() if not hasattr(c_user, "id") else c_user
+)
 flask_security.core.current_user = current_user
 flask_security.forms.current_user = current_user
 flask_security.decorators.current_user = current_user
@@ -25,12 +27,12 @@ flask_security.core._get_login_manager = lambda app, anonymous_user: None
 
 
 def encrypt_password(password):
-    pwd_context = flask.current_app.extensions['security'].pwd_context
-    return pwd_context.encrypt(password.encode('utf-8'))
+    pwd_context = flask.current_app.extensions["security"].pwd_context
+    return pwd_context.encrypt(password.encode("utf-8"))
 
 
 def verify(password, user):
-    pwd_context = flask.current_app.extensions['security'].pwd_context
+    pwd_context = flask.current_app.extensions["security"].pwd_context
     return pwd_context.verify(password, user.password)
 
 
@@ -45,8 +47,8 @@ flask_security.forms.verify_and_update_password = verify
 
 class UserDatastore(SQLAlchemyUserDatastore):
     def create_user(self, **kwargs):
-        kwargs.setdefault('active', False)
-        kwargs['account_date'] = datetime.utcnow().strftime('%Y-%m-%d %H:%M')
+        kwargs.setdefault("active", False)
+        kwargs["account_date"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M")
         return super(UserDatastore, self).create_user(**kwargs)
 
     def _prepare_role_modify_args(self, user, role):
@@ -59,10 +61,10 @@ class UserDatastore(SQLAlchemyUserDatastore):
 
 def check_duplicate_with_ldap(form, field):
     from .providers import get_ldap_user_info
+
     user = get_ldap_user_info(field.data)
     if user is not None:
-        raise ValidationError(
-            "Username already exists in the EIONET database.")
+        raise ValidationError("Username already exists in the EIONET database.")
 
 
 def check_duplicate_with_local_db(form, field):
@@ -72,25 +74,26 @@ def check_duplicate_with_local_db(form, field):
 
 
 def custom_unique_user_email(form, field):
-    obj = getattr(form, 'obj', None)
-    datastore = flask.current_app.extensions['security'].datastore
+    obj = getattr(form, "obj", None)
+    datastore = flask.current_app.extensions["security"].datastore
     check = datastore.find_user(email=field.data)
 
     # check for editing existing objects
-    if check and getattr(obj, 'id', None) != check.id:
-        raise ValidationError("%s is already associated with an account" %
-                              field.data)
+    if check and getattr(obj, "id", None) != check.id:
+        raise ValidationError("%s is already associated with an account" % field.data)
 
 
 def no_ldap_user(form, field):
     if form.user is not None:
         if form.user.is_ldap:
-            raise ValidationError("Please use the password recovery "
-                                  "system for Eionet accounts")
+            raise ValidationError(
+                "Please use the password recovery " "system for Eionet accounts"
+            )
 
 
 def user_registered_sighandler(app, user, confirm_token):
     from .common import add_default_role
+
     add_default_role(user)
 
 

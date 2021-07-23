@@ -32,9 +32,9 @@ security_ext = Security(
 )
 
 DEFAULT_CONFIG = {
-    'WTF_CSRF_ENABLED': False,
-    'PDF_DESTINATION': '.',
-    'DEFAULT_PERIOD': 3,
+    "WTF_CSRF_ENABLED": False,
+    "PDF_DESTINATION": ".",
+    "DEFAULT_PERIOD": 3,
 }
 
 
@@ -43,9 +43,9 @@ def create_app(config={}, testing=False):
     app.config.update(DEFAULT_CONFIG)
     if testing:
         app.testing = True
-        app.config.from_pyfile('test_settings.py', silent=True)
+        app.config.from_pyfile("test_settings.py", silent=True)
     else:
-        app.config.from_pyfile('settings.py', silent=True)
+        app.config.from_pyfile("settings.py", silent=True)
     app.config.update(config)
     create_cli_commands(app)
     assets_env.init_app(app)
@@ -60,39 +60,38 @@ def create_app(config={}, testing=False):
     app.register_blueprint(wiki)
     app.register_blueprint(factsheet)
     login_manager.init_app(app)
-    login_manager.login_view = 'login'
+    login_manager.login_view = "login"
     app.add_template_global(inject_static_file)
 
-    app.jinja_env.globals['TREND_CLASSES'] = TREND_CLASSES
-    app.jinja_env.globals['SCRIPT_NAME'] = app.config.get('SCRIPT_NAME',
-                                                          '/article12')
-    app.jinja_env.globals['EEA_PASSWORD_RESET'] = app.config.get(
-        'EEA_PASSWORD_RESET'
-    )
+    app.jinja_env.globals["TREND_CLASSES"] = TREND_CLASSES
+    app.jinja_env.globals["SCRIPT_NAME"] = app.config.get("SCRIPT_NAME", "/article12")
+    app.jinja_env.globals["EEA_PASSWORD_RESET"] = app.config.get("EEA_PASSWORD_RESET")
 
     if not app.testing:
-        auth_ext = Auth(models=models, security_ext=security_ext,
-                        homepage=HOMEPAGE_VIEW_NAME)
+        auth_ext = Auth(
+            models=models, security_ext=security_ext, homepage=HOMEPAGE_VIEW_NAME
+        )
         auth_ext.init_app(app)
     Mail().init_app(app)
 
-    url_prefix = app.config.get('URL_PREFIX')
+    url_prefix = app.config.get("URL_PREFIX")
     if url_prefix:
         app.wsgi_app = create_url_prefix_middleware(app.wsgi_app, url_prefix)
 
-    if app.config.get('SENTRY_DSN'):
+    if app.config.get("SENTRY_DSN"):
         from raven.contrib.flask import Sentry
 
         Sentry(app)
 
     return app
 
+
 def create_url_prefix_middleware(wsgi_app, url_prefix):
     def middleware(environ, start_response):
-        path_info = environ['PATH_INFO']
+        path_info = environ["PATH_INFO"]
         if path_info.startswith(url_prefix):
-            environ['PATH_INFO'] = path_info[len(url_prefix):]
-            environ['SCRIPT_NAME'] += url_prefix
+            environ["PATH_INFO"] = path_info[len(url_prefix):]
+            environ["SCRIPT_NAME"] += url_prefix
         return wsgi_app(environ, start_response)
 
     return middleware
