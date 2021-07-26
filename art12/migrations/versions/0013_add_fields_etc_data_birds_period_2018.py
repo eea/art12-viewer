@@ -12,25 +12,24 @@ down_revision = "0012"
 
 from alembic import op
 import sqlalchemy as sa
-from sqlalchemy.dialects import mysql
 
 
 def upgrade():
     op.alter_column(
-        "datasets", "name", existing_type=mysql.VARCHAR(length=255), nullable=False
+        "datasets", "name", existing_type=sa.String(length=255), nullable=False
     )
     op.create_unique_constraint(None, "datasets", ["id"])
 
     op.alter_column(
         "etc_birds_eu_view",
         "ID",
-        existing_type=mysql.INTEGER(display_width=11),
+        existing_type=sa.Integer(display_width=11),
         nullable=False,
     )
     op.alter_column(
         "etc_birds_eu_view",
         "assessment_speciesname",
-        existing_type=mysql.VARCHAR(length=255),
+        existing_type=sa.String(length=255),
         nullable=True,
     )
 
@@ -315,46 +314,46 @@ def upgrade():
     op.alter_column(
         "lu_birds_name",
         "ext_dataset_id",
-        existing_type=mysql.INTEGER(display_width=11),
+        existing_type=sa.Integer(display_width=11),
         nullable=False,
     )
     op.alter_column(
         "lu_birds_name",
         "speciescode",
-        existing_type=mysql.VARCHAR(length=10),
+        existing_type=sa.String(length=10),
         nullable=False,
     )
     op.alter_column(
         "lu_restricted_birds",
         "show_data",
-        existing_type=mysql.SMALLINT(display_width=1, unsigned=True),
+        existing_type=sa.SmallInteger(display_width=1, unsigned=True),
         nullable=False,
     )
     op.alter_column(
-        "wiki_changes", "body", existing_type=mysql.VARCHAR(length=6000), nullable=False
+        "wiki_changes", "body", existing_type=sa.String(length=6000), nullable=False
     )
 
 
 def downgrade():
     op.alter_column(
-        "wiki_changes", "body", existing_type=mysql.VARCHAR(length=6000), nullable=True
+        "wiki_changes", "body", existing_type=sa.String(length=6000), nullable=True
     )
     op.alter_column(
         "lu_restricted_birds",
         "show_data",
-        existing_type=mysql.SMALLINT(display_width=1, unsigned=True),
+        existing_type=sa.SmallInteger(display_width=1, unsigned=True),
         nullable=True,
     )
     op.alter_column(
         "lu_birds_name",
         "speciescode",
-        existing_type=mysql.VARCHAR(length=10),
+        existing_type=sa.String(length=10),
         nullable=True,
     )
     op.alter_column(
         "lu_birds_name",
         "ext_dataset_id",
-        existing_type=mysql.INTEGER(display_width=11),
+        existing_type=sa.Integer(display_width=11),
         nullable=True,
     )
 
@@ -513,16 +512,16 @@ def downgrade():
     op.alter_column(
         "etc_birds_eu_view",
         "assessment_speciesname",
-        existing_type=mysql.VARCHAR(length=255),
+        existing_type=sa.String(length=255),
         nullable=False,
     )
     op.alter_column(
         "etc_birds_eu_view",
         "ID",
-        existing_type=mysql.INTEGER(display_width=11),
+        existing_type=sa.Integer(display_width=11),
         nullable=True,
     )
 
     op.alter_column(
-        "datasets", "name", existing_type=mysql.VARCHAR(length=255), nullable=True
+        "datasets", "name", existing_type=sa.String(length=255), nullable=True
     )

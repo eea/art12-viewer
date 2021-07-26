@@ -10,14 +10,13 @@ down_revision = "0001"
 
 from alembic import op
 import sqlalchemy as sa
-from sqlalchemy.dialects import mysql
 
 
 def upgrade():
     op.create_table(
         "datasets",
         sa.Column("id", sa.Integer, nullable=False),
-        sa.Column("name", mysql.VARCHAR(255), nullable=True),
+        sa.Column("name", sa.String(255), nullable=True),
         sa.PrimaryKeyConstraint("id"),
     )
 

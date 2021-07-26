@@ -28,7 +28,7 @@ TEST_CONFIG = {
     "ADMIN_EMAIL": "admin@example.com",
     "SQLALCHEMY_TRACK_MODIFICATIONS": False,
     "EEA_PASSWORD_RESET": "pw_reset",
-    "SQLALCHEMY_DATABASE_URI": "mysql://{}{}@{}/{}".format(
+    "SQLALCHEMY_DATABASE_URI": "postgresql://{}{}@{}/{}".format(
         getenv("DB_USER_TEST"),
         db_pass_test,
         getenv("DB_HOST_TEST"),

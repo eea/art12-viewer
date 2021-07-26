@@ -4,7 +4,7 @@ LABEL maintainer="EEA: IDM2 C-TEAM <eea-edw-c-team-alerts@googlegroups.com>"
 ENV WORK_DIR=/var/local/art12
 ENV DATA_DIR=/var/local/art12-data
 
-RUN runDeps="curl gcc vim build-essential netcat default-mysql-client default-libmysqlclient-dev python-dev libldap2-dev libsasl2-dev libssl-dev libxrender1 libfontconfig1 libxext6" \
+RUN runDeps="curl gcc vim build-essential netcat python-dev libldap2-dev libsasl2-dev libssl-dev libxrender1 libfontconfig1 libxext6" \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends $runDeps \
 	&& rm -vrf /var/lib/apt/lists/*
@@ -27,7 +27,7 @@ RUN mkdir $WORK_DIR/logs \
 RUN mkdir $WORK_DIR/temp_static \
     && cp -a $WORK_DIR/art12/static/. $WORK_DIR/temp_static/
 
-RUN sed '/st_mysql_options options;/a unsigned int reconnect;' /usr/include/mysql/mysql.h -i.bkp
+# RUN sed '/st_mysql_options options;/a unsigned int reconnect;' /usr/include/mysql/mysql.h -i.bkp
 
 RUN pip install -U setuptools \
 	&& pip install -r requirements-dep.txt --trusted-host eggrepo.eea.europa.eu

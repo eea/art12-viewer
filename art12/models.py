@@ -483,7 +483,7 @@ class RegisteredUser(Base, UserMixin):
     name = Column(String(255))
     institution = Column(String(45))
     abbrev = Column(String(10))
-    MS = Column(String(255))
+    MS = Column("ms", String(255))
     email = Column(String(255))
     qualification = Column(String(255))
     account_date = Column(String(16), nullable=False)

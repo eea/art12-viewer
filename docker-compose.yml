@@ -22,17 +22,18 @@ services:
 
     entrypoint: ["/usr/bin/tail", "-f", "/dev/null"]
     # command: ["runserver", "-t", "0.0.0.0", "-p", "5000"]
-
-  mysql:
-    image: mysql:5.6
-    container_name: art12.mysql
+  
+  db:
+    image: postgres:13
+    container_name: art12.db
+    ports:
+    - '5431:5432'
     env_file:
     - docker/art12.env
     environment:
       TZ: Europe/Copenhagen
     volumes:
-    - mysqldata:/var/lib/mysql
-    command: "--character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
+    - pg_data:/var/lib/postgresql/data
 
   postfix:
     image: eaudeweb/mailtrap:2.0
@@ -43,5 +44,5 @@ services:
     - 80:80
 
 volumes:
-  mysqldata:
+  pg_data:
     driver: local

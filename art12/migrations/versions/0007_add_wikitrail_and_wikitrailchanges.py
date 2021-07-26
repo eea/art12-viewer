@@ -12,7 +12,6 @@ down_revision = "0006"
 
 from alembic import op
 import sqlalchemy as sa
-from sqlalchemy.dialects import mysql
 
 
 def upgrade():
@@ -49,13 +48,13 @@ def upgrade():
         sa.PrimaryKeyConstraint("id"),
     )
     op.alter_column(
-        u"wiki", "speciescode", existing_type=mysql.VARCHAR(length=10), nullable=True
+        u"wiki", "speciescode", existing_type=sa.String(length=10), nullable=True
     )
 
 
 def downgrade():
     op.alter_column(
-        u"wiki", "speciescode", existing_type=mysql.VARCHAR(length=10), nullable=False
+        u"wiki", "speciescode", existing_type=sa.String(length=10), nullable=False
     )
     op.drop_table("wiki_trail_changes")
     op.drop_table("wiki_trail")
