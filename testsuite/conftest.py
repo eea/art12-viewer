@@ -144,6 +144,7 @@ def create_user(user_id, role_names=[], name="", institution="", ms=""):
         email="%s@example.com" % user_id,
         institution=institution,
         MS=ms,
+        fs_uniquifier=f"{user_id}_fs"
     )
     models.db.session.add(user)
     for name in role_names:

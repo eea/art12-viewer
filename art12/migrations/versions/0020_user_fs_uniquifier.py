@@ -1,4 +1,4 @@
-"""empty message
+"""add fs_uniquifier to registered_users
 
 Revision ID: 0020
 Revises: 0019

@@ -291,9 +291,9 @@ def admin_user(user_id):
                     lambda k: k not in new_roles, current_user_roles
                 )
                 for role in new_roles:
-                    datastore.add_role_to_user(user_id, role)
+                    datastore.add_role_to_user(user, role)
                 for role in expandable_roles:
-                    datastore.remove_role_from_user(user_id, role)
+                    datastore.remove_role_from_user(user, role)
                 datastore.commit()
 
                 # manage user info

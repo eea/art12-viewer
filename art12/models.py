@@ -497,6 +497,7 @@ class RegisteredUser(Base, UserMixin):
         backref=db.backref("users", lazy="dynamic"),
     )
     password = db.Column(String(60))
+    fs_uniquifier = db.Column(String(64))
 
     def has_role(self, role):
         return role in [r.name for r in self.roles]

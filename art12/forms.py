@@ -1,5 +1,5 @@
 from flask import request
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import SelectField, StringField, TextField, PasswordField
 from wtforms.validators import Optional, InputRequired
 from art12.common import get_default_period
@@ -7,7 +7,7 @@ from art12.mixins import SpeciesMixin
 from art12.models import Dataset, EtcDataBird
 
 
-class CommonFilterForm(Form):
+class CommonFilterForm(FlaskForm):
     period = SelectField("Period...", default=3)
     model_cls = EtcDataBird
 
@@ -100,7 +100,7 @@ class ReportsFilterForm(SpeciesMixin, CommonFilterForm):
         return super(ReportsFilterForm, self).get_selection() + [country_name]
 
 
-class ConfigForm(Form):
+class ConfigForm(FlaskForm):
     default_dataset_id = SelectField(label="Default period")
 
     species_map_url = StringField(label="URL for species map", validators=[Optional()])
@@ -132,13 +132,13 @@ class ConfigForm(Form):
         ]
 
 
-class ChangeDetailsForm(Form):
+class ChangeDetailsForm(FlaskForm):
     institution = StringField(label="Institution", validators=[Optional()])
     abbrev = StringField(label="Abbreviation", validators=[Optional()])
     MS = StringField(label="MS", validators=[Optional()])
     qualification = StringField(label="Qualification", validators=[Optional()])
 
 
-class LoginForm(Form):
+class LoginForm(FlaskForm):
     username = TextField("Username", [InputRequired()])
     password = PasswordField("Password", [InputRequired()])

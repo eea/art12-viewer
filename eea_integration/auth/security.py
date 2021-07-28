@@ -2,7 +2,8 @@ from datetime import datetime
 import flask
 import flask_security.utils
 import flask_security as flask_security
-from flask_login import current_user as c_user
+from flask_login import current_user
+# from flask_login.utils import _get_user
 from flask_security import user_registered
 from flask_security import SQLAlchemyUserDatastore, AnonymousUser
 from flask_login import LoginManager
@@ -16,6 +17,7 @@ login_manager = LoginManager()
 current_user = LocalProxy(
     lambda: AnonymousUser() if not hasattr(c_user, "id") else c_user
 )
+# current_user = LocalProxy(lambda: _get_user())
 flask_security.core.current_user = current_user
 flask_security.forms.current_user = current_user
 flask_security.decorators.current_user = current_user
@@ -51,13 +53,10 @@ class UserDatastore(SQLAlchemyUserDatastore):
         kwargs["account_date"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M")
         return super(UserDatastore, self).create_user(**kwargs)
 
-    def _prepare_role_modify_args(self, user, role):
-        if isinstance(user, str):
-            user = self.find_user(id=user)
+    def _prepare_role_modify_args(self, role):
         if isinstance(role, str):
             role = self.find_role(role)
-        return user, role
-
+        return role
 
 def check_duplicate_with_ldap(form, field):
     from .providers import get_ldap_user_info

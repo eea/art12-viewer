@@ -8,9 +8,9 @@ from eea_integration.auth.providers import set_user
 from flask import current_app
 
 
-def force_login(client, user_id=None):
+def force_login(client, fs_uniquifier=None):
     with client.session_transaction() as sess:
-        sess["_user_id"] = user_id
+        sess["_user_id"] = fs_uniquifier
         sess["_fresh"] = True
 
 
@@ -168,6 +168,7 @@ def test_change_local_password(app, plone_auth, client):
     page.form["password"] = "my old pw"
     page.form["new_password"] = "the new pw"
     page.form["new_password_confirm"] = "the new pw"
+
     confirmation_page = page.form.submit().follow()
 
     assert "password has been changed" in confirmation_page.text

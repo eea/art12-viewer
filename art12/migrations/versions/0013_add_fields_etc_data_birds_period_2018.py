@@ -23,7 +23,7 @@ def upgrade():
     op.alter_column(
         "etc_birds_eu_view",
         "ID",
-        existing_type=sa.Integer(display_width=11),
+        existing_type=sa.Integer(),
         nullable=False,
     )
     op.alter_column(
@@ -314,7 +314,7 @@ def upgrade():
     op.alter_column(
         "lu_birds_name",
         "ext_dataset_id",
-        existing_type=sa.Integer(display_width=11),
+        existing_type=sa.Integer(),
         nullable=False,
     )
     op.alter_column(
@@ -326,7 +326,7 @@ def upgrade():
     op.alter_column(
         "lu_restricted_birds",
         "show_data",
-        existing_type=sa.SmallInteger(display_width=1, unsigned=True),
+        existing_type=sa.SmallInteger(),
         nullable=False,
     )
     op.alter_column(
@@ -341,7 +341,7 @@ def downgrade():
     op.alter_column(
         "lu_restricted_birds",
         "show_data",
-        existing_type=sa.SmallInteger(display_width=1, unsigned=True),
+        existing_type=sa.SmallInteger(),
         nullable=True,
     )
     op.alter_column(
@@ -353,7 +353,7 @@ def downgrade():
     op.alter_column(
         "lu_birds_name",
         "ext_dataset_id",
-        existing_type=sa.Integer(display_width=11),
+        existing_type=sa.Integer(),
         nullable=True,
     )
 
@@ -518,7 +518,7 @@ def downgrade():
     op.alter_column(
         "etc_birds_eu_view",
         "ID",
-        existing_type=sa.Integer(display_width=11),
+        existing_type=sa.Integer(),
         nullable=True,
     )
 

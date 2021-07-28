@@ -14,7 +14,7 @@ services:
     ports:
     - "5000:5000"
     depends_on:
-    - mysql
+    - db
     env_file:
     - docker/art12.env
     volumes:
@@ -22,6 +22,17 @@ services:
 
     entrypoint: ["/usr/bin/tail", "-f", "/dev/null"]
     # command: ["runserver", "-t", "0.0.0.0", "-p", "5000"]
+
+  # mysql:
+  #   image: mysql:5.6
+  #   container_name: art12.mysql
+  #   env_file:
+  #   - docker/art12.env
+  #   environment:
+  #     TZ: Europe/Copenhagen
+  #   volumes:
+  #   - mysqldata:/var/lib/mysql
+  #   command: "--character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
   
   db:
     image: postgres:13
@@ -34,6 +45,7 @@ services:
       TZ: Europe/Copenhagen
     volumes:
     - pg_data:/var/lib/postgresql/data
+    - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
 
   postfix:
     image: eaudeweb/mailtrap:2.0
@@ -46,3 +58,5 @@ services:
 volumes:
   pg_data:
     driver: local
+  # mysqldata:
+  #   driver: local
