@@ -1,5 +1,11 @@
 Changelog
 =========
+
+2.6.7 (2021-07-30)
+------------------
+* Add clarifying text for periods 0712 and 0712bis
+  [dianaboiangiu]
+
 2.6.6 (2021-03-16)
 ------------------
 * Add import script for sensitive data
