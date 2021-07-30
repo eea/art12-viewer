@@ -22,6 +22,13 @@
       </p>
     {% endif %}
 
+    {% if dataset.id == 1 %}
+      <p class="note">
+        IMPORTANT: Data from the late delivery of the 2008-2012 Article 12 report by Greece are
+        not shown on this page. To access these data filter ‘Period’= ‘2008-2012bis’.
+      </p>
+    {% endif %}
+
     {% include 'reports/filters.html' %}
 
     {% if dataset.id == 3 %}

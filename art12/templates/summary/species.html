@@ -43,6 +43,20 @@
       </p>
     {% endif %}
 
+    {% if dataset.id == 1 %}
+      <p class="note">
+        IMPORTANT: Due to late delivery by Greece of the Article 12 report for 2008-2012 period, the
+        reported data were not used for the EU population status assessment and are not displayed on
+        this page.
+        <br>Information on surrogate data for EU assessment is provided in the ‘Audit trail’.
+        To consult 2008-2012 data form Greece filter 'Period' = '2008-2012bis'.
+        <br>
+        Although not used for the EU population status assessment the spatial data from delayed
+        Article 12 report from Greece are included in the distribution map available by clicking
+        the ‘Map’ button.
+      </p>
+    {% endif %}
+
     {% include 'summary/filters.html' %}
 
     {% if dataset.id == 3 %}
