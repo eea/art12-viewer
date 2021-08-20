@@ -18,8 +18,10 @@ login_manager = LoginManager()
 #     lambda: AnonymousUser() if not hasattr(c_user, "id") else c_user
 # )
 
+
 class AnonymousUser(BaseAnonymousUser):
     id = None
+
 
 current_user = LocalProxy(
     lambda: AnonymousUser() if not c_user.is_authenticated else c_user
@@ -66,6 +68,7 @@ class UserDatastore(SQLAlchemyUserDatastore):
         if isinstance(role, str):
             role = self.find_role(role)
         return role
+
 
 def check_duplicate_with_ldap(form, field):
     from .providers import get_ldap_user_info

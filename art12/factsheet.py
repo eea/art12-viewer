@@ -273,7 +273,7 @@ def get_pdf_url(subject, dataset):
         if code == 200:
             return pdf_url
     except:
-        return ''
+        return ""
 
 
 def get_factsheet_url(subject, dataset):

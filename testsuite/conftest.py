@@ -28,6 +28,9 @@ TEST_CONFIG = {
     "ADMIN_EMAIL": "admin@example.com",
     "SQLALCHEMY_TRACK_MODIFICATIONS": False,
     "EEA_PASSWORD_RESET": "pw_reset",
+    "SECURITY_PASSWORD_HASH": "ldap_salted_sha1",
+    # "SECURITY_PASSWORD_SALT": 'salted',
+    # "SQLALCHEMY_DATABASE_URI": "sqlite:///:memory:",
     "SQLALCHEMY_DATABASE_URI": "postgresql://{}{}@{}/{}".format(
         getenv("DB_USER_TEST"),
         db_pass_test,
@@ -144,7 +147,7 @@ def create_user(user_id, role_names=[], name="", institution="", ms=""):
         email="%s@example.com" % user_id,
         institution=institution,
         MS=ms,
-        fs_uniquifier=f"{user_id}_fs"
+        fs_uniquifier=f"{user_id}_fs",
     )
     models.db.session.add(user)
     for name in role_names:

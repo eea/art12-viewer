@@ -25,7 +25,7 @@ def upgrade():
     )
 
     op.execute(
-        "INSERT INTO \"config\" (\"id\", \"default_dataset_id\") " "VALUES ('1', '1');"
+        'INSERT INTO "config" ("id", "default_dataset_id") ' "VALUES ('1', '1');"
     )
 
 

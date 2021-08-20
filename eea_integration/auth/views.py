@@ -147,7 +147,9 @@ def admin_create_ldap():
 
     if user_id is None:
         form = EeaLDAPRegisterForm()
-        return flask.render_template("auth/register_ldap_enter_user_id.html", **{'form': form})
+        return flask.render_template(
+            "auth/register_ldap_enter_user_id.html", **{"form": form}
+        )
 
     if auth.models.RegisteredUser.query.get(user_id) is not None:
         flask.flash('User "%s" already registered.' % user_id, "error")
@@ -214,7 +216,9 @@ def change_password():
     form = ChangePasswordForm()
 
     if form.validate_on_submit():
-        change_user_password(user=current_user, password=form.new_password.data, autologin=False)
+        change_user_password(
+            user=current_user, password=form.new_password.data, autologin=False
+        )
         auth.models.db.session.commit()
         msg = "Your password has been changed. Please log in again."
         flask.flash(msg, "success")

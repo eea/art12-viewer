@@ -1,5 +1,6 @@
 from flask.cli import AppGroup
 from .auth import auth
+
 # from .providers import get_ldap_user_info
 
 

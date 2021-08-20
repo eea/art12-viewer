@@ -9,6 +9,7 @@ from .auth import auth
 
 csrf = CSRFProtect()
 
+
 class Auth(object):
     def __init__(self, models, security_ext, homepage):
         self.models = models

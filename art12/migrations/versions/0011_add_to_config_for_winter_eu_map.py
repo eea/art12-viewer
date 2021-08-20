@@ -47,9 +47,7 @@ def downgrade():
     )
     op.add_column(
         "config",
-        sa.Column(
-            "eu_sensitive_species_map_url", sa.String(length=255), nullable=True
-        ),
+        sa.Column("eu_sensitive_species_map_url", sa.String(length=255), nullable=True),
     )
     op.drop_column("config", "eu_species_map_winter_url")
     op.drop_column("config", "eu_species_map_breeding_url")

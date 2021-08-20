@@ -24,4 +24,4 @@ def upgrade():
 
 
 def downgrade():
-    op.execute("DROP TABLE IF EXISTS \"lu_birds_name\";")
+    op.execute('DROP TABLE IF EXISTS "lu_birds_name";')

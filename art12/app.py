@@ -57,7 +57,7 @@ def create_app(config={}, testing=False):
     assets_env.init_app(app)
 
     db.init_app(app)
-    MIGRATION_DIR = os.path.join('art12', 'migrations')
+    MIGRATION_DIR = os.path.join("art12", "migrations")
     migrate = Migrate()
     migrate.init_app(app, db, directory=MIGRATION_DIR)
 
@@ -97,7 +97,7 @@ def create_url_prefix_middleware(wsgi_app, url_prefix):
     def middleware(environ, start_response):
         path_info = environ["PATH_INFO"]
         if path_info.startswith(url_prefix):
-            environ["PATH_INFO"] = path_info[len(url_prefix):]
+            environ["PATH_INFO"] = path_info[len(url_prefix) :]
             environ["SCRIPT_NAME"] += url_prefix
         return wsgi_app(environ, start_response)
 
