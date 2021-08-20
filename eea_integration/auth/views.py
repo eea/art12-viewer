@@ -5,11 +5,11 @@ from flask import current_app
 from flask_principal import PermissionDenied
 from flask_security.forms import ChangePasswordForm, ResetPasswordForm
 from flask_security.changeable import change_user_password
-from flask_security.registerable import register_user, encrypt_password
+from flask_security.registerable import register_user
 from werkzeug.datastructures import ImmutableMultiDict
 
 from .auth import auth
-from .security import current_user
+from .security import current_user, encrypt_password
 from .forms import EeaAdminEditUserForm, EeaLDAPRegisterForm, EeaLocalRegisterForm
 from .providers import _get_initial_ldap_data
 from .common import (
@@ -146,7 +146,8 @@ def admin_create_ldap():
     user_id = flask.request.form.get("user_id")
 
     if user_id is None:
-        return flask.render_template("auth/register_ldap_enter_user_id.html")
+        form = EeaLDAPRegisterForm()
+        return flask.render_template("auth/register_ldap_enter_user_id.html", **{'form': form})
 
     if auth.models.RegisteredUser.query.get(user_id) is not None:
         flask.flash('User "%s" already registered.' % user_id, "error")
@@ -213,7 +214,7 @@ def change_password():
     form = ChangePasswordForm()
 
     if form.validate_on_submit():
-        change_user_password(current_user, form.new_password.data)
+        change_user_password(user=current_user, password=form.new_password.data, autologin=False)
         auth.models.db.session.commit()
         msg = "Your password has been changed. Please log in again."
         flask.flash(msg, "success")

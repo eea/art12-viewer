@@ -9,22 +9,23 @@ class SpeciesMixin(object):
     def get_subjects(self, dataset):
         model = LuDataBird
         if dataset.id == 3:
-            result = (
+            return [(entry.speciesname, entry.speciesname) for entry in (
                 model.query.filter_by(dataset=dataset)
                 .distinct()
                 .with_entities(model.speciesname, model.speciesname)
                 .order_by(model.speciesname)
                 .all()
+            )]
+        else: 
+            return [(entry.speciescode, entry.speciesname) for entry in (
+                model.query.filter_by(dataset=dataset)
+                .distinct()
+                .with_entities(model.speciescode, model.speciesname)
+                .order_by(model.speciesname)
+                .all()
             )
-            return result
-        return (
-            model.query.filter_by(dataset=dataset)
-            .with_entities(model.speciescode, model.speciesname)
-            .order_by(model.speciesname)
-            .all()
-        )
+            ]
 
-        return result
 
     def get_reported_name(self, dataset, speciesname):
         model = EtcDataBird
@@ -33,23 +34,22 @@ class SpeciesMixin(object):
             speciesname = ""
         else:
             speciesname = lu_data_bird.speciesname
-        etc_data_bird_results = (
+        return [(entry.speciescode, entry.reported_name) for entry in (
             model.query.filter_by(dataset=dataset, assessment_speciesname=speciesname)
             .with_entities(model.speciescode, model.reported_name)
             .order_by(model.reported_name)
             .distinct()
             .all()
-        )
-        return etc_data_bird_results
+        )]
 
     def get_countries(self, dataset):
         if dataset.id == 2:
             return [(u"GR", u"GR")]
-        return (
+        return [(entry.country_isocode, entry.country) for entry in (
             self.model_cls.query.filter_by(dataset=dataset)
             .filter(self.model_cls.country_isocode != EU_COUNTRY)
             .with_entities(self.model_cls.country_isocode, self.model_cls.country)
             .distinct()
             .order_by(self.model_cls.country)
             .all()
-        )
+        )]

@@ -1,7 +1,11 @@
 import flask
+import os
+
 from flask_mail import Mail
 from flask_migrate import Migrate
 from flask_security import Security
+from flask_wtf.csrf import CSRFProtect
+
 from art12.assets import assets_env
 from art12 import models
 from art12.definitions import TREND_CLASSES
@@ -30,9 +34,10 @@ security_ext = Security(
         models.Role,
     ),
 )
+csrf = CSRFProtect()
 
 DEFAULT_CONFIG = {
-    "WTF_CSRF_ENABLED": False,
+    "WTF_CSRF_ENABLED": True,
     "PDF_DESTINATION": ".",
     "DEFAULT_PERIOD": 3,
 }
@@ -47,12 +52,14 @@ def create_app(config={}, testing=False):
     else:
         app.config.from_pyfile("settings.py", silent=True)
     app.config.update(config)
+    csrf.init_app(app)
     create_cli_commands(app)
     assets_env.init_app(app)
-    migrate = Migrate()
 
     db.init_app(app)
-    migrate.init_app(app, db)
+    MIGRATION_DIR = os.path.join('art12', 'migrations')
+    migrate = Migrate()
+    migrate.init_app(app, db, directory=MIGRATION_DIR)
 
     app.register_blueprint(common)
     app.register_blueprint(views)

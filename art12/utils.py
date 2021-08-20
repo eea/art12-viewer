@@ -77,8 +77,11 @@ def slugify(value):
     """
     import unicodedata
 
+    if not value:
+        return ""
     if not isinstance(value, str):
         value = str(value)
-    value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
-    value = str(_slugify_strip_re.sub(' ', value).strip().lower())
-    return _slugify_hyphenate_re.sub('-', value)
+    value = unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode()
+    value = _slugify_strip_re.sub("", value).strip().lower()
+    value = _slugify_hyphenate_re.sub("-", value)
+    return value

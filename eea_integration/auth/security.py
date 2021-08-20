@@ -2,10 +2,10 @@ from datetime import datetime
 import flask
 import flask_security.utils
 import flask_security as flask_security
-from flask_login import current_user
-# from flask_login.utils import _get_user
+from flask_login import current_user as c_user
 from flask_security import user_registered
-from flask_security import SQLAlchemyUserDatastore, AnonymousUser
+from flask_security import SQLAlchemyUserDatastore
+from flask_security import AnonymousUser as BaseAnonymousUser
 from flask_login import LoginManager
 from werkzeug.local import LocalProxy
 from wtforms import ValidationError
@@ -14,11 +14,20 @@ from .auth import auth
 login_manager = LoginManager()
 
 # current_user = LocalProxy(lambda: flask.g.get('user') or AnonymousUser())
+# current_user = LocalProxy(
+#     lambda: AnonymousUser() if not hasattr(c_user, "id") else c_user
+# )
+
+class AnonymousUser(BaseAnonymousUser):
+    id = None
+
 current_user = LocalProxy(
-    lambda: AnonymousUser() if not hasattr(c_user, "id") else c_user
+    lambda: AnonymousUser() if not c_user.is_authenticated else c_user
 )
+
 # current_user = LocalProxy(lambda: _get_user())
 flask_security.core.current_user = current_user
+flask_security.core.AnonymousUser = AnonymousUser
 flask_security.forms.current_user = current_user
 flask_security.decorators.current_user = current_user
 flask_security.views.current_user = current_user
@@ -30,7 +39,7 @@ flask_security.core._get_login_manager = lambda app, anonymous_user: None
 
 def encrypt_password(password):
     pwd_context = flask.current_app.extensions["security"].pwd_context
-    return pwd_context.encrypt(password.encode("utf-8"))
+    return pwd_context.hash(password.encode("utf-8"))
 
 
 def verify(password, user):

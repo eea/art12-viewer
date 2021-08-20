@@ -1,6 +1,6 @@
 from flask import request
 from flask_wtf import FlaskForm
-from wtforms import SelectField, StringField, TextField, PasswordField
+from wtforms import SelectField, StringField, PasswordField
 from wtforms.validators import Optional, InputRequired
 from art12.common import get_default_period
 from art12.mixins import SpeciesMixin
@@ -124,6 +124,9 @@ class ConfigForm(FlaskForm):
         validators=[Optional()],
     )
 
+    class Meta:
+        csrf = True
+
     def __init__(self, *args, **kwargs):
         super(ConfigForm, self).__init__(*args, **kwargs)
         dataset_qs = Dataset.query.with_entities(Dataset.id, Dataset.name).all()
@@ -140,5 +143,5 @@ class ChangeDetailsForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    username = TextField("Username", [InputRequired()])
+    username = StringField("Username", [InputRequired()])
     password = PasswordField("Password", [InputRequired()])

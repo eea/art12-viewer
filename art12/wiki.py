@@ -39,7 +39,7 @@ class CommonSection(object):
         return self.wiki_change_cls.query.filter_by(wiki=self.get_wiki())
 
     def get_active_change(self):
-        return self.get_wiki_changes().filter_by(active=1).first()
+        return self.get_wiki_changes().filter_by(active=True).first()
 
     def get_context(self):
         active_change = self.get_active_change()
@@ -115,7 +115,7 @@ class AuditView(views.View):
             for wiki in wikis:
                 change = self.section.wiki_change_cls.query.filter_by(
                     wiki=wiki,
-                    active=1,
+                    active=True,
                 ).first()
                 if change:
                     wiki_body.append(change.body)
@@ -136,7 +136,7 @@ class AuditView(views.View):
             for wiki in wikis:
                 change = self.section.wiki_change_cls.query.filter_by(
                     wiki=wiki,
-                    active=1,
+                    active=True,
                 ).first()
                 if change:
                     wiki_body.append(change.body)

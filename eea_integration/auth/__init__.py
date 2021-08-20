@@ -1,10 +1,13 @@
 from flask_security import Security
+from flask_wtf.csrf import CSRFProtect
 
 from .security import UserDatastore, current_user
 from .providers import DebugAuthProvider
 from .forms import EeaForgotPasswordForm
 from .common import ugly_fix
 from .auth import auth
+
+csrf = CSRFProtect()
 
 class Auth(object):
     def __init__(self, models, security_ext, homepage):
@@ -54,6 +57,7 @@ class Auth(object):
         app.register_blueprint(auth)
         app.jinja_env.globals["AUTH_BLUEPRINT_INSTALLED"] = True
         app.jinja_env.filters["ugly_fix"] = ugly_fix
+        csrf.init_app(app)
         auth.models = self.models
         auth.HOMEPAGE = self.homepage
 

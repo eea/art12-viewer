@@ -114,7 +114,7 @@ class EtcDataBird(Base):
     population_size_unit_bs = Column(String(255))
     population_units_agreed_bs = Column(String(50))
     population_units_other_bs = Column(String(50))
-    population_estimateType_bs = Column(String(255))
+    population_estimateType_bs = Column("population_estimatetype_bs", String(255))
     population_change_reason_bs = Column(String(200))
     number_of_different_population_units_bs = Column(Integer)
     different_population_percentage_bs = Column(Integer)
@@ -164,7 +164,7 @@ class EtcDataBird(Base):
     population_size_unit_ws = Column(String(255))
     population_units_agreed_ws = Column(String(10))
     population_units_other_ws = Column(String(10))
-    population_estimateType_ws = Column(String(255))
+    population_estimateType_ws = Column("population_estimatetype_ws", String(255))
     population_change_reason_ws = Column(String(200))
     number_of_different_population_units_ws = Column(Integer)
     different_population_percentage_ws = Column(Integer)
@@ -253,7 +253,7 @@ class EtcDataBird(Base):
 class EtcBirdsEu(Base):
     __tablename__ = "etc_birds_eu_view"
 
-    id = Column("ID", Integer, primary_key=True, autoincrement=True)
+    id = Column("id", Integer, primary_key=True, autoincrement=True)
     speciescode = Column(String(10), nullable=False, server_default=text("''"))
     speciesname = Column(String(255))
     reported_name = Column(Text)

@@ -1,6 +1,6 @@
 from flask_security import ForgotPasswordForm, ConfirmRegisterForm
-from flask_wtf import Form
-from wtforms import SelectField, TextField, BooleanField
+from flask_wtf import FlaskForm
+from wtforms import SelectField, StringField, BooleanField
 from wtforms.validators import Optional
 from wtforms.widgets import HiddenInput
 from flask_security.forms import (
@@ -18,9 +18,9 @@ from .security import (
 )
 
 
-class CustomEmailTextField(TextField):
+class CustomEmailStringField(StringField):
     def process_formdata(self, valuelist):
-        super(CustomEmailTextField, self).process_formdata(valuelist)
+        super(CustomEmailStringField, self).process_formdata(valuelist)
         # if comma or semicolon addresses are provided, consider the first one
         if self.data:
             self.data = self.data.replace(",", " ").replace(";", " ").split()[0]
@@ -28,13 +28,13 @@ class CustomEmailTextField(TextField):
 
 class EeaRegisterFormBase(object):
 
-    name = TextField("Full name", validators=[Required("Full name is required")])
-    institution = TextField("Institution", validators=[Optional()])
-    abbrev = TextField("Abbrev.")
-    MS = TextField(widget=HiddenInput())
+    name = StringField("Full name", validators=[Required("Full name is required")])
+    institution = StringField("Institution", validators=[Optional()])
+    abbrev = StringField("Abbrev.")
+    MS = StringField(widget=HiddenInput())
     country_options = SelectField("Member State")
-    other_country = TextField("Other country")
-    qualification = TextField("Qualification", validators=[Optional()])
+    other_country = StringField("Other country")
+    qualification = StringField("Qualification", validators=[Optional()])
 
     def __init__(self, *args, **kwargs):
         super(EeaRegisterFormBase, self).__init__(*args, **kwargs)
@@ -55,17 +55,17 @@ class EeaRegisterFormBase(object):
 
 
 class EeaForgotPasswordForm(ForgotPasswordForm):
-    email = TextField(
+    email = StringField(
         label=ForgotPasswordForm.email.args[0],
         validators=ForgotPasswordForm.email.kwargs["validators"] + [no_ldap_user],
     )
 
 
-class EeaAdminEditUserForm(EeaRegisterFormBase, Form):
+class EeaAdminEditUserForm(EeaRegisterFormBase, FlaskForm):
     active = BooleanField(
         "Active", description="User is allowed to login and gain roles."
     )
-    email = TextField(
+    email = StringField(
         "Email address",
         validators=[
             Required("Email is required"),
@@ -75,14 +75,14 @@ class EeaAdminEditUserForm(EeaRegisterFormBase, Form):
     )
 
 
-class EeaLDAPRegisterForm(EeaRegisterFormBase, RegisterFormMixin, Form):
-    email = TextField(
+class EeaLDAPRegisterForm(EeaRegisterFormBase, RegisterFormMixin, FlaskForm):
+    email = StringField(
         "Email address", validators=[Required("Email is required"), email_validator]
     )
 
 
 class EeaLocalRegisterForm(EeaRegisterFormBase, ConfirmRegisterForm):
-    id = TextField(
+    id = StringField(
         "Username",
         validators=[
             Required("User ID is required"),
@@ -91,7 +91,7 @@ class EeaLocalRegisterForm(EeaRegisterFormBase, ConfirmRegisterForm):
         ],
     )
 
-    email = CustomEmailTextField(
+    email = CustomEmailStringField(
         "Email address",
         validators=[Required("Email is required"), email_validator, unique_user_email],
     )

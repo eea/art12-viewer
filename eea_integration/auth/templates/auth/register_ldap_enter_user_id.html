@@ -18,6 +18,9 @@
       <input name="user_id">
     </label>
     <br>
+
+    {{ form.csrf_token() }}
+
     <input type="hidden" name="_fields_from_ldap" value="on">
     <button type="submit">Search</button>
   </form>

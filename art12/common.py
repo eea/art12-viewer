@@ -280,8 +280,7 @@ def config():
 
     admin_perm.test()
     row = get_config()
-
-    form = ConfigForm(request.form, row)
+    form = ConfigForm(request.form, obj=row)
     if form.validate_on_submit():
         form.populate_obj(row)
         db.session.commit()
@@ -299,7 +298,7 @@ def change_details():
     else:
         from art12.forms import ChangeDetailsForm
 
-        form = ChangeDetailsForm(request.form, current_user)
+        form = ChangeDetailsForm(request.form, obj=current_user)
         if form.validate_on_submit():
             flash("Details updated successfully!", "success")
             form.populate_obj(current_user)

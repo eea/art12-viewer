@@ -268,9 +268,12 @@ def get_pdf_url(subject, dataset):
         + "/"
         + (app.config["PDF_URL_SUFIX"].format(filename=pdf_file_name))
     )
-    code = urllib.urlopen(pdf_url).getcode()
-    if code == 200:
-        return pdf_url
+    try:
+        code = urllib.request.urlopen(pdf_url).getcode()
+        if code == 200:
+            return pdf_url
+    except:
+        return ''
 
 
 def get_factsheet_url(subject, dataset):

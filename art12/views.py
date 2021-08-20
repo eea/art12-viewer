@@ -190,7 +190,7 @@ class Progress(SpeciesMixin, TemplateView):
                     LuDataBird.speciesname.label("name"),
                     bindparam("conclution", ""),
                     bindparam("status", ""),
-                    bindparam("additional_record", 0),
+                    bindparam("additional_record", False),
                     bindparam("", ""),
                     bindparam("", ""),
                 )
