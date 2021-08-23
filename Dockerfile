@@ -27,8 +27,6 @@ RUN mkdir $WORK_DIR/logs \
 RUN mkdir $WORK_DIR/temp_static \
     && cp -a $WORK_DIR/art12/static/. $WORK_DIR/temp_static/
 
-# RUN sed '/st_mysql_options options;/a unsigned int reconnect;' /usr/include/mysql/mysql.h -i.bkp
-
 RUN pip install -U setuptools \
 	&& pip install -r requirements-dep.txt --trusted-host eggrepo.eea.europa.eu
 

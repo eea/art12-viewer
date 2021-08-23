@@ -77,17 +77,17 @@ During the first time deployment, create and edit the following files:
 
 A minimal configuration file could be:
 
-    #mysql env
-    MYSQL_ROOT_PASSWORD=art12
+    #postgres env
+    POSTGRES_PASSWORD=art12
 
     #art12 env
     DEBUG=True
     SECRET_KEY=secret
 
-    DB_SCHEMA=mysql
+    DB_SCHEMA=postgresql
     DB_USER=art12
     DB_PASS=art12
-    DB_HOST=mysql
+    DB_HOST=db
     DB_NAME=art12
     BIND_NAME=art12rp1_eu
 
@@ -152,7 +152,7 @@ If, for some reason, you want to completely delete the stack and its volumes:
 
     $ docker-compose stop
     $ docker-compose rm
-    $ docker volume rm art12_mysqldata
+    $ docker volume rm art12_pg_data
 
 ### 2.6. _art12-app_ service
 
@@ -188,33 +188,28 @@ and from inside the container:
 
 _Note: make sure you have set **DEBUG=True** in the art12.devel.env file._
 
-### 2.7. _mysql_ service
+### 2.7. _db_ service
 
-If you need to take a closer look at the MySQL database, you can do that like below:
+If you need to take a closer look at the Postgres database, you can do that like below:
 
-    # step into the mysql container
-    $ docker exec -it art12-mysql bash
+    # step into the postgres container
+    $ docker exec -it art12.db bash
 
-    # start mysql client
-    $ mysql -u root -p
+    # start postgres client
+    $ psql -U user database_name
 
     # runn SQL commands
-    mysql> use DB_NAME;
-    mysql> show tables;
+    psql> \dt;
 
-To import old data, first copy the sql dumps to your mysql container:
+To import old data, first copy the sql dumps to your postgres container:
 
-    $ docker cp art12.sql art12-mysql:/var/lib/mysql/
+    $ docker cp art12.sql art12.db:art12.sql
 
-    # step into the mysql container
-    $ docker exec -it art12-mysql bash
-
-    # start mysql interpreter
-    $ mysql -u art12 -p
+    # step into the postgres container
+    $ docker exec -it art12.db bash
 
     # import data
-    mysql> use art12;
-    mysql> source /var/lib/mysql/art12.sql
+    $ psql -U art12 art12 < art12.sql
 
 Do the same set of operations for `art12rp1_eu` database.
 
