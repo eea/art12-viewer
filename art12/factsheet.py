@@ -1,46 +1,59 @@
 from flask import Blueprint
 from flask import render_template, request, current_app as app, url_for
-from flask_script import Manager
+from flask.cli import AppGroup
 from flask.views import MethodView
-from path import path
+from path import Path
 import jinja2
 import subprocess
 import urllib
 
 from art12.common import get_map_path
 from art12.models import (
-    db, EtcBirdsEu, EtcDataBird,
-    LuDataBird, Wiki, WikiChange,
+    db,
+    EtcBirdsEu,
+    EtcDataBird,
+    LuDataBird,
+    Wiki,
+    WikiChange,
 )
 from art12.pdf import PdfRenderer
 from art12.queries import (
-    SPECIESNAME_Q, SUBUNIT_Q, ANNEX_Q, PLAN_Q, MS_TABLE_Q,
-    SPA_TRIGGER_Q, PRESS_THRE_Q, N2K_Q, CONS_MEASURES_Q)
+    SPECIESNAME_Q,
+    SUBUNIT_Q,
+    ANNEX_Q,
+    PLAN_Q,
+    MS_TABLE_Q,
+    SPA_TRIGGER_Q,
+    PRESS_THRE_Q,
+    N2K_Q,
+    CONS_MEASURES_Q,
+)
 from art12.utils import slugify
 
-factsheet_manager = Manager()
-factsheet = Blueprint('factsheet', __name__)
+factsheet_manager = AppGroup("factsheet")
+factsheet = Blueprint("factsheet", __name__)
 
 
-@factsheet.app_template_filter('format_subpopulation')
+@factsheet.app_template_filter("format_subpopulation")
 def format_subpopulation(subpopulation):
-    subpopulation = '<i>{}</i>'.format(subpopulation)
+    subpopulation = f"<i>{subpopulation}</i>"
     return jinja2.Markup(
-        subpopulation
-        .replace('[', '</i>[')
-        .replace(']', ']<i>')
-        .replace('all others', '</i>all others<i>')
+        subpopulation.replace("[", "</i>[")
+        .replace("]", "]<i>")
+        .replace("all others", "</i>all others<i>")
     )
 
-@factsheet.app_template_filter('format_info')
-def format_info(value):
-    return value.replace('|', '<br>')
 
-@factsheet.app_template_global('get_map_url')
+@factsheet.app_template_filter("format_info")
+def format_info(value):
+    return value.replace("|", "<br>")
+
+
+@factsheet.app_template_global("get_map_url")
 def get_map_url(code, suffix):
     map = get_map_path(code=code, suffix=suffix)
     if map:
-        return app.config['MAP_URL_PREFIX'] + url_for('static', filename=map)
+        return app.config["MAP_URL_PREFIX"] + url_for("static", filename=map)
 
 
 def get_arg(kwargs, key, default=None):
@@ -50,39 +63,43 @@ def get_arg(kwargs, key, default=None):
 
 def get_query_result(engine, query, subject):
     result = engine.execute(query.format(code=subject))
-    return ', '.join([row[0] for row in result if row[0]])
+    return ", ".join([row[0] for row in result if row[0]])
 
 
 class DummyCls(object):
     def __init__(self, **kwargs):
-        for k, v in kwargs.iteritems():
+        for k, v in kwargs.items():
             setattr(self, k, v)
 
 
 class BirdFactsheet(MethodView):
-    template_name = 'factsheet/species.html'
+    template_name = "factsheet/species.html"
     property_to_query = {
-        'speciesname': SPECIESNAME_Q,
-        'subunit': SUBUNIT_Q,
-        'annex': ANNEX_Q,
-        'plan': PLAN_Q,
+        "speciesname": SPECIESNAME_Q,
+        "subunit": SUBUNIT_Q,
+        "annex": ANNEX_Q,
+        "plan": PLAN_Q,
     }
 
     def list_all(self):
         objects = EtcDataBird.query.filter_by(dataset_id=self.period)
-        return render_template('factsheet/list_all.html', objects=objects)
+        return render_template("factsheet/list_all.html", objects=objects)
 
     def set_properties(self, obj):
-        for prop_name, query in self.property_to_query.iteritems():
+        for prop_name, query in self.property_to_query.items():
             value = get_query_result(self.engine, query, self.subject)
             setattr(obj, prop_name, value)
 
     def set_wiki(self, obj):
-        wiki_change = WikiChange.query.join(Wiki).filter(
-            WikiChange.dataset_id == self.period,
-            Wiki.speciescode == self.subject,
-        ).first()
-        obj.wiki = wiki_change.body if wiki_change else ''
+        wiki_change = (
+            WikiChange.query.join(Wiki)
+            .filter(
+                WikiChange.dataset_id == self.period,
+                Wiki.speciescode == self.subject,
+            )
+            .first()
+        )
+        obj.wiki = wiki_change.body if wiki_change else ""
 
     def set_etc_birds(self, obj):
         obj.etc_birds = EtcBirdsEu.query.filter_by(
@@ -94,13 +111,14 @@ class BirdFactsheet(MethodView):
         def get_bird_values(attr):
             return [getattr(b, attr) for b in obj.etc_birds if getattr(b, attr)]
 
-        for attr in ['conclusion_status_level1_record',
-                     'conclusion_status_level2_record']:
+        for attr in [
+            "conclusion_status_level1_record",
+            "conclusion_status_level2_record",
+        ]:
             setattr(obj, attr, any(get_bird_values(attr)))
 
-        for attr in ['conclusion_status_level1',
-                     'conclusion_status_level2']:
-            setattr(obj, attr, ', '.join(get_bird_values(attr)))
+        for attr in ["conclusion_status_level1", "conclusion_status_level2"]:
+            setattr(obj, attr, ", ".join(get_bird_values(attr)))
 
     def set_ms_birds(self, obj):
         query = MS_TABLE_Q.format(subject=self.subject, period=self.period)
@@ -111,7 +129,7 @@ class BirdFactsheet(MethodView):
         query = SPA_TRIGGER_Q.format(subject=self.subject)
         result = self.engine.execute(query)
         row = result and result.first()
-        return row and row['count'] > 0
+        return row and row["count"] > 0
 
     def set_list_property(self, obj, prop_name, query):
         result = self.engine.execute(query.format(subject=self.subject))
@@ -119,10 +137,10 @@ class BirdFactsheet(MethodView):
         setattr(obj, prop_name, list_obj)
 
     def get_context_data(self, **kwargs):
-        self.period = get_arg(kwargs, 'period', app.config['DEFAULT_PERIOD'])
-        self.subject = get_arg(kwargs, 'subject')
+        self.period = get_arg(kwargs, "period", app.config["DEFAULT_PERIOD"])
+        self.subject = get_arg(kwargs, "subject")
 
-        self.engine = db.get_engine(app, 'factsheet')
+        self.engine = db.get_engine(app, "factsheet")
         self.tool_engine = db.get_engine(app)
 
         bird_obj = DummyCls()
@@ -131,21 +149,22 @@ class BirdFactsheet(MethodView):
         self.set_etc_birds(bird_obj)
         self.set_conclusion_status_levels(bird_obj)
         self.set_ms_birds(bird_obj)
-        bird_obj.url = app.config['LOCAL_PDF_URL_PREFIX'] + url_for(
-            'views.summary', subject=self.subject, period=self.period)
+        bird_obj.url = app.config["LOCAL_PDF_URL_PREFIX"] + url_for(
+            "views.summary", subject=self.subject, period=self.period
+        )
         bird_obj.code = self.subject
 
         if self.is_spa_trigger():
             bird_obj.is_spa_trigger = True
             spa_properties = {
-                'threats': PRESS_THRE_Q,
-                'n2k': N2K_Q,
-                'cons_measures': CONS_MEASURES_Q,
+                "threats": PRESS_THRE_Q,
+                "n2k": N2K_Q,
+                "cons_measures": CONS_MEASURES_Q,
             }
-            for prop, query in spa_properties.iteritems():
+            for prop, query in spa_properties.items():
                 self.set_list_property(bird_obj, prop, query)
 
-        return {'obj': bird_obj}
+        return {"obj": bird_obj}
 
     def get(self):
         context = self.get_context_data(**request.args)
@@ -157,30 +176,34 @@ class BirdFactsheet(MethodView):
 
     @classmethod
     def get_pdf_file_name(cls, subject, engine=None):
-        engine = engine or db.get_engine(app, 'factsheet')
+        engine = engine or db.get_engine(app, "factsheet")
         name = get_query_result(engine, SPECIESNAME_Q, subject)
         subunit = get_query_result(engine, SUBUNIT_Q, subject)
-        return slugify('{} {}'.format(name, subunit))
+        return slugify("{} {}".format(name, subunit))
 
     def _get_pdf_file_name(self):
         return self.get_pdf_file_name(self.subject, self.engine)
 
     def get_pdf(self, **kwargs):
         context = self.get_context_data(**kwargs)
-        header_url = app.config['PDF_URL_PREFIX'] + url_for(
-            'factsheet.header', subject=self.subject, period=self.period)
-        footer_url = app.config['PDF_URL_PREFIX'] + url_for('factsheet.footer')
-        return PdfRenderer(self.template_name,
-                           pdf_file=self._get_pdf_file_name(),
-                           height='11.693in', width='8.268in',
-                           context=context,
-                           header_url=header_url, footer_url=footer_url)
+        header_url = app.config["PDF_URL_PREFIX"] + url_for(
+            "factsheet.header", subject=self.subject, period=self.period
+        )
+        footer_url = app.config["PDF_URL_PREFIX"] + url_for("factsheet.footer")
+        return PdfRenderer(
+            self.template_name,
+            pdf_file=self._get_pdf_file_name(),
+            height="11.693in",
+            width="8.268in",
+            context=context,
+            header_url=header_url,
+            footer_url=footer_url,
+        )
 
     @classmethod
     def get_all(cls, period):
         return (
-            db.session
-            .query(EtcDataBird.speciescode)
+            db.session.query(EtcDataBird.speciescode)
             .filter(EtcDataBird.dataset_id == period)
             .distinct()
         )
@@ -188,61 +211,70 @@ class BirdFactsheet(MethodView):
 
 class FactsheetHeader(MethodView):
     def get_context_data(self, **kwargs):
-        subject = get_arg(kwargs, 'subject')
-        period = get_arg(kwargs, 'period')
+        subject = get_arg(kwargs, "subject")
+        period = get_arg(kwargs, "period")
 
-        bird = (EtcDataBird.query
-                .filter_by(speciescode=subject, dataset_id=period)
-                .first_or_404())
+        bird = EtcDataBird.query.filter_by(
+            speciescode=subject, dataset_id=period
+        ).first_or_404()
 
-        factsheet_engine = db.get_engine(app, 'factsheet')
+        factsheet_engine = db.get_engine(app, "factsheet")
         result = factsheet_engine.execute(SUBUNIT_Q.format(code=subject))
         row = result and result.first()
-        subunit = row and row['sub_unit']
+        subunit = row and row["sub_unit"]
 
         return {
-            'period': bird.dataset.name,
-            'subject': bird.speciesname,
-            'subunit': subunit,
+            "period": bird.dataset.name,
+            "subject": bird.speciesname,
+            "subunit": subunit,
         }
 
     def get(self):
         context = self.get_context_data(**request.args)
-        return render_template('factsheet/header.html', **context)
+        return render_template("factsheet/header.html", **context)
 
 
 class FactsheetFooter(MethodView):
     def get(self):
-        return render_template('factsheet/footer.html')
+        return render_template("factsheet/footer.html")
 
 
 def get_pdf_path(subject):
-    pdf_path = path(app.config['PDF_DESTINATION']) / (
-        BirdFactsheet.get_pdf_file_name(subject) + '.pdf')
-    real_path = path(app.static_folder) / pdf_path
+    pdf_path = Path(app.config["PDF_DESTINATION"]) / (
+        BirdFactsheet.get_pdf_file_name(subject) + ".pdf"
+    )
+    real_path = Path(app.static_folder) / pdf_path
     if real_path.exists():
         return pdf_path
+
 
 def check_if_species_is_non_native(subject, dataset):
     """
     Check if the subject is non-native and if there is a native version.
     """
     native_exists = LuDataBird.query.filter_by(
-        dataset=dataset,
-        speciescode=subject[:-2]).count()
-    if subject.endswith('-X') and native_exists:
+        dataset=dataset, speciescode=subject[:-2]
+    ).count()
+    if subject.endswith("-X") and native_exists:
         return True
+
 
 def get_pdf_url(subject, dataset):
     if check_if_species_is_non_native(subject, dataset):
         return
     pdf_file_name = BirdFactsheet.get_pdf_file_name(subject)
-    pdf_url = app.config['PDF_URL_PREFIX'] + '/' + (
-        app.config['PDF_URL_SUFIX'].format(filename=pdf_file_name)
+    pdf_url = (
+        app.config["PDF_URL_PREFIX"]
+        + "/"
+        + (app.config["PDF_URL_SUFIX"].format(filename=pdf_file_name))
     )
-    code = urllib.urlopen(pdf_url).getcode()
-    if code == 200:
-        return pdf_url
+    try:
+        code = urllib.request.urlopen(pdf_url).getcode()
+        if code == 200:
+            return pdf_url
+    except:
+        return ""
+
 
 def get_factsheet_url(subject, dataset):
     pdf_url = get_pdf_url(subject, dataset)
@@ -256,7 +288,7 @@ def species(subject, period):
     fs = BirdFactsheet()
     renderer = fs.get_pdf(subject=subject, period=period)
     renderer._generate()
-    print "Generated for {}: {}".format(subject, renderer.pdf_path)
+    print(f"Generated for {subject}: {renderer.pdf_path}")
 
 
 @factsheet_manager.command
@@ -267,5 +299,5 @@ def genall(period, overwrite_existing=False):
         try:
             species(obj.speciescode, period)
         except subprocess.CalledProcessError:
-            print "Error occured for: {}".format(obj.speciescode)
-    print "Done"
+            print(f"Error occured for: {obj.speciescode}")
+    print("Done")

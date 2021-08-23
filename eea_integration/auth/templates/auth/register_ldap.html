@@ -35,7 +35,8 @@
             </div>
           {% endif %}
 
-          {{ register_user_form.hidden_tag() }}
+          {{ register_user_form.csrf_token() }}
+
           {{ register_user_form.MS() }}
 
           <!-- INSTITUTION -->

@@ -2,7 +2,7 @@ language: python
 services:
   - mysql
 python:
-  - "2.7"
+  - "3.8"
 env:
   global:
     - EEA_PASSWORD_RESET=https://www.example.com/password-reset
@@ -11,10 +11,9 @@ env:
     - DB_HOST_TEST=localhost
 install:
   - pip install -r requirements-dev.txt --trusted-host eggshop.eaudeweb.ro
-  - pip install pytest-cov==1.8.1 coverage==3.7.1 coveralls==0.5
+  - pip install pytest-cov==2.12.1 coverage==5.5 coveralls==3.1.0
 before_script:
   - cp settings.py.example instance/test_settings.py
-  - mysql -e 'create database art12;'
 script:  py.test --cov=art12 testsuite
 after_success: coveralls
 notifications:

@@ -1,25 +1,19 @@
-from flask_script import Manager, Option
-from flask_security.script import Command
-
 from art12 import models
+from flask.cli import AppGroup
+
+import click
 
 
-class GenerateNewPeriodCommand(Command):
+generate_new_period = AppGroup("generate_new_period")
 
-    option_list = Command.option_list + (
-        Option('-i', '--id', dest='id', required=True),
-        Option('-n', '--name', dest='name', required=True),
-    )
 
-    def run(self, **kwargs):
-
-        dataset = models.Dataset.query.filter_by(id=kwargs['id']).first()
-        if not dataset:
-            dataset = models.Dataset(id=kwargs['id'], name=kwargs['name'])
-            models.db.session.add(dataset)
-            models.db.session.commit()
-            print("Created new dataset {} {}".format(dataset.id, dataset.name))
- 
-
-generate_new_period = Manager()
-generate_new_period.add_command('run', GenerateNewPeriodCommand())
+@generate_new_period.command("run")
+@click.option("-i", "--id", "id")
+@click.option("-n", "--name", "name")
+def run(**kwargs):
+    dataset = models.Dataset.query.filter_by(id=kwargs["id"]).first()
+    if not dataset:
+        dataset = models.Dataset(id=kwargs["id"], name=kwargs["name"])
+        models.db.session.add(dataset)
+        models.db.session.commit()
+        print(f"Created new dataset {dataset.id}, {dataset.name}")

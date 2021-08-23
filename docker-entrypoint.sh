@@ -9,29 +9,15 @@ TEMP_STATIC_DIR="/var/local/art12/temp_static/"
 cp -a $TEMP_STATIC_DIR/. $STATIC_DIR
 rm -r $TEMP_STATIC_DIR
 
-if [ -z "$MYSQL_ADDR" ]; then
-  MYSQL_ADDR="mysql"
+if [ -z "$POSTGRES_ADDR" ]; then
+  POSTGRES_ADDR="postgres"
 fi
 
-while ! nc -z $MYSQL_ADDR 3306; do
-  echo "Waiting for MySQL server at '$MYSQL_ADDR' to accept connections on port 3306..."
+while ! nc -z $POSTGRES_ADDR 5432; do
+  echo "Waiting for Postgres server at '$POSTGRES_ADDR' to accept connections on port 5432..."
   sleep 3s
 done
 
-#create database for service
-if ! mysql -h $MYSQL_ADDR -u root -p$MYSQL_ROOT_PASSWORD -e "use $DB_NAME;"; then
-  echo "CREATE DATABASE $DB_NAME"
-  mysql -h $MYSQL_ADDR -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE $DB_NAME CHARACTER SET utf8 COLLATE utf8_general_ci;"
-  mysql -h $MYSQL_ADDR -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE USER '$DB_USER'@'%' IDENTIFIED BY '$DB_PASS';"
-  mysql -h $MYSQL_ADDR -u root -p$MYSQL_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'%';"
-fi
-
-#create binds database for service
-if ! mysql -h $MYSQL_ADDR -u root -p$MYSQL_ROOT_PASSWORD -e "use $BIND_NAME;"; then
-  echo "CREATE DATABASE $BIND_NAME"
-  mysql -h $MYSQL_ADDR -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE $BIND_NAME CHARACTER SET utf8 COLLATE utf8_general_ci;"
-  mysql -h $MYSQL_ADDR -u root -p$MYSQL_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON $BIND_NAME.* TO '$DB_USER'@'%';"
-fi
 
 if [ "x$MIGRATE" = 'xyes' ]; then
   echo "Running DB CMD: ./manage.py db upgrade"
@@ -53,7 +39,7 @@ if [ -z "$1" ]; then
 fi
 
 if [[ $COMMANDS == *"$1"* ]]; then
-  exec python manage.py "$@"
+  exec python -m flask "$@"
 fi
 
 exec "$@"

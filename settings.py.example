@@ -1,4 +1,4 @@
-SQLALCHEMY_DATABASE_URI = 'mysql://root@localhost/art12'
+SQLALCHEMY_DATABASE_URI = 'postgresql://root@localhost/art12'
 
 DEBUG = True
 
