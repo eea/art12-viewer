@@ -7,7 +7,6 @@ echo "Refreshing static files..."
 STATIC_DIR="/var/local/art12/art12/static/"
 TEMP_STATIC_DIR="/var/local/art12/temp_static/"
 cp -a $TEMP_STATIC_DIR/. $STATIC_DIR
-rm -r $TEMP_STATIC_DIR
 
 if [ -z "$POSTGRES_ADDR" ]; then
   POSTGRES_ADDR="postgres"
