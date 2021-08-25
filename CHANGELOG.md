@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2.7.0 (2021-08-25)
+------------------
+* Upgrade packages to the latest version available
+* Format code using black and flake8
+* Switch from using MYSQL database to using Postgres
+  [dianaboiangiu]
+
 2.6.7 (2021-07-30)
 ------------------
 * Add clarifying text for periods 0712 and 0712bis
