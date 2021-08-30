@@ -95,7 +95,7 @@ Tests
 4. Make sure to complete the data for environment variables in docker/art12.env file:
 
        # test art12
-       DB_NAME_TEST=art12test
+       DB_NAME_TEST=art12_test
        DB_USER_TEST=test
        DB_PASSWORD_TEST=test
        DB_HOST_TEST=mysql

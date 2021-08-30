@@ -333,7 +333,8 @@ class EtcBirdsEu(Base):
         primaryjoin="and_(EtcBirdsEu.speciescode==LuDataBird.speciescode,"
         "EtcBirdsEu.dataset_id==LuDataBird.dataset_id)",
         foreign_keys=[speciescode, dataset_id],
-        backref="eu_objects",
+        overlaps="dataset",
+        backref=db.backref("eu_objects", overlaps="dataset"),
     )
 
 
@@ -422,7 +423,8 @@ class WikiChange(Base):
         primaryjoin="and_(WikiChange.wiki_id==Wiki.id,"
         "WikiChange.dataset_id==Wiki.dataset_id)",
         foreign_keys=[wiki_id, dataset_id],
-        backref="changes",
+        overlaps="dataset",
+        backref=db.backref("changes", overlaps="dataset"),
     )
 
 
@@ -463,7 +465,8 @@ class WikiTrailChange(Base):
         primaryjoin="and_(WikiTrailChange.wiki_id==WikiTrail.id,"
         "WikiTrailChange.dataset_id==WikiTrail.dataset_id)",
         foreign_keys=[wiki_id, dataset_id],
-        backref="changes",
+        overlaps="dataset",
+        backref=db.backref("changes", overlaps="dataset"),
     )
 
 
