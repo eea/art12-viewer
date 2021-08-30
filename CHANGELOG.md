@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.7.1 (2021-08-30)
+------------------
+* Fix models overlap warnings
+  [dianaboiangiu]
+
 2.7.0 (2021-08-25)
 ------------------
 * Upgrade packages to the latest version available
