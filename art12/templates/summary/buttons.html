@@ -1,5 +1,5 @@
 <div>
-  {% set datasheet_url=url_for('wiki.datasheet', period=dataset.id, subject=subject) %}
+  {% set datasheet_url=url_for('wiki.datasheet', period=dataset.id, subject=subject, reported_name=reported_name) %}
   {% set audittrail_url=url_for('wiki.audittrail', period=dataset.id, subject=subject, reported_name=reported_name) %}
 
   <button type="button" id="wikibutton" href="{{ datasheet_url }}" {% if dataset.id == 2 %}disabled{% endif %}>
