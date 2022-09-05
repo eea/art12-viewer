@@ -20,6 +20,7 @@ from art12.management.import_greece import import_greece
 from art12.management.generate_lu_data_bird import generate_lu_data_bird
 from art12.management.generate_wiki_trail import generate_wiki_trail
 from art12.management.import_new_data import import_new_data
+from art12.management.import_new_wiki_data import import_new_wiki_data
 from art12.management.generate_new_period import generate_new_period
 
 from eea_integration.auth.script import user_manager, role_manager
@@ -109,6 +110,7 @@ def create_cli_commands(app):
     app.cli.add_command(import_greece)
     app.cli.add_command(generate_new_period)
     app.cli.add_command(import_new_data)
+    app.cli.add_command(import_new_wiki_data)
     app.cli.add_command(generate_lu_data_bird)
     app.cli.add_command(generate_wiki_trail)
     app.cli.add_command(role_manager)

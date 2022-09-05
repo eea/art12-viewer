@@ -10,6 +10,7 @@ from flask import (
 
 from art12.models import (
     Dataset,
+    EtcDataBird,
     Wiki,
     WikiChange,
     WikiTrail,
@@ -29,11 +30,20 @@ class CommonSection(object):
 
     def get_wiki(self):
         r = self.get_req_args()
-
-        return self.wiki_cls.query.filter(
-            self.wiki_cls.subject == r["subject"],
+        subject = r["subject"]
+        if int(r['period']) == 3:
+            etc_data_bird = EtcDataBird.query.filter_by(
+                speciesname=r['subject'],
+                dataset_id=r['period']).first()
+            if etc_data_bird:
+                subject = etc_data_bird.speciescode
+            if r['reported_name']:
+                subject = r['reported_name']
+        wiki = self.wiki_cls.query.filter(
+            self.wiki_cls.subject == subject,
             self.wiki_cls.dataset_id == r["period"],
         ).first()
+        return wiki
 
     def get_wiki_changes(self):
         return self.wiki_change_cls.query.filter_by(wiki=self.get_wiki())
