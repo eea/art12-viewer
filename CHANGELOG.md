@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.7.3 (2022-10-04)
+------------------
+* Fix typo in mail address
+  [dianaboiangiu]
+
 2.7.2 (2022-09-05)
 ------------------
 * Add command for publishing data sheets
