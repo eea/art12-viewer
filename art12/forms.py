@@ -15,6 +15,10 @@ class CommonFilterForm(FlaskForm):
         super(CommonFilterForm, self).__init__(*args, **kwargs)
         self.period.choices = [(d.id, d.name) for d in Dataset.query.all()]
         dataset_id = request.args.get("period", get_default_period())
+        try:
+            dataset_id = int(dataset_id)
+        except ValueError:
+            dataset_id = get_default_period()
         self.period.default = dataset_id
         self.dataset = Dataset.query.get_or_404(dataset_id)
 

@@ -1,11 +1,16 @@
+import jinja2
+import subprocess
+import urllib
+
 from flask import Blueprint
 from flask import render_template, request, current_app as app, url_for
 from flask.cli import AppGroup
 from flask.views import MethodView
 from path import Path
-import jinja2
-import subprocess
-import urllib
+
+from sqlalchemy import text
+from sqlalchemy.sql.expression import bindparam
+from sqlalchemy.types import String, Integer
 
 from art12.common import get_map_path
 from art12.models import (
@@ -61,8 +66,9 @@ def get_arg(kwargs, key, default=None):
     return arg[0] if isinstance(arg, list) else arg or default
 
 
-def get_query_result(engine, query, subject):
-    result = engine.execute(query.format(code=subject))
+def get_query_result(engine, query, value):
+    sql = text(query).bindparams(bindparam("value", String))
+    result = engine.execute(sql, value=value)
     return ", ".join([row[0] for row in result if row[0]])
 
 
@@ -121,13 +127,19 @@ class BirdFactsheet(MethodView):
             setattr(obj, attr, ", ".join(get_bird_values(attr)))
 
     def set_ms_birds(self, obj):
-        query = MS_TABLE_Q.format(subject=self.subject, period=self.period)
-        result = self.tool_engine.execute(query)
+        sql = text(MS_TABLE_Q).bindparams(
+            bindparam("subject", String), bindparam("period", Integer)
+        )
+        result = self.tool_engine.execute(
+            sql,
+            subject=str(self.subject),  # Explicitly cast subject to String
+            period=int(self.period),  # Explicitly cast period to Integer
+        )
         obj.ms_birds = [DummyCls(**dict(row.items())) for row in result]
 
     def is_spa_trigger(self):
-        query = SPA_TRIGGER_Q.format(subject=self.subject)
-        result = self.engine.execute(query)
+        sql = text(SPA_TRIGGER_Q).bindparams(bindparam("subject", String))
+        result = self.engine.execute(sql, subject=self.subject)
         row = result and result.first()
         return row and row["count"] > 0
 
@@ -137,9 +149,11 @@ class BirdFactsheet(MethodView):
         setattr(obj, prop_name, list_obj)
 
     def get_context_data(self, **kwargs):
-        self.period = get_arg(kwargs, "period", app.config["DEFAULT_PERIOD"])
+        try:
+            self.period = int(get_arg(kwargs, "period", app.config["DEFAULT_PERIOD"]))
+        except ValueError:
+            self.period = app.config["DEFAULT_PERIOD"]
         self.subject = get_arg(kwargs, "subject")
-
         self.engine = db.get_engine(app, "factsheet")
         self.tool_engine = db.get_engine(app)
 
@@ -219,7 +233,7 @@ class FactsheetHeader(MethodView):
         ).first_or_404()
 
         factsheet_engine = db.get_engine(app, "factsheet")
-        result = factsheet_engine.execute(SUBUNIT_Q.format(code=subject))
+        result = factsheet_engine.execute(SUBUNIT_Q).params(code=subject)
         row = result and result.first()
         subunit = row and row["sub_unit"]
 

@@ -277,7 +277,7 @@ def admin_user(user_id):
     )
 
     if flask.request.method == "POST":
-        if flask.request.form.get("btn") == u"delete":
+        if flask.request.form.get("btn") == "delete":
             user = auth.models.RegisteredUser.query.get(user_id)
             auth.models.db.session.delete(user)
             auth.models.db.session.commit()

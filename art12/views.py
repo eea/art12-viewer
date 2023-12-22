@@ -1,5 +1,6 @@
 import json
 import ldap
+import uuid
 
 from datetime import datetime
 from flask import flash, g, redirect, render_template, request, url_for
@@ -51,9 +52,10 @@ class Summary(SpeciesMixin, TemplateView):
     def get_speciescode(self, dataset, speciesname):
         return (
             LuDataBird.query.filter_by(dataset=dataset, speciesname=speciesname)
-            .first()
+            .first_or_404()
             .speciescode
         )
+        return lu_data_bird.speciescode
 
     def get_context_data(self, **kwargs):
         map_url = ""
@@ -331,8 +333,9 @@ class LoginView(TemplateView):
                 qualification=initial_data["qualification"],
                 password=encrypt_password(password),
                 is_ldap=True,
+                fs_uniquifier=uuid.uuid4().hex,
                 confirmed_at=datetime.utcnow(),
-                account_date=datetime.now(),
+                account_date=datetime.utcnow().strftime("%Y-%m-%d %H:%M"),
             )
             set_user_active(user, True)
             db.session.add(user)

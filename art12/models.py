@@ -329,7 +329,7 @@ class EtcBirdsEu(Base):
     red_list_cat_prev = Column(String(255))
 
     lu_bird = relationship(
-        u"LuDataBird",
+        "LuDataBird",
         primaryjoin="and_(EtcBirdsEu.speciescode==LuDataBird.speciescode,"
         "EtcBirdsEu.dataset_id==LuDataBird.dataset_id)",
         foreign_keys=[speciescode, dataset_id],
@@ -419,7 +419,7 @@ class WikiChange(Base):
     )
     dataset = relationship(Dataset)
     wiki = relationship(
-        u"Wiki",
+        "Wiki",
         primaryjoin="and_(WikiChange.wiki_id==Wiki.id,"
         "WikiChange.dataset_id==Wiki.dataset_id)",
         foreign_keys=[wiki_id, dataset_id],
@@ -461,7 +461,7 @@ class WikiTrailChange(Base):
     )
     dataset = relationship(Dataset)
     wiki = relationship(
-        u"WikiTrail",
+        "WikiTrail",
         primaryjoin="and_(WikiTrailChange.wiki_id==WikiTrail.id,"
         "WikiTrailChange.dataset_id==WikiTrail.dataset_id)",
         foreign_keys=[wiki_id, dataset_id],
@@ -489,7 +489,7 @@ class RegisteredUser(Base, UserMixin):
     MS = Column("ms", String(255))
     email = Column(String(255))
     qualification = Column(String(255))
-    account_date = Column(String(16), nullable=False)
+    account_date = Column(String(100), nullable=False)
     show_assessment = Column(Integer, nullable=False, default=1)
     active = Column(Boolean)
     confirmed_at = db.Column(db.DateTime())

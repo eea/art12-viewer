@@ -31,14 +31,14 @@ class CommonSection(object):
     def get_wiki(self):
         r = self.get_req_args()
         subject = r["subject"]
-        if int(r['period']) == 3:
+        if int(r["period"]) == 3:
             etc_data_bird = EtcDataBird.query.filter_by(
-                speciesname=r['subject'],
-                dataset_id=r['period']).first()
+                speciesname=r["subject"], dataset_id=r["period"]
+            ).first()
             if etc_data_bird:
                 subject = etc_data_bird.speciescode
-            if r['reported_name']:
-                subject = r['reported_name']
+            if r["reported_name"]:
+                subject = r["reported_name"]
         wiki = self.wiki_cls.query.filter(
             self.wiki_cls.subject == subject,
             self.wiki_cls.dataset_id == r["period"],
@@ -138,7 +138,7 @@ class AuditView(views.View):
             self.section.wiki_cls.subject == rq["subject"],
             self.section.wiki_cls.dataset_id == rq["period"],
         ).all()
-        if rq["period"] == u"3":
+        if rq["period"] == "3":
             wiki_body = self.get_wiki_changes_for_period_2018(rq, wikis)
         else:
             wiki_body = []

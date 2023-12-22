@@ -54,7 +54,7 @@
         </tr>
       </thead>
       <tbody>
-      {% for row in obj.etc_birds.filter_by(additional_record=0) %}
+      {% for row in obj.etc_birds.filter_by(additional_record=False) %}
         <tr class="stripe_row">
           <td>
             {{ row.br_population_size or '' }}
@@ -97,7 +97,7 @@
 
   </section>
 
-  {% set etc_birds_subspecies = obj.etc_birds.filter_by(additional_record=-1) %}
+  {% set etc_birds_subspecies = obj.etc_birds.filter_by(additional_record=True) %}
   {% if etc_birds_subspecies.count() %}
   <section>
     <header>

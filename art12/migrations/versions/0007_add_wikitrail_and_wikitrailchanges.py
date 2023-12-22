@@ -48,13 +48,13 @@ def upgrade():
         sa.PrimaryKeyConstraint("id"),
     )
     op.alter_column(
-        u"wiki", "speciescode", existing_type=sa.String(length=10), nullable=True
+        "wiki", "speciescode", existing_type=sa.String(length=10), nullable=True
     )
 
 
 def downgrade():
     op.alter_column(
-        u"wiki", "speciescode", existing_type=sa.String(length=10), nullable=False
+        "wiki", "speciescode", existing_type=sa.String(length=10), nullable=False
     )
     op.drop_table("wiki_trail_changes")
     op.drop_table("wiki_trail")

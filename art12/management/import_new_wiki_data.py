@@ -26,12 +26,12 @@ def run(**kwargs):
             {k: v for k, v in row.items()}
             for row in csv.DictReader(file, skipinitialspace=True)
         ]
-        if kwargs["model"] == 'Wiki':
+        if kwargs["model"] == "Wiki":
             for data_object in data:
                 new_object = models.Wiki(**data_object)
                 models.db.session.add(new_object)
                 models.db.session.commit()
-        if kwargs["model"] == 'WikiChanges':
+        if kwargs["model"] == "WikiChanges":
             for data_object in data:
                 new_object = models.WikiChange(**data_object)
                 models.db.session.add(new_object)

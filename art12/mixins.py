@@ -53,7 +53,7 @@ class SpeciesMixin(object):
 
     def get_countries(self, dataset):
         if dataset.id == 2:
-            return [(u"GR", u"GR")]
+            return [("GR", "GR")]
         return [
             (entry.country_isocode, entry.country)
             for entry in (
