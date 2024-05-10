@@ -2,7 +2,7 @@ import jinja2
 import subprocess
 import urllib
 
-from flask import Blueprint
+from flask import Blueprint, abort
 from flask import render_template, request, current_app as app, url_for
 from flask.cli import AppGroup
 from flask.views import MethodView
@@ -144,7 +144,7 @@ class BirdFactsheet(MethodView):
         return row and row["count"] > 0
 
     def set_list_property(self, obj, prop_name, query):
-        result = self.engine.execute(query.format(subject=self.subject))
+        result = self.get_query_result(self.engine, query, self.subject)
         list_obj = [DummyCls(**dict(row.items())) for row in result]
         setattr(obj, prop_name, list_obj)
 
@@ -225,15 +225,18 @@ class BirdFactsheet(MethodView):
 
 class FactsheetHeader(MethodView):
     def get_context_data(self, **kwargs):
+        try:
+            period = int(get_arg(kwargs, "period", app.config["DEFAULT_PERIOD"]))
+        except ValueError:
+            abort(404)
         subject = get_arg(kwargs, "subject")
         period = get_arg(kwargs, "period")
 
         bird = EtcDataBird.query.filter_by(
             speciescode=subject, dataset_id=period
         ).first_or_404()
-
         factsheet_engine = db.get_engine(app, "factsheet")
-        result = factsheet_engine.execute(SUBUNIT_Q).params(code=subject)
+        result = get_query_result(factsheet_engine, SUBUNIT_Q, subject)
         row = result and result.first()
         subunit = row and row["sub_unit"]
 

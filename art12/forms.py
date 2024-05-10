@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, abort
 from flask_wtf import FlaskForm
 from wtforms import SelectField, StringField, PasswordField
 from wtforms.validators import Optional, InputRequired
@@ -14,11 +14,10 @@ class CommonFilterForm(FlaskForm):
     def __init__(self, *args, **kwargs):
         super(CommonFilterForm, self).__init__(*args, **kwargs)
         self.period.choices = [(d.id, d.name) for d in Dataset.query.all()]
-        dataset_id = request.args.get("period", get_default_period())
         try:
-            dataset_id = int(dataset_id)
+            dataset_id = int(request.args.get("period", get_default_period()))
         except ValueError:
-            dataset_id = get_default_period()
+            abort(404)
         self.period.default = dataset_id
         self.dataset = Dataset.query.get_or_404(dataset_id)
 
@@ -75,6 +74,10 @@ class ProgressFilterForm(CommonFilterForm):
         self.period.choices = [
             (d.id, d.name) for d in Dataset.query.filter(Dataset.id != 2)
         ]
+        try:
+            dataset_id = int(request.args.get("period", get_default_period()))
+        except ValueError:
+            abort(404)
         dataset_id = request.args.get("period", get_default_period())
         self.dataset = Dataset.query.get_or_404(dataset_id)
 

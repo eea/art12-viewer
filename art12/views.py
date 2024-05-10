@@ -3,7 +3,7 @@ import ldap
 import uuid
 
 from datetime import datetime
-from flask import flash, g, redirect, render_template, request, url_for
+from flask import flash, g, redirect, render_template, request, url_for, abort
 
 from flask.views import View
 from sqlalchemy.sql.expression import bindparam
@@ -178,7 +178,7 @@ class Progress(SpeciesMixin, TemplateView):
             elif conclusion_type == "ltwp":
                 conclusion_value = self.model_eu_cls.wi_population_trend_long
             else:
-                raise ValueError("Unknown conclusion type")
+                abort(404)
             eu_species = self.get_species_qs(dataset, conclusion_value, status_level)
 
             ignore_species = self.model_eu_cls.query.with_entities(
@@ -237,7 +237,10 @@ class ConnectedSelectBoxes(View, SpeciesMixin):
     methods = ["GET"]
 
     def dispatch_request(self):
-        dataset_id = request.args.get("dataset_id", 3)
+        try:
+            dataset_id = int(request.args.get("dataset_id", 3))
+        except ValueError:
+            abort(404)
         dataset = Dataset.query.get_or_404(dataset_id)
         options = [("", "-")] + self.get_subjects(dataset)
         return json.dumps(options)
@@ -247,7 +250,10 @@ class FilterFormReportedName(View, SpeciesMixin):
     methods = ["GET"]
 
     def dispatch_request(self):
-        dataset_id = request.args.get("dataset_id", 3)
+        try:
+            dataset_id = int(request.args.get("dataset_id", 3))
+        except ValueError:
+            abort(404)
         speciesname = request.args.get("subject", "")
         dataset = Dataset.query.get_or_404(dataset_id)
         options = [("", "-")] + self.get_reported_name(dataset, speciesname)
@@ -258,7 +264,10 @@ class FilterFormCountries(View, SpeciesMixin):
     methods = ["GET"]
 
     def dispatch_request(self):
-        dataset_id = request.args.get("dataset_id", 3)
+        try:
+            dataset_id = int(request.args.get("dataset_id", 3))
+        except ValueError:
+            abort(404)
         dataset = Dataset.query.get_or_404(dataset_id)
         options = [("", "-")] + self.get_countries(dataset)
         return json.dumps(options)
