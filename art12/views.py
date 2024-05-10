@@ -3,11 +3,14 @@ import ldap
 import uuid
 
 from datetime import datetime
-from flask import flash, g, redirect, render_template, request, url_for, abort
 
+from flask import flash, g, redirect, render_template, request, url_for, abort
 from flask.views import View
-from sqlalchemy.sql.expression import bindparam
+
 from flask_login import login_user, logout_user
+
+from sqlalchemy.sql.expression import bindparam
+
 from eea_integration.auth.security import (
     current_user,
     login_manager,
@@ -17,6 +20,7 @@ from eea_integration.auth.security import (
 from eea_integration.auth.providers import _get_initial_ldap_data
 from eea_integration.auth.common import set_user_active
 
+from art12.common import HOMEPAGE_VIEW_NAME
 from art12.common import TemplateView, get_map_path, get_map_url
 from art12.common import get_eu_map_breeding_url, get_eu_map_winter_url
 from art12.definitions import EU_COUNTRY
@@ -30,7 +34,6 @@ from art12.forms import (
 from art12.mixins import SpeciesMixin
 from art12.models import Dataset, LuDataBird, LuRestrictedDataBird, RegisteredUser, db
 
-from art12.common import HOMEPAGE_VIEW_NAME
 
 
 class Homepage(TemplateView):

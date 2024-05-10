@@ -48,7 +48,6 @@ class CommonSection(object):
         except ValueError:
             abort(404)
 
-
     def get_wiki_changes(self):
         return self.wiki_change_cls.query.filter_by(wiki=self.get_wiki())
 
