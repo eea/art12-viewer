@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.7.4 (2024-05-14)
+------------------
+* Fix errors on bad parameters
+  [dianaboiangiu]
+
 2.7.3 (2022-10-04)
 ------------------
 * Fix typo in mail address
