@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.7.5 (2024-10-29)
+------------------
+* Upgrade packages to the latest versions
+  [dianaboiangiu]
+
 2.7.4 (2024-05-14)
 ------------------
 * Fix errors on bad parameters
