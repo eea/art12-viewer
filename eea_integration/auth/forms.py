@@ -1,11 +1,11 @@
 from flask_security import ForgotPasswordForm, ConfirmRegisterForm
 from flask_wtf import FlaskForm
 from wtforms import SelectField, StringField, BooleanField
-from wtforms.validators import Optional
+from wtforms.validators import Optional, Email
 from wtforms.widgets import HiddenInput
+
 from flask_security.forms import (
     Required,
-    email_validator,
     RegisterFormMixin,
     unique_user_email,
 )
@@ -70,7 +70,7 @@ class EeaAdminEditUserForm(EeaRegisterFormBase, FlaskForm):
         "Email address",
         validators=[
             Required("Email is required"),
-            email_validator,
+            Email("Invalid email address"),
             custom_unique_user_email,
         ],
     )
@@ -78,7 +78,11 @@ class EeaAdminEditUserForm(EeaRegisterFormBase, FlaskForm):
 
 class EeaLDAPRegisterForm(EeaRegisterFormBase, RegisterFormMixin, FlaskForm):
     email = StringField(
-        "Email address", validators=[Required("Email is required"), email_validator]
+        "Email address",
+        validators=[
+            Required("Email is required"),
+            Email("Invalid email address"),
+        ]
     )
 
 
@@ -94,5 +98,9 @@ class EeaLocalRegisterForm(EeaRegisterFormBase, ConfirmRegisterForm):
 
     email = CustomEmailStringField(
         "Email address",
-        validators=[Required("Email is required"), email_validator, unique_user_email],
+        validators=[
+            Required("Email is required"),
+            Email("Invalid email address"),
+            unique_user_email
+        ],
     )

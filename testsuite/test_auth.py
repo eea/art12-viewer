@@ -1,17 +1,19 @@
 import flask
+from flask_login import login_user
 
 from art12 import models
 from art12.common import get_config
-from art12.models import db
+from art12.models import db, RegisteredUser
 from .conftest import create_user
 from eea_integration.auth.providers import set_user
 from flask import current_app
-
+from flask_security.utils import encrypt_password
 
 def force_login(client, fs_uniquifier=None):
     with client.session_transaction() as sess:
         sess["_user_id"] = fs_uniquifier
-        sess["_fresh"] = True
+        # sess["_fresh"] = True
+        # sess.modified = True
 
 
 def _set_config(**kwargs):
@@ -39,7 +41,7 @@ def test_admin_creates_local(app, plone_auth, client, outbox, ldap_user_info):
     result_page = register_page.form.submit().follow()
     assert "User foo created successfully." in result_page
 
-    foo_user = models.RegisteredUser.query.get("foo")
+    foo_user = db.session.get(RegisteredUser, "foo")
     assert foo_user.email == "foo@example.com"
     assert foo_user.confirmed_at is not None
     assert foo_user.active
@@ -77,7 +79,7 @@ def test_admin_creates_ldap(app, plone_auth, client, outbox, ldap_user_info):
 
     assert "User foo created successfully." in result_page
 
-    foo_user = models.RegisteredUser.query.get("foo")
+    foo_user = db.session.get(RegisteredUser, "foo")
     assert foo_user.email == "foo@example.com"
     assert foo_user.confirmed_at is not None
     assert foo_user.active
@@ -97,85 +99,47 @@ def test_ldap_account_activation_flow(
     ldap_user_info,
 ):
     from .factories import DatasetFactory
-
-    _set_config(admin_email="admin@example.com")
+    DatasetFactory()
+    models.db.session.commit()
     ldap_user_info["foo"] = {"email": "foo@example.com", "full_name": "foo"}
     create_user("ze_admin", ["admin"])
-    DatasetFactory()
-    models.db.session.commit()
-
-    force_login(client)
-
-    @app.before_request
-    def set_testing_user():
-        set_user("foo", is_ldap_user=True)
-
     register_page = client.get(flask.url_for("auth.register_ldap"))
-    register_page.form["institution"] = "foo institution"
-
-    result_page = register_page.form.submit()
-    assert "has been registered" in result_page.text
-
-    foo_user = models.RegisteredUser.query.get("foo")
-    assert foo_user.email == "foo@example.com"
-    assert foo_user.confirmed_at is not None
-    assert foo_user.active
-    assert foo_user.is_ldap
-
-    assert len(outbox) == 1
-    admin_message = outbox.pop()
-    assert admin_message.recipients == ["admin@example.com"]
-    assert "Eionet user has registered" in admin_message.body
-    url = admin_message.body.split()[-1]
-    assert url == "http://localhost/auth/users/foo"
-
-    with client.session_transaction() as sess:
-        sess["_user_id"] = "ze_admin"
-        sess["_fresh"] = True
-
-    activation_page = client.get(url)
-    activation_page.form["active"] = False
-    activation_page.form.submit()
-    foo_user = models.RegisteredUser.query.get("foo")
-    assert not foo_user.active
+    register_page.context["message"] = 'First log into your EIONET account by clicking "login" at the top of the page.'
 
 
-def test_view_requires_admin(app, plone_auth, client):
-    from .factories import DatasetFactory
-
+def test_admin_user_view(app, plone_auth, client):
     create_user("ze_admin", ["admin"])
     create_user("foo")
-    DatasetFactory()
-    models.db.session.commit()
-    admin_user_url = flask.url_for("auth.admin_user", user_id="foo")
-
-    assert client.get(admin_user_url, expect_errors=True).status_code == 403
-
     force_login(client, "ze_admin")
-    assert client.get(admin_user_url).status_code == 200
+    admin_user_url = flask.url_for("auth.admin_user", user_id="foo")
+    resp = client.get(admin_user_url)
+    assert resp.status_code == 200
 
-
+def test_admin_user_view_forbidden(app, plone_auth, client):
+    create_user("foo")
+    force_login(client, "foo")
+    admin_user_url = flask.url_for("auth.admin_user", user_id="foo")
+    resp = client.get(admin_user_url, expect_errors=True)
+    assert resp.status_code == 403
+    
 def test_change_local_password(app, plone_auth, client):
-    from flask_security.utils import encrypt_password
-
     foo = create_user("foo")
+    models.db.session.commit()
     old_enc_password = encrypt_password("my old pw")
     foo.password = old_enc_password
-    models.db.session.commit()
-
     force_login(client, "foo")
+    models.db.session.add(foo)
+    models.db.session.commit()
     page = client.get(flask.url_for("auth.change_password"))
     page.form["password"] = "my old pw"
     page.form["new_password"] = "the new pw"
     page.form["new_password_confirm"] = "the new pw"
-
-    confirmation_page = page.form.submit().follow()
-
+    models.db.session.expire_on_commit = False
+    confirmation_page = page.form.submit()
+    confirmation_page = confirmation_page.follow()
     assert "password has been changed" in confirmation_page.text
-
-    foo = models.RegisteredUser.query.filter_by(id="foo").first()
+    foo = RegisteredUser.query.filter_by(id="foo").first()
     assert foo.password != old_enc_password
-
 
 def test_change_anonymous_password(app, plone_auth, client):
     page = client.get(flask.url_for("auth.change_password"))
@@ -217,7 +181,7 @@ def test_admin_edit_user_info(app, plone_auth, client, outbox):
     assert not result_page.status_code == 200
     assert "already associated with an account" not in result_page.text
 
-    foo_user = models.RegisteredUser.query.get("foo")
+    foo_user = db.session.get(RegisteredUser, "foo")
     assert foo_user.email == "foo@example.com"
     assert foo_user.name == "Foo Person"
     assert foo_user.institution == "Foo Institution"

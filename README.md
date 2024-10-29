@@ -83,9 +83,14 @@ Tests
 
 2. Access the art12-mysql container:
 
-       docker exec -it art12-mysql bash
+       docker exec -it art12.db bash
 
 3. Create the test database and grant all the privileges to the test user:
+
+        CREATE USER art12 WITH PASSWORD 'password';
+        CREATE DATABASE art12_test;
+        GRANT ALL PRIVILEGES ON DATABASE art12_test TO art12;
+        ALTER DATABASE art12_test OWNER TO art12;
 
        create database art12test character set utf8 collate utf8_general_ci;
        create user 'test'@'%' identified by 'test';
@@ -96,9 +101,9 @@ Tests
 
        # test art12
        DB_NAME_TEST=art12_test
-       DB_USER_TEST=test
-       DB_PASSWORD_TEST=test
-       DB_HOST_TEST=mysql
+       DB_USER_TEST=art12
+       DB_PASSWORD_TEST=art12
+       DB_HOST_TEST=db
 
 5. Access the art12-app container:
 
@@ -110,7 +115,7 @@ Tests
 
 7. Run tests:
 
-       py.test testsuite
+       pytest testsuite
 
 
 Build production

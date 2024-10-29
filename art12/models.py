@@ -37,7 +37,7 @@ metadata = Base.metadata
 
 
 def get_ldap_connection():
-    ldap_url = "{}://{}:{}".format(
+    ldap_url = "{}://{}".format(
         app.config["EEA_LDAP_PROTOCOL"],
         app.config["EEA_LDAP_SERVER"],
         app.config["EEA_LDAP_PORT"],
@@ -314,7 +314,7 @@ class EtcBirdsEu(Base):
     decision = Column(String(20))
     user_decision = Column(String(50))
     last_update_decision = Column(String(50))
-    additional_record = Column("addtionnal_record", Integer)
+    additional_record = Column("addtionnal_record", Boolean)
     dataset_id = Column(
         "ext_dataset_id",
         ForeignKey("datasets.id"),

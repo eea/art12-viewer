@@ -68,7 +68,9 @@ def get_arg(kwargs, key, default=None):
 
 def get_query_result(engine, query, value):
     sql = text(query).bindparams(bindparam("value", String))
-    result = engine.execute(sql, value=value)
+    result = []
+    with engine.connect() as conn:
+        result = conn.execute(statement=sql, parameters={'value':value})
     return ", ".join([row[0] for row in result if row[0]])
 
 
@@ -130,16 +132,23 @@ class BirdFactsheet(MethodView):
         sql = text(MS_TABLE_Q).bindparams(
             bindparam("subject", String), bindparam("period", Integer)
         )
-        result = self.tool_engine.execute(
-            sql,
-            subject=str(self.subject),  # Explicitly cast subject to String
-            period=int(self.period),  # Explicitly cast period to Integer
-        )
+        result = []
+        with self.tool_engine.connect() as conn:
+            result = conn.execute(
+                sql,
+                subject=str(self.subject),  # Explicitly cast subject to String
+                period=int(self.period),  # Explicitly cast period to Integer
+            )
         obj.ms_birds = [DummyCls(**dict(row.items())) for row in result]
 
     def is_spa_trigger(self):
         sql = text(SPA_TRIGGER_Q).bindparams(bindparam("subject", String))
-        result = self.engine.execute(sql, subject=self.subject)
+        result = []
+        with self.engine.connect() as conn:
+            result = conn.execute(
+                sql,
+                subject=self.subject
+            )
         row = result and result.first()
         return row and row["count"] > 0
 
@@ -154,8 +163,8 @@ class BirdFactsheet(MethodView):
         except ValueError:
             self.period = app.config["DEFAULT_PERIOD"]
         self.subject = get_arg(kwargs, "subject")
-        self.engine = db.get_engine(app, "factsheet")
-        self.tool_engine = db.get_engine(app)
+        self.engine = db.get_engine("factsheet")
+        self.tool_engine = db.get_engine()
 
         bird_obj = DummyCls()
         self.set_properties(bird_obj)
@@ -190,7 +199,7 @@ class BirdFactsheet(MethodView):
 
     @classmethod
     def get_pdf_file_name(cls, subject, engine=None):
-        engine = engine or db.get_engine(app, "factsheet")
+        engine = engine or db.get_engine("factsheet")
         name = get_query_result(engine, SPECIESNAME_Q, subject)
         subunit = get_query_result(engine, SUBUNIT_Q, subject)
         return slugify("{} {}".format(name, subunit))
@@ -235,7 +244,7 @@ class FactsheetHeader(MethodView):
         bird = EtcDataBird.query.filter_by(
             speciescode=subject, dataset_id=period
         ).first_or_404()
-        factsheet_engine = db.get_engine(app, "factsheet")
+        factsheet_engine = db.get_engine("factsheet")
         result = get_query_result(factsheet_engine, SUBUNIT_Q, subject)
         row = result and result.first()
         subunit = row and row["sub_unit"]

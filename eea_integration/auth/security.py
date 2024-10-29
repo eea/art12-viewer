@@ -1,11 +1,11 @@
-from datetime import datetime
+from datetime import datetime, UTC
 import flask
 import flask_security.utils
 import flask_security as flask_security
 from flask_login import current_user as c_user
 from flask_security import user_registered
 from flask_security import SQLAlchemyUserDatastore
-from flask_security import AnonymousUser as BaseAnonymousUser
+from flask_security.core import AnonymousUser as BaseAnonymousUser
 from flask_login import LoginManager
 from werkzeug.local import LocalProxy
 from wtforms import ValidationError
@@ -61,7 +61,7 @@ flask_security.forms.verify_and_update_password = verify
 class UserDatastore(SQLAlchemyUserDatastore):
     def create_user(self, **kwargs):
         kwargs.setdefault("active", False)
-        kwargs["account_date"] = datetime.utcnow().strftime("%Y-%m-%d %H:%M")
+        kwargs["account_date"] = datetime.now(UTC).strftime("%Y-%m-%d %H:%M")
         return super(UserDatastore, self).create_user(**kwargs)
 
     def _prepare_role_modify_args(self, role):
@@ -79,7 +79,7 @@ def check_duplicate_with_ldap(form, field):
 
 
 def check_duplicate_with_local_db(form, field):
-    user = auth.models.RegisteredUser.query.get(field.data)
+    user = auth.models.db.session.get(auth.models.RegisteredUser, field.data)
     if user is not None:
         raise ValidationError("Username already exists")
 

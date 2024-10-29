@@ -1,14 +1,16 @@
 import flask
+import os
 from flask_security import Security
 from flask_webtest import TestApp
 from pytest import fixture
 from alembic import config
-from path import Path
 from mock import patch
-from datetime import datetime
+from datetime import datetime, UTC
 import urllib
 from smart_getenv import getenv
-
+from sqlalchemy.sql import text
+from sqlalchemy.orm import close_all_sessions
+from flask_login import FlaskLoginClient
 from art12.app import create_app
 from art12 import models
 from art12.common import HOMEPAGE_VIEW_NAME
@@ -29,6 +31,8 @@ TEST_CONFIG = {
     "SQLALCHEMY_TRACK_MODIFICATIONS": False,
     "EEA_PASSWORD_RESET": "pw_reset",
     "SECURITY_PASSWORD_HASH": "ldap_salted_sha1",
+    "MAIL_DEFAULT_SENDER": "no-reply@localhost.com",
+    "SESSION_PROTECTION": None,
     # "SECURITY_PASSWORD_SALT": 'salted',
     # "SQLALCHEMY_DATABASE_URI": "sqlite:///:memory:",
     "SQLALCHEMY_DATABASE_URI": "postgresql://{}{}@{}/{}".format(
@@ -37,30 +41,39 @@ TEST_CONFIG = {
         getenv("DB_HOST_TEST"),
         getenv("DB_NAME_TEST"),
     ),
+    "MAPS_FORMAT":"{code}_{suffix}.png",
+    "MAPS_STATIC":"maps",
 }
 
-alembic_cfg_path = Path((__file__)).dirname() / ".." / "alembic.ini"
-alembic_cfg = config.Config(alembic_cfg_path.abspath())
+
+current_dir = os.path.dirname(__file__)
+alembic_cfg_path = os.path.abspath(os.path.join(current_dir, "..", "alembic.ini"))
+alembic_cfg = config.Config(alembic_cfg_path)
 
 
 def create_generic_fixtures():
+    models.db.session.commit()
+    models.db.close_all_sessions()
+    close_all_sessions()
     models.db.drop_all()
     models.db.create_all()
-    models.db.session.execute(
+    models.db.session.execute(text(
         "insert into roles(name, description) values "
         "('admin', 'Administrator'), "
         "('etc', 'European topic center'), "
         "('stakeholder', 'Stakeholder'), "
         "('nat', 'National expert')"
     )
-    models.db.session.execute("insert into config(default_dataset_id) values (3)")
-
+    )
+    models.db.session.execute(text(
+        "insert into config(default_dataset_id) values (3)"
+    ))
 
 def create_testing_app():
     test_config = dict(TEST_CONFIG)
 
     app = create_app(test_config, testing=True)
-    models.db.init_app(app)
+    app.test_client_class = FlaskLoginClient
     return app
 
 
@@ -87,7 +100,7 @@ def app(request):
 
 @fixture
 def client(app):
-    client = TestApp(app, db=models.db, use_session_scopes=True)
+    client = TestApp(app, db=models.db)
     return client
 
 
@@ -141,7 +154,7 @@ def plone_auth(app, request):
 def create_user(user_id, role_names=[], name="", institution="", ms=""):
     user = models.RegisteredUser(
         id=user_id,
-        account_date=datetime.utcnow().strftime("%Y-%m-%d %H:%M"),
+        account_date=datetime.now(UTC).strftime("%Y-%m-%d %H:%M"),
         active=True,
         name=name,
         email="%s@example.com" % user_id,

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, UTC
 
 import flask
 from flask import current_app
@@ -64,7 +64,7 @@ def admin_create_local():
         encrypted_password = encrypt_password(plaintext_password)
         datastore = flask.current_app.extensions["security"].datastore
         user = datastore.create_user(**kwargs)
-        user.confirmed_at = datetime.utcnow()
+        user.confirmed_at = datetime.now(UTC)
         set_user_active(user, True)
         user.password = encrypted_password
         datastore.commit()
@@ -118,7 +118,7 @@ def register_ldap():
                 id=user_id,
                 is_ldap=True,
                 password="",
-                confirmed_at=datetime.utcnow(),
+                confirmed_at=datetime.now(UTC),
                 **form.to_dict(only_user=True)
             )
             datastore.commit()
@@ -126,7 +126,7 @@ def register_ldap():
                 "Eionet account %s has been activated" % user_id,
                 "success",
             )
-            activate_and_notify_admin(flask._app_ctx_stack.top.app, user)
+            activate_and_notify_admin(current_app, user)
             add_default_role(user)
             return flask.render_template("auth/register_ldap_done.html")
 
@@ -150,8 +150,7 @@ def admin_create_ldap():
         return flask.render_template(
             "auth/register_ldap_enter_user_id.html", **{"form": form}
         )
-
-    if auth.models.RegisteredUser.query.get(user_id) is not None:
+    if auth.models.db.session.get(auth.models.RegisteredUser, user_id) is not None:
         flask.flash('User "%s" already registered.' % user_id, "error")
         return flask.redirect(flask.url_for(".admin_create_ldap"))
 
@@ -172,7 +171,7 @@ def admin_create_ldap():
             kwargs["is_ldap"] = True
             datastore = flask.current_app.extensions["security"].datastore
             user = datastore.create_user(**kwargs)
-            user.confirmed_at = datetime.utcnow()
+            user.confirmed_at = datetime.now(UTC)
             set_user_active(user, True)
             datastore.commit()
             send_welcome_email(user)

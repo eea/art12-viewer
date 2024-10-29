@@ -183,7 +183,6 @@ class Progress(SpeciesMixin, TemplateView):
             else:
                 abort(404)
             eu_species = self.get_species_qs(dataset, conclusion_value, status_level)
-
             ignore_species = self.model_eu_cls.query.with_entities(
                 self.model_eu_cls.speciescode
             )
@@ -200,7 +199,6 @@ class Progress(SpeciesMixin, TemplateView):
                     bindparam("", ""),
                 )
             )
-
             species = sorted(eu_species.union(ms_species), key=lambda x: x.name)
 
         return {
@@ -289,7 +287,7 @@ class EuMap(TemplateView):
 
 @login_manager.user_loader
 def load_user(id=None):
-    return RegisteredUser.query.get(id)
+    return db.session.get(RegisteredUser, id)
 
 
 def try_local_login(username, password, form):

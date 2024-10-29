@@ -25,12 +25,7 @@ fi
 
 if [ -z "$1" ]; then
   echo "Serving on port 5000"
-  exec gunicorn -e SCRIPT_NAME=$SCRIPT_NAME \
-                manage:app \
-                --name article12 \
-                --bind 0.0.0.0:5000 \
-                --access-logfile - \
-                --error-logfile -
+  exec gunicorn -c gunicorn_config.py manage:app
 fi
 
 if [[ $COMMANDS == *"$1"* ]]; then

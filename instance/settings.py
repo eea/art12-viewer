@@ -40,14 +40,6 @@ EEA_LDAP_PROTOCOL = getenv("EEA_LDAP_PROTOCOL", default="")
 EEA_LDAP_SERVER = getenv("EEA_LDAP_SERVER", default="")
 EEA_LDAP_PORT = getenv("EEA_LDAP_PORT", default="")
 
-# Set this for correct links in emails.
-if getenv("PUBLIC_SERVER_NAME", default=None) is not None:
-    PUBLIC_SERVER_NAME = getenv("PUBLIC_SERVER_NAME")
-    SECURITY_EMAIL_SENDER = DEFAULT_MAIL_SENDER = "noreply@" + PUBLIC_SERVER_NAME
-elif getenv("SERVER_NAME", default=None) is not None:
-    SERVER_NAME = getenv("SERVER_NAME")
-    SECURITY_EMAIL_SENDER = DEFAULT_MAIL_SENDER = "noreply@" + SERVER_NAME
-
 SECURITY_POST_REGISTER_VIEW = getenv(
     "SECURITY_POST_REGISTER_VIEW", default="/article12/"
 )
@@ -77,3 +69,11 @@ MAIL_USE_TLS = getenv("MAIL_USE_TLS")
 MAIL_USE_SSL = getenv("MAIL_USE_SSL")
 MAIL_USERNAME = getenv("MAIL_USERNAME")
 MAIL_PASSWORD = getenv("MAIL_PASSWORD")
+
+# Set this for correct links in emails.
+if getenv("PUBLIC_SERVER_NAME", default=None) is not None:
+    PUBLIC_SERVER_NAME = getenv("PUBLIC_SERVER_NAME")
+    MAIL_DEFAULT_SENDER = f"noreply@{PUBLIC_SERVER_NAME}"
+elif getenv("SERVER_NAME", default=None) is not None:
+    SERVER_NAME = getenv("SERVER_NAME")
+    MAIL_DEFAULT_SENDER = f"noreply@{SERVER_NAME}"

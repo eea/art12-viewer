@@ -1,9 +1,8 @@
 -r requirements.txt
-Flask-WebTest==0.0.9
-WebTest==2.0.35
-factory-boy==3.2.0
-mock==4.0.3
-pytest==6.2.4
-gunicorn==20.1.0
-flake8==3.9.2
-black==22.3.0
+Flask-WebTest==0.1.6
+WebTest==3.0.1
+factory-boy==3.3.1
+mock==5.1.0
+pytest==8.3.3
+flake8==7.1.1
+black==24.10.0

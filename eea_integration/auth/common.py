@@ -39,7 +39,7 @@ def activate_and_notify_admin(app, user, **extra):
     else:
         msg = Message(
             subject="User has registered",
-            sender=app.extensions["security"].email_sender,
+            sender=app.config["MAIL_DEFAULT_SENDER"],
             recipients=admin_email.split(),
         )
         msg.body = flask.render_template(
@@ -96,7 +96,7 @@ def send_role_change_notification(user, new_roles):
     role_description = {row.name: row.description for row in auth.models.Role.query}
     msg = Message(
         subject="Role update on the Biological Diversity website",
-        sender=app.extensions["security"].email_sender,
+        sender=app.config["MAIL_DEFAULT_SENDER"],
         recipients=[user.email],
     )
     msg.body = flask.render_template(
@@ -113,7 +113,7 @@ def send_welcome_email(user, plaintext_password=None):
     app = flask.current_app
     msg = Message(
         subject="Role update on the Biological Diversity website",
-        sender=app.extensions["security"].email_sender,
+        sender=app.config["MAIL_DEFAULT_SENDER"],
         recipients=[user.email],
     )
     msg.body = flask.render_template(
