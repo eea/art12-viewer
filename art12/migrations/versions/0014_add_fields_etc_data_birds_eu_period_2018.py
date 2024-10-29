@@ -1,3 +1,6 @@
+from alembic import op
+import sqlalchemy as sa
+
 """add_fields_etc_data_birds_eu_period_2018
 
 Revision ID: 0014
@@ -9,9 +12,6 @@ Create Date: 2020-04-03 12:45:16.506572
 # revision identifiers, used by Alembic.
 revision = "0014"
 down_revision = "0013"
-
-from alembic import op
-import sqlalchemy as sa
 
 
 def upgrade():

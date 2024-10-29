@@ -1,3 +1,7 @@
+from alembic import op
+import sqlalchemy as sa
+import uuid
+
 """add fs_uniquifier to registered_users
 
 Revision ID: 0020
@@ -5,9 +9,6 @@ Revises: 0019
 Create Date: 2021-07-23 15:12:41.250524
 
 """
-from alembic import op
-import sqlalchemy as sa
-import uuid
 
 # revision identifiers, used by Alembic.
 revision = "0020"

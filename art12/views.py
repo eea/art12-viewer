@@ -35,7 +35,6 @@ from art12.mixins import SpeciesMixin
 from art12.models import Dataset, LuDataBird, LuRestrictedDataBird, RegisteredUser, db
 
 
-
 class Homepage(TemplateView):
     template_name = "homepage.html"
 
@@ -58,7 +57,6 @@ class Summary(SpeciesMixin, TemplateView):
             .first_or_404()
             .speciescode
         )
-        return lu_data_bird.speciescode
 
     def get_context_data(self, **kwargs):
         map_url = ""

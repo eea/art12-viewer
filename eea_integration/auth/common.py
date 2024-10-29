@@ -64,7 +64,6 @@ def require_admin(view):
 
 
 def set_user_active(user, new_active):
-    was_active = user.active
     user.active = new_active
     auth.models.db.session.commit()
 

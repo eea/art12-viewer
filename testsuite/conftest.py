@@ -41,8 +41,8 @@ TEST_CONFIG = {
         getenv("DB_HOST_TEST"),
         getenv("DB_NAME_TEST"),
     ),
-    "MAPS_FORMAT":"{code}_{suffix}.png",
-    "MAPS_STATIC":"maps",
+    "MAPS_FORMAT": "{code}_{suffix}.png",
+    "MAPS_STATIC": "maps",
 }
 
 
@@ -57,17 +57,17 @@ def create_generic_fixtures():
     close_all_sessions()
     models.db.drop_all()
     models.db.create_all()
-    models.db.session.execute(text(
-        "insert into roles(name, description) values "
-        "('admin', 'Administrator'), "
-        "('etc', 'European topic center'), "
-        "('stakeholder', 'Stakeholder'), "
-        "('nat', 'National expert')"
+    models.db.session.execute(
+        text(
+            "insert into roles(name, description) values "
+            "('admin', 'Administrator'), "
+            "('etc', 'European topic center'), "
+            "('stakeholder', 'Stakeholder'), "
+            "('nat', 'National expert')"
+        )
     )
-    )
-    models.db.session.execute(text(
-        "insert into config(default_dataset_id) values (3)"
-    ))
+    models.db.session.execute(text("insert into config(default_dataset_id) values (3)"))
+
 
 def create_testing_app():
     test_config = dict(TEST_CONFIG)

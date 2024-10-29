@@ -1,3 +1,6 @@
+from alembic import op
+import sqlalchemy as sa
+
 """eu_population
 
 Revision ID: 0012
@@ -7,9 +10,6 @@ Create Date: 2015-04-21 16:49:48.444859
 """
 revision = "0012"
 down_revision = "0011"
-
-from alembic import op
-import sqlalchemy as sa
 
 
 def upgrade():

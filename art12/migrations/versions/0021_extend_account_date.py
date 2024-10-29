@@ -1,3 +1,6 @@
+from alembic import op
+import sqlalchemy as sa
+
 """empty message
 
 Revision ID: 8a10b516e6a4
@@ -5,9 +8,6 @@ Revises: 0020
 Create Date: 2023-12-22 13:12:19.067055
 
 """
-from alembic import op
-import sqlalchemy as sa
-
 
 # revision identifiers, used by Alembic.
 revision = "0021"

@@ -82,7 +82,7 @@ class EeaLDAPRegisterForm(EeaRegisterFormBase, RegisterFormMixin, FlaskForm):
         validators=[
             Required("Email is required"),
             Email("Invalid email address"),
-        ]
+        ],
     )
 
 
@@ -101,6 +101,6 @@ class EeaLocalRegisterForm(EeaRegisterFormBase, ConfirmRegisterForm):
         validators=[
             Required("Email is required"),
             Email("Invalid email address"),
-            unique_user_email
+            unique_user_email,
         ],
     )

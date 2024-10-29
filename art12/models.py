@@ -1,13 +1,13 @@
 # coding: utf-8
-import os
-import sys
 import json
 import ldap
+import os
 import sqlalchemy
-from sqlalchemy import inspect
-
+import sys
 
 from datetime import datetime
+from sqlalchemy import inspect
+
 from flask_security import UserMixin, RoleMixin
 from flask_sqlalchemy import SQLAlchemy
 from flask import current_app as app
@@ -37,7 +37,7 @@ metadata = Base.metadata
 
 
 def get_ldap_connection():
-    ldap_url = "{}://{}".format(
+    ldap_url = "{}://{}:{}".format(
         app.config["EEA_LDAP_PROTOCOL"],
         app.config["EEA_LDAP_SERVER"],
         app.config["EEA_LDAP_PORT"],
@@ -562,7 +562,7 @@ def dumpdata(model):
         for field in model_fields:
             value = getattr(entry, field)
 
-            if type(value) == datetime:
+            if isinstance(value, datetime):
                 value = value.isoformat()
 
             kwargs["fields"][field] = value

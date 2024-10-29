@@ -1,19 +1,18 @@
 import flask
-from flask_login import login_user
+from flask import current_app
+from flask_security.utils import encrypt_password
 
 from art12 import models
 from art12.common import get_config
 from art12.models import db, RegisteredUser
-from .conftest import create_user
-from eea_integration.auth.providers import set_user
-from flask import current_app
-from flask_security.utils import encrypt_password
+
+from testsuite.conftest import create_user
+
 
 def force_login(client, fs_uniquifier=None):
     with client.session_transaction() as sess:
         sess["_user_id"] = fs_uniquifier
-        # sess["_fresh"] = True
-        # sess.modified = True
+        sess["_fresh"] = True
 
 
 def _set_config(**kwargs):
@@ -99,12 +98,15 @@ def test_ldap_account_activation_flow(
     ldap_user_info,
 ):
     from .factories import DatasetFactory
+
     DatasetFactory()
     models.db.session.commit()
     ldap_user_info["foo"] = {"email": "foo@example.com", "full_name": "foo"}
     create_user("ze_admin", ["admin"])
     register_page = client.get(flask.url_for("auth.register_ldap"))
-    register_page.context["message"] = 'First log into your EIONET account by clicking "login" at the top of the page.'
+    register_page.context["message"] = (
+        'First log into your EIONET account by clicking "login" at the top of the page.'
+    )
 
 
 def test_admin_user_view(app, plone_auth, client):
@@ -115,13 +117,15 @@ def test_admin_user_view(app, plone_auth, client):
     resp = client.get(admin_user_url)
     assert resp.status_code == 200
 
+
 def test_admin_user_view_forbidden(app, plone_auth, client):
     create_user("foo")
     force_login(client, "foo")
     admin_user_url = flask.url_for("auth.admin_user", user_id="foo")
     resp = client.get(admin_user_url, expect_errors=True)
     assert resp.status_code == 403
-    
+
+
 def test_change_local_password(app, plone_auth, client):
     foo = create_user("foo")
     models.db.session.commit()
@@ -141,6 +145,7 @@ def test_change_local_password(app, plone_auth, client):
     foo = RegisteredUser.query.filter_by(id="foo").first()
     assert foo.password != old_enc_password
 
+
 def test_change_anonymous_password(app, plone_auth, client):
     page = client.get(flask.url_for("auth.change_password"))
     assert "You must log in before changing your password" in page
@@ -154,9 +159,7 @@ def test_change_ldap_password(app, plone_auth, client):
     models.db.session.commit()
     force_login(client, "foo")
     page = client.get(flask.url_for("auth.change_password"))
-    msg = "Your password can be changed only from the EIONET website ({}).".format(
-        EEA_PASSWORD_RESET
-    )
+    msg = f"Your password can be changed only from the EIONET website ({EEA_PASSWORD_RESET})."
     assert page.context["message"] == msg
 
 

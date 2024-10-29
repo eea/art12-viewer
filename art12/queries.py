@@ -39,7 +39,7 @@ SELECT
   A.range_trend_bs,
   A.range_trend_long_bs,
   CASE
-    WHEN A.population_minimum_size_ws IS null 
+    WHEN A.population_minimum_size_ws IS null
       AND A.population_maximum_size_ws IS null
       THEN null
       ELSE CONCAT_WS(
@@ -61,7 +61,7 @@ SELECT count(*) AS count
 
 
 PRESS_THRE_Q = """
-SELECT rst.* FROM ( 
+SELECT rst.* FROM (
   SELECT
     rs1.level2_code AS code,
     rs1.level2_name AS name,
@@ -146,7 +146,7 @@ LIMIT 10;
 """
 
 N2K_Q = """
-SELECT 
+SELECT
   t.country AS reg,
   IF(t.season = 'W', 'winter', 'breeding') AS wb,
     'YES' AS spa,
@@ -195,8 +195,8 @@ ORDER  BY reg ASC,
 
 CONS_MEASURES_Q = """
 SELECT rst.*
-FROM (SELECT rs1.level2_code                        AS code,
-             rs1.level2_name                        AS name,
+FROM (SELECT rs1.level2_code AS code,
+             rs1.level2_name AS name,
              Round(100 * rs1.pl2_num / rs2.pl2_tot) AS pc
       FROM (SELECT e.level2_code,
                    e.level2_name,

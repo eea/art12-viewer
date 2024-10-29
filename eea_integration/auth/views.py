@@ -49,7 +49,7 @@ def register_local():
         "auth/register_local.html",
         **{
             "register_user_form": form,
-        }
+        },
     )
 
 
@@ -76,7 +76,7 @@ def admin_create_local():
         "auth/register_local.html",
         **{
             "register_user_form": form,
-        }
+        },
     )
 
 
@@ -102,7 +102,7 @@ def register_ldap():
             "auth/register_ldap_exists.html",
             **{
                 "admin_email": current_app.config.get("ADMIN_EMAIL"),
-            }
+            },
         )
 
     initial_data = _get_initial_ldap_data(user_id)
@@ -119,7 +119,7 @@ def register_ldap():
                 is_ldap=True,
                 password="",
                 confirmed_at=datetime.now(UTC),
-                **form.to_dict(only_user=True)
+                **form.to_dict(only_user=True),
             )
             datastore.commit()
             flask.flash(
@@ -136,7 +136,7 @@ def register_ldap():
             "already_registered": flask.g.get("user") is not None,
             "user_id": user_id,
             "register_user_form": form,
-        }
+        },
     )
 
 
@@ -186,7 +186,7 @@ def admin_create_ldap():
         **{
             "user_id": user_id,
             "register_user_form": form,
-        }
+        },
     )
 
 
@@ -227,7 +227,7 @@ def change_password():
         "auth/change_password.html",
         **{
             "form": form,
-        }
+        },
     )
 
 
@@ -258,7 +258,7 @@ def users():
             "user_list": user_query.all(),
             "role_map": get_roles_for_all_users(),
             "countries": dict(countries),
-        }
+        },
     )
 
 
@@ -320,7 +320,7 @@ def admin_user(user_id):
             "user_form": user_form,
             "current_user_roles": current_user_roles,
             "all_roles": dict(all_roles),
-        }
+        },
     )
 
 
@@ -341,7 +341,7 @@ def admin_user_reset_password(user_id):
     if form.validate_on_submit():
         user.password = encrypt_password(form.password.data)
         auth.models.db.session.commit()
-        msg = "The password for user {} has been reset successfully".format(user.id)
+        msg = f"The password for user {user.id} has been reset successfully"
         flask.flash(msg, "success")
 
     return flask.render_template(
@@ -349,5 +349,5 @@ def admin_user_reset_password(user_id):
         **{
             "user": user,
             "form": form,
-        }
+        },
     )

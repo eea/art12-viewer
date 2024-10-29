@@ -1,3 +1,6 @@
+from alembic import op
+import sqlalchemy as sa
+
 """add to Config for winter eu map
 
 Revision ID: 0011
@@ -8,9 +11,6 @@ Create Date: 2014-10-24 15:15:17.055466
 
 revision = "0011"
 down_revision = "0010"
-
-from alembic import op
-import sqlalchemy as sa
 
 
 def upgrade():

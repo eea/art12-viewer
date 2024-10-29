@@ -1,3 +1,6 @@
+from alembic import op
+import sqlalchemy as sa
+
 """add_wiki_and_wiki_change_tables
 
 Revision ID: 0006
@@ -8,9 +11,6 @@ Create Date: 2014-10-07 15:52:07.956349
 # revision identifiers, used by Alembic.
 revision = "0006"
 down_revision = "0005"
-
-from alembic import op
-import sqlalchemy as sa
 
 
 def upgrade():

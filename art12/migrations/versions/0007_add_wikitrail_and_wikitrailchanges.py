@@ -1,3 +1,6 @@
+from alembic import op
+import sqlalchemy as sa
+
 """add WikiTrail and WikiTrailChanges
 
 Revision ID: 0007
@@ -9,9 +12,6 @@ Create Date: 2014-10-07 18:12:32.559577
 # revision identifiers, used by Alembic.
 revision = "0007"
 down_revision = "0006"
-
-from alembic import op
-import sqlalchemy as sa
 
 
 def upgrade():

@@ -1,3 +1,6 @@
+from alembic import op
+import sqlalchemy as sa
+
 """add reported_name to etc_birds_eu_view
 
 Revision ID: 0019
@@ -9,9 +12,6 @@ Create Date: 2020-10-19 16:43:53.628563
 # revision identifiers, used by Alembic.
 revision = "0019"
 down_revision = "0018"
-
-from alembic import op
-import sqlalchemy as sa
 
 
 def upgrade():

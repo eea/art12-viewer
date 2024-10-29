@@ -1,3 +1,6 @@
+from alembic import op
+import sqlalchemy as sa
+
 """add_presence_columns
 
 Revision ID: 0009
@@ -9,9 +12,6 @@ Create Date: 2014-10-10 15:50:31.567980
 # revision identifiers, used by Alembic.
 revision = "0009"
 down_revision = "0008"
-
-from alembic import op
-import sqlalchemy as sa
 
 
 def upgrade():

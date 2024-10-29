@@ -1,3 +1,6 @@
+from alembic import op
+import sqlalchemy as sa
+
 """empty message
 
 Revision ID: 0015
@@ -9,9 +12,6 @@ Create Date: 2020-05-11 13:02:41.122492
 # revision identifiers, used by Alembic.
 revision = "0015"
 down_revision = "0014"
-
-from alembic import op
-import sqlalchemy as sa
 
 
 def upgrade():

@@ -201,7 +201,7 @@ def get_map_url(subject, reported_name, dataset, sensitive=False):
     if not map_href:
         return ""
 
-    return map_href + "&code={}&zoomto=true&embed=true".format(code)
+    return f"{map_href}&code={code}&zoomto=true&embed=true"
 
 
 def get_eu_map_breeding_url(subject, sensitive=False):
@@ -308,7 +308,7 @@ def change_details():
         "change_details.html",
         **{
             "form": form,
-        }
+        },
     )
 
 

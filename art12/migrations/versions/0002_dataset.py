@@ -1,3 +1,6 @@
+from alembic import op
+import sqlalchemy as sa
+
 """dataset
 
 Revision ID: 0002
@@ -7,9 +10,6 @@ Create Date: 2014-09-29 16:48:02.080721
 """
 revision = "0002"
 down_revision = "0001"
-
-from alembic import op
-import sqlalchemy as sa
 
 
 def upgrade():

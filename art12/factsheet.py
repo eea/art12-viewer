@@ -70,7 +70,7 @@ def get_query_result(engine, query, value):
     sql = text(query).bindparams(bindparam("value", String))
     result = []
     with engine.connect() as conn:
-        result = conn.execute(statement=sql, parameters={'value':value})
+        result = conn.execute(statement=sql, parameters={"value": value})
     return ", ".join([row[0] for row in result if row[0]])
 
 
@@ -145,10 +145,7 @@ class BirdFactsheet(MethodView):
         sql = text(SPA_TRIGGER_Q).bindparams(bindparam("subject", String))
         result = []
         with self.engine.connect() as conn:
-            result = conn.execute(
-                sql,
-                subject=self.subject
-            )
+            result = conn.execute(sql, subject=self.subject)
         row = result and result.first()
         return row and row["count"] > 0
 
@@ -202,7 +199,7 @@ class BirdFactsheet(MethodView):
         engine = engine or db.get_engine("factsheet")
         name = get_query_result(engine, SPECIESNAME_Q, subject)
         subunit = get_query_result(engine, SUBUNIT_Q, subject)
-        return slugify("{} {}".format(name, subunit))
+        return slugify(f"{name} {subunit}")
 
     def _get_pdf_file_name(self):
         return self.get_pdf_file_name(self.subject, self.engine)

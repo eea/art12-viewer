@@ -1,3 +1,6 @@
+from alembic import op
+import sqlalchemy as sa
+
 """auth
 
 Revision ID: 0005
@@ -7,9 +10,6 @@ Create Date: 2014-10-08 14:15:12.614723
 """
 revision = "0005"
 down_revision = "0004"
-
-from alembic import op
-import sqlalchemy as sa
 
 
 def upgrade():

@@ -1,3 +1,6 @@
+import os
+from alembic import op
+
 """
 
 Revision ID: 0001
@@ -8,9 +11,6 @@ Create Date: 2014-09-29 16:37:24.292676
 # revision identifiers, used by Alembic.
 revision = "0001"
 down_revision = None
-
-import os
-from alembic import op
 
 SQL_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "sql")
 SCRIPT_NAME = "etc_data_birds.sql"

@@ -1,3 +1,6 @@
+from alembic import op
+import sqlalchemy as sa
+
 """add Config table
 
 Revision ID: 0004
@@ -9,9 +12,6 @@ Create Date: 2014-10-06 12:22:07.478672
 # revision identifiers, used by Alembic.
 revision = "0004"
 down_revision = "0003"
-
-from alembic import op
-import sqlalchemy as sa
 
 
 def upgrade():

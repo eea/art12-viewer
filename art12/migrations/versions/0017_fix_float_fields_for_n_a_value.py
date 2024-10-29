@@ -1,3 +1,6 @@
+from alembic import op
+import sqlalchemy as sa
+
 """fix float fields for n/a value
 
 Revision ID: 0017
@@ -9,9 +12,6 @@ Create Date: 2020-05-14 14:10:55.065613
 # revision identifiers, used by Alembic.
 revision = "0017"
 down_revision = "0016"
-
-from alembic import op
-import sqlalchemy as sa
 
 
 def upgrade():

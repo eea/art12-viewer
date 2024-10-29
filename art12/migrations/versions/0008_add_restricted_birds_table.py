@@ -1,3 +1,6 @@
+from alembic import op
+import sqlalchemy as sa
+
 """add restricted birds table
 
 Revision ID: 0008
@@ -9,9 +12,6 @@ Create Date: 2014-10-10 14:53:51.163684
 # revision identifiers, used by Alembic.
 revision = "0008"
 down_revision = "0007"
-
-from alembic import op
-import sqlalchemy as sa
 
 
 def upgrade():
