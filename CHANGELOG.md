@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.7.6 (2024-10-29)
+------------------
+* Upgrade Werkzeug to the latest version
+  [dianaboiangiu]
+
 2.7.5 (2024-10-29)
 ------------------
 * Upgrade packages to the latest versions
