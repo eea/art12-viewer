@@ -26,5 +26,5 @@ requests==2.32.3
 smart_getenv==1.1.0
 SQLAlchemy==2.0.36
 webassets==2.0
-Werkzeug==3.0.4
+Werkzeug==3.0.6
 WTForms==3.2.1
