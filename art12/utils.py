@@ -76,6 +76,7 @@ def inject_static_file(filepath):
 # See: https://gist.github.com/berlotto/6295018
 _slugify_strip_re = re.compile(r"[^\w\s-]")
 _slugify_hyphenate_re = re.compile(r"[-\s]+")
+_slugify_strip_multiple_spaces = re.compile(r"\s+")
 
 
 def slugify(value):
@@ -92,6 +93,7 @@ def slugify(value):
     if not isinstance(value, str):
         value = str(value)
     value = unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode()
-    value = _slugify_strip_re.sub("", value).strip().lower()
+    value = _slugify_strip_re.sub(" ", value).strip().lower()
+    value = _slugify_strip_multiple_spaces.sub(" ", value)
     value = _slugify_hyphenate_re.sub("-", value)
     return value

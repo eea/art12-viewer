@@ -18,7 +18,6 @@ MAPS_STATIC = 'maps'
 MAPS_FORMAT = '{code}_{suffix}.png'
 # Prefix for the PDF urls (header & footer)
 PDF_URL_PREFIX = ''
-PDF_URL_SUFIX = ''
 LOCAL_PDF_URL_PREFIX=''
 # Prefix for the MAP urls
 MAP_URL_PREFIX = ''

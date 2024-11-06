@@ -206,10 +206,10 @@ class BirdFactsheet(MethodView):
 
     def get_pdf(self, **kwargs):
         context = self.get_context_data(**kwargs)
-        header_url = app.config["PDF_URL_PREFIX"] + url_for(
+        header_url = app.config["LOCAL_PDF_URL_PREFIX"] + url_for(
             "factsheet.header", subject=self.subject, period=self.period
         )
-        footer_url = app.config["PDF_URL_PREFIX"] + url_for("factsheet.footer")
+        footer_url = app.config["LOCAL_PDF_URL_PREFIX"] + url_for("factsheet.footer")
         return PdfRenderer(
             self.template_name,
             pdf_file=self._get_pdf_file_name(),
@@ -282,28 +282,18 @@ def check_if_species_is_non_native(subject, dataset):
         return True
 
 
-def get_pdf_url(subject, dataset):
+def get_factsheet_url(subject, dataset):
     if check_if_species_is_non_native(subject, dataset):
         return
     pdf_file_name = BirdFactsheet.get_pdf_file_name(subject)
-    pdf_url = (
-        app.config["PDF_URL_PREFIX"]
-        + "/"
-        + (app.config["PDF_URL_SUFIX"].format(filename=pdf_file_name))
-    )
+
+    pdf_url = f"{app.config['PDF_URL_PREFIX']}/{pdf_file_name}.pdf"
     try:
         code = urllib.request.urlopen(pdf_url).getcode()
         if code == 200:
             return pdf_url
     except:
-        return ""
-
-
-def get_factsheet_url(subject, dataset):
-    pdf_url = get_pdf_url(subject, dataset)
-    if pdf_url:
-        return pdf_url
-    return None
+        return None
 
 
 @factsheet_manager.command

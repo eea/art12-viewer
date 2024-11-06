@@ -18,6 +18,7 @@ from art12.utils import inject_static_file
 from art12.factsheet import factsheet_manager
 from art12.management.import_greece import import_greece
 from art12.management.generate_lu_data_bird import generate_lu_data_bird
+from art12.management.check_factsheets_urls import check_factsheets_urls
 from art12.management.generate_wiki_trail import generate_wiki_trail
 from art12.management.import_new_data import import_new_data
 from art12.management.import_new_wiki_data import import_new_wiki_data
@@ -112,6 +113,7 @@ def create_cli_commands(app):
     app.cli.add_command(import_new_data)
     app.cli.add_command(import_new_wiki_data)
     app.cli.add_command(generate_lu_data_bird)
+    app.cli.add_command(check_factsheets_urls)
     app.cli.add_command(generate_wiki_trail)
     app.cli.add_command(role_manager)
     app.cli.add_command(factsheet_manager)
