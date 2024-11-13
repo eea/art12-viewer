@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.7.7 (2024-11-13)
+------------------
+* Implement changes for factsheets storage change
+  [dianaboiangiu]
+
 2.7.6 (2024-10-29)
 ------------------
 * Upgrade Werkzeug to the latest version
