@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.7.8 (2025-09-29)
+------------------
+* Remove wkhtmltopdf from Dockerfile
+  [dianaboiangiu]
+
 2.7.7 (2024-11-13)
 ------------------
 * Implement changes for factsheets storage change
