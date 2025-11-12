@@ -6,6 +6,7 @@ from flask_migrate import Migrate
 from flask_security import Security
 from flask_wtf.csrf import CSRFProtect
 
+from art12.admin import admin_register
 from art12.assets import assets_env
 from art12 import models
 from art12.definitions import TREND_CLASSES
@@ -59,6 +60,7 @@ def create_app(config={}, testing=False):
     assets_env.init_app(app)
 
     db.init_app(app)
+    admin_register(app)
     MIGRATION_DIR = os.path.join("art12", "migrations")
     migrate = Migrate()
     migrate.init_app(app, db, directory=MIGRATION_DIR)
