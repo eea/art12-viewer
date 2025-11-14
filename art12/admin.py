@@ -17,6 +17,7 @@ from art12.models import (
     WikiTrailChange,
     db,
 )
+from art12.forms import FileUploadForm
 from werkzeug.utils import secure_filename
 
 
@@ -540,27 +541,33 @@ class WikiTrailChangeModelView(ProtectedModelView):
 
 
 class FileUploadView(BaseView):
-
     @expose("/", methods=("GET", "POST"))
     def index(self):
         if not admin_perm.can():
             return abort(404)
 
-        if request.method == "POST" and "file" in request.files:
-            f = request.files["file"]
-            if f.filename == "":
-                flash("No file selected", "error")
+        if request.method == "POST":
+            form = FileUploadForm(request.form)
+            if not form.validate():
+                flash("Form validation failed", "error")
                 return redirect(url_for(".index"))
 
-            filename = secure_filename(f.filename)
-            upload_dir = current_app.config.get("UPLOAD_FOLDER", "uploads")
-            os.makedirs(upload_dir, exist_ok=True)
-            filepath = os.path.join(upload_dir, filename)
-            f.save(filepath)
-            flash(f"File uploaded to {filepath}", "success")
-            return redirect(url_for(".index"))
+            if "file" in request.files:
+                f = request.files["file"]
+                if f.filename == "":
+                    flash("No file selected", "error")
+                    return redirect(url_for(".index"))
 
-        return self.render("admin/upload.html")
+                filename = secure_filename(f.filename)
+                upload_dir = current_app.config.get("UPLOAD_FOLDER", "uploads")
+                os.makedirs(upload_dir, exist_ok=True)
+                filepath = os.path.join(upload_dir, filename)
+                f.save(filepath)
+                flash(f"File uploaded to {filepath}", "success")
+                return redirect(url_for(".index"))
+
+        form = FileUploadForm()
+        return self.render("admin/upload.html", form=form)
 
 
 def admin_register(app):

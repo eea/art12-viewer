@@ -141,6 +141,11 @@ class ConfigForm(FlaskForm):
         ]
 
 
+class FileUploadForm(FlaskForm):
+    class Meta:
+        csrf = True
+
+
 class ChangeDetailsForm(FlaskForm):
     institution = StringField(label="Institution", validators=[Optional()])
     abbrev = StringField(label="Abbreviation", validators=[Optional()])
