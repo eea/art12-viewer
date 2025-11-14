@@ -27,7 +27,8 @@
 
     <p>The Article 12 web tool provides an access to EU assessments and Member States’ data compiled
        as part of the Habitats Directive - Article 12 reporting process. The EU assessments have been
-       carried out in EU 27 for the period 2008-2012 and in EU28 for the period 2013-2018.
+       carried out in EU 27 for the period 2008-2012 and in EU28 for the period 2013-2018 ...2012, in EU28 for the period 2013-2018
+       and in EU 27 for the period 2019-2024.
     </p>
     <p>Choose period, species and if relevant sub-specific unit.</p>
     <p>Once a selection has been made the breeding distribution of the species can be visualized in a map.</p>
@@ -59,7 +60,7 @@
 
     {% include 'summary/filters.html' %}
 
-    {% if dataset.id == 3 %}
+    {% if dataset.id in [3,4] %}
       {% set colspan_all=45 %}
     {% else %}
       {% set colspan_all=30 %}
@@ -87,6 +88,11 @@
           </br>
           The data from delayed delivery by Romania were not used for the EU population status assessment.
         </p>
+      {% elif dataset.id == 4 %}
+        <p class="note">
+          Codes ‘PT’, ‘ES ‘correspond to Portugal mainland (excluding Azores-PTAC and Madeira-PTMA) and Spain
+          mainland (excluding Canary Islands-ESIC) respectively.
+        </p>
       {% endif %}
       <div style="overflow-x:auto;">
         <table class="complex_datatable">
@@ -102,6 +108,8 @@
 
           {% if dataset.id == 3 %}
             {% include "common/species_table_header_2018.html" with context %}
+          {% elif dataset.id == 4 %}
+            {% include "common/species_table_header_2024.html" with context %}
           {% else %}
             {% include "common/species_table_header.html" with context %}
           {% endif %}
@@ -111,6 +119,8 @@
               <tr {% if row.is_assesm %}class="assesm"{% endif %}>
                 {% if dataset.id == 3 %}
                   {% include 'summary/content/content_2018.html' %}
+                {% elif dataset.id == 4 %}
+                  {% include 'summary/content/content_2024.html' %}
                 {% else %}
                   {% include 'summary/content/ms.html' %}
                   {% include 'summary/content/population_bs.html' with context %}

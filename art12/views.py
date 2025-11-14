@@ -250,7 +250,7 @@ class FilterFormReportedName(View, SpeciesMixin):
 
     def dispatch_request(self):
         try:
-            dataset_id = int(request.args.get("dataset_id", 3))
+            dataset_id = int(request.args.get("dataset_id", 4))
         except ValueError:
             abort(404)
         speciesname = request.args.get("subject", "")
