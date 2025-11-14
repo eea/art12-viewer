@@ -6,6 +6,7 @@ from flask_migrate import Migrate
 from flask_security import Security
 from flask_wtf.csrf import CSRFProtect
 
+from art12.admin import admin_register
 from art12.assets import assets_env
 from art12 import models
 from art12.definitions import TREND_CLASSES
@@ -21,6 +22,7 @@ from art12.management.generate_lu_data_bird import generate_lu_data_bird
 from art12.management.check_factsheets_urls import check_factsheets_urls
 from art12.management.generate_wiki_trail import generate_wiki_trail
 from art12.management.import_new_data import import_new_data
+from art12.management.import_new_data_v2 import import_new_data_v2
 from art12.management.import_new_wiki_data import import_new_wiki_data
 from art12.management.generate_new_period import generate_new_period
 
@@ -59,6 +61,7 @@ def create_app(config={}, testing=False):
     assets_env.init_app(app)
 
     db.init_app(app)
+    admin_register(app)
     MIGRATION_DIR = os.path.join("art12", "migrations")
     migrate = Migrate()
     migrate.init_app(app, db, directory=MIGRATION_DIR)
@@ -111,6 +114,7 @@ def create_cli_commands(app):
     app.cli.add_command(import_greece)
     app.cli.add_command(generate_new_period)
     app.cli.add_command(import_new_data)
+    app.cli.add_command(import_new_data_v2)
     app.cli.add_command(import_new_wiki_data)
     app.cli.add_command(generate_lu_data_bird)
     app.cli.add_command(check_factsheets_urls)

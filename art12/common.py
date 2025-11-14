@@ -60,7 +60,8 @@ class TemplateView(MethodView):
 
 
 def get_default_period():
-    return 3  # FIXME
+    config = get_config()
+    return config.default_dataset_id
 
 
 def get_zero(value):

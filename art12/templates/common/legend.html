@@ -9,7 +9,7 @@
     </dd>
 
     <dt class="trend-eq">
-      <abbr title="Stable" class="conclusion">{% if dataset.id == 3 %}={% else %}0{% endif %}</abbr>
+      <abbr title="Stable" class="conclusion">{% if dataset.id in [3, 4] %}={% else %}0{% endif %}</abbr>
     </dt>
     <dd>
       Stable
@@ -60,7 +60,7 @@
 </div>
 <p>
   {% if page_type == 'progress' %}
-    {% if dataset.id == 3 %}
+    {% if dataset.id in [3,4] %}
       <p>
         Globally the EU population status assessment was carried out at the species level.
         For subspecies included in the Annexes of the Directive, for subspecies or populations

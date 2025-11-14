@@ -31,7 +31,7 @@
 
     {% include 'reports/filters.html' %}
 
-    {% if dataset.id == 3 %}
+    {% if dataset.id in [3,4] %}
       {% set colspan_all = 45 %}
     {% else %}
       {% set colspan_all=30 %}
@@ -42,13 +42,18 @@
       {% include 'common/legend.html' with context %}
       {% if dataset.id == 3 %}
         <p class="note">
-          Codes ‘PT’, ‘ES ‘correspond to Portugal mainland (excluding Azores-PTAC and Madeira-PTMA) and Spain
+          Codes ‘PT’, ‘ES‘ correspond to Portugal mainland (excluding Azores-PTAC and Madeira-PTMA) and Spain
           mainland (excluding Canary Islands-ESIC) respectively.
           </br>
           Similarly ‘UK’ stands for the United Kingdom
           of Great Britain and Northern Ireland (excluding Gibraltar-GIB).
           </br>
           The data from delayed delivery by Romania were not used for the EU population status assessment.
+        </p>
+      {% elif dataset.id == 4 %}
+        <p class="note">
+          Codes ‘PT’, ‘ES‘ correspond to Portugal mainland (excluding Azores-PTAC and Madeira-PTMA) and Spain
+          mainland (excluding Canary Islands-ESIC) respectively.
         </p>
       {% endif %}
       <div style="overflow-x:auto;min-height: 500px;">

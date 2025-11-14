@@ -8,7 +8,7 @@ from art12.models import Dataset, EtcDataBird
 
 
 class CommonFilterForm(FlaskForm):
-    period = SelectField("Period...", default=3)
+    period = SelectField("Period...", default=get_default_period)
     model_cls = EtcDataBird
 
     def __init__(self, *args, **kwargs):
@@ -18,7 +18,6 @@ class CommonFilterForm(FlaskForm):
             dataset_id = int(request.args.get("period", get_default_period()))
         except ValueError:
             abort(404)
-        self.period.default = dataset_id
         self.dataset = Dataset.query.get_or_404(dataset_id)
 
     def get_selection(self):

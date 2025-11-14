@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 
 def get_model(self, name):
-    return self.Model._decl_class_registry.get(name, None)
+    return self.Model._sa_registry._class_registry.get(name, None)
 
 
 SQLAlchemy.get_model = get_model
