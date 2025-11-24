@@ -1,0 +1,136 @@
+{% from 'common/_macros.html' import additional_info %}
+<style>
+  .center {
+    text-align: center
+  }
+</style>
+
+{# Breeding population #}
+
+<td class="default-td border_left" title="{{ row.population_quality_bs or '' }}">
+  <div class="first-subcolumn">{{ population_size_unit(row.bs) or '' }}</div>
+</td>
+
+{{ additional_info(row.population_additional_info_record_bs, row.population_additional_info_bs) }}
+
+<td class="center">
+  {{ row.percentage_population_mean_size_bs|float or '' }}
+</td>
+
+<td class="default-td">
+  {{ row.population_trend_period_bs or '' }}
+</td>
+
+<td class="trend-{{ TREND_CLASSES.get(row.population_trend_bs) }}"
+    title="{{ row.population_trend_quality_bs or '' }}">
+  <span class="conclusion">
+    {{ population_trend(row.bs) or '' }}
+  </span>
+</td>
+
+<td class="default-td">
+  {{ row.population_trend_long_period_bs or '' }}
+</td>
+
+<td class="trend-{{ TREND_CLASSES.get(row.population_trend_long_bs) }}"
+    title="{{ row.population_trend_long_quality_bs or '' }}">
+  <span class="conclusion">
+    {{ population_trend_long(row.bs) or '' }}
+  </span>
+</td>
+
+{{ additional_info(row.population_trend_additional_info_record_bs, row.population_trend_additional_info_bs) }}
+
+
+{# Range #}
+
+<td class="default-td border_left" title="{{ row.range_quality_bs or '' }}">
+  <div class="first-subcolumn">
+    {{ row.range_surface_area_bs|int or '' }}
+  </div>
+</td>
+
+{{ additional_info(row.range_additional_info_record_bs, row.range_additional_info_bs) }}
+
+<td class="center">
+  {{ row.percentage_range_surface_area_bs|float or '' }}
+</td>
+
+<td class="default-td">
+  {{ row.range_trend_period_bs or '' }}
+</td>
+
+<td class="trend-{{ TREND_CLASSES.get(row.range_trend_bs) }}"
+    title="{{ row.range_trend_quality_bs or '' }}">
+  <span class="conclusion">
+    {{ range_trend(row.range_trend_bs, row.range_trend_magnitude_min_bs, row.range_trend_magnitude_max_bs) }}
+  </span>
+</td>
+
+<td class="default-td">
+  {{ row.range_trend_long_period_bs or '' }}
+</td>
+
+<td class="trend-{{ TREND_CLASSES.get(row.range_trend_long_bs) }}"
+    title="{{ row.range_trend_long_quality_bs or '' }}">
+  <span class="conclusion">
+    {{ range_trend_long(row.range_trend_long_bs, row.range_trend_long_magnitude_min_bs, row.range_trend_long_magnitude_max_bs) }}
+  </span>
+</td>
+
+{{ additional_info(row.range_trend_additional_info_record_bs, row.range_trend_additional_info_bs) }}
+
+
+{# Winter population #}
+
+<td class="default-td border_left" title="{{ row.population_quality_ws or '' }}">
+  <div class="first-subcolumn">{{ population_size_unit(row.ws) or '' }}</div>
+</td>
+
+{{ additional_info(row.population_additional_info_record_ws, row.population_additional_info_ws) }}
+
+<td class="center">
+  {{ row.percentage_population_mean_size_ws|float or '' }}
+</td>
+
+<td class="default-td">
+  {{ row.population_trend_period_ws or '' }}
+</td>
+
+<td class="trend-{{ TREND_CLASSES.get(row.population_trend_ws) }}"
+    title="{{ row.population_trend_quality_ws or '' }}">
+  <span class="conclusion">
+    {{ population_trend(row.ws) or '' }}
+  </span>
+</td>
+
+<td class="default-td">
+  {{ row.population_trend_long_period_ws or '' }}
+</td>
+
+<td class="trend-{{ TREND_CLASSES.get(row.population_trend_long_ws) }}"
+    title="{{ row.population_trend_long_quality_ws or '' }}">
+  <span class="conclusion">
+    {{ population_trend_long(row.ws) or '' }}
+  </span>
+</td>
+
+{{ additional_info(row.population_trend_additional_info_record_ws, row.population_trend_additional_info_ws) }}
+
+{# gridded maps #}
+
+<td class="center border_left">
+  {{ row.distribution_grid_area|int or '' }}
+</td>
+
+<td class="center">
+  {{ row.percentage_distribution_grid_area|float or '' }}
+</td>
+
+<td class="center">
+  {{ row.range_grid_area|int or '' }}
+</td>
+
+<td class="center" colspan="2">
+  {{ row.percentage_range_grid_area|float or '' }}
+</td>

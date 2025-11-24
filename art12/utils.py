@@ -6,23 +6,6 @@ from path import Path
 from flask import current_app as app
 
 patt = re.compile(r"(?<!\d)(\d+)(\.0*)?(?!\d)")
-valid_numeric = re.compile(
-    r"^\s*"
-    + "("
-    + r"(\d\.)?\d+\s*-\s*(\d\.)?\d+"
-    + r"|(>|>>|≈|<)?\s*((\d\.)?\d+)"
-    + ")"
-    + r"\s*$"
-)
-valid_ref = re.compile(
-    r"^\s*"
-    + "("
-    + r"(\d\.)?\d+\s*-\s*(\d\.)?\d+"
-    + r"|(>|>>|≈|<)?\s*((\d\.)?\d+)?|x"
-    + ")"
-    + r"\s*$"
-)
-empty_str = re.compile(r"^\s*$")
 
 
 def str2num(s, default="", number_format="%.2f"):
@@ -37,33 +20,6 @@ def str2num(s, default="", number_format="%.2f"):
         return re.sub(patt, r"\1", buffer)
     else:
         return default
-
-
-def str1num(s, default=""):
-    return str2num(s, default=default, number_format="%.1f")
-
-
-def parse_semicolon(s, sep="<br />"):
-    """Replaces all semicolons found in the string ${s} with
-    the given separator ${sep}"""
-    if s is None:
-        return s
-    patt = re.compile(r";\s*")
-    return patt.sub(sep, s)
-
-
-def validate_field(s):
-    """Checks if a field is a valid numeric or progress value"""
-    if s:
-        return bool(valid_numeric.match(s))
-    return True
-
-
-def validate_ref(s):
-    """Checks if a field is a valid numeric or progress value"""
-    if s:
-        return bool(valid_ref.match(s))
-    return True
 
 
 def inject_static_file(filepath):
