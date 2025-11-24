@@ -76,7 +76,11 @@
         <p class="note">Map is only available at subspecific level.</p>
       {% endif %}
       {% set page_type='summary' %}
-      {% include 'common/legend.html' with context %}
+      {% if dataset.id == 4 %}
+        {% include 'common/legend_2024.html' with context %}
+      {% else %}
+        {% include 'common/legend.html' with context %}
+      {% endif %}
       {% if dataset.id == 3 %}
         <p class="note">
           Codes ‘PT’, ‘ES‘ correspond to Portugal mainland (excluding Azores-PTAC and Madeira-PTMA) and Spain

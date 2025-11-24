@@ -60,7 +60,7 @@ class EtcDataBird(Base):
     country_isocode = Column(String(4))
     delivery = Column(Integer)
     envelope = Column(Text, nullable=False)
-    filename = Column(String(60), nullable=False)
+    filename = Column(String(60), nullable=True)
     reported_name = Column(Text)
     group = Column(String(30), index=True)
     family = Column(String(30))

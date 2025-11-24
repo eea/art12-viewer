@@ -23,6 +23,10 @@ TREND_CLASSES = {
     "F": "f",
     "n": "n",
     "u": "u",
+    "S": "eq",
+    "I": "inc",
+    "D": "dec",
+    "Unk": "xx",
 }
 
 SEASON_FIELDS = [

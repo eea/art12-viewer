@@ -72,7 +72,7 @@ class Summary(SpeciesMixin, TemplateView):
         speciescode = None
         reported_name = filter_form.reported_name.data
         if subject:
-            if dataset.id == 3:
+            if dataset.id in [3, 4]:
                 speciescode = self.get_speciescode(dataset, subject)
                 filter_args["assessment_speciesname"] = subject
                 if reported_name:
@@ -86,7 +86,12 @@ class Summary(SpeciesMixin, TemplateView):
         if filter_args:
             filter_args["dataset"] = dataset
             qs = self.model_cls.query.filter_by(**filter_args)
-            content_objects = qs.filter(self.model_cls.country_isocode != EU_COUNTRY)
+            if dataset.id == 4:
+                content_objects = qs.filter(self.model_cls.country != EU_COUNTRY)
+            else:
+                content_objects = qs.filter(
+                    self.model_cls.country_isocode != EU_COUNTRY
+                )
             eu_objects = self.model_eu_cls.query.filter_by(**filter_args).order_by(
                 self.model_eu_cls.additional_record.desc()
             )
@@ -216,11 +221,18 @@ class Reports(SpeciesMixin, TemplateView):
         country = filter_form.country.data
         period = filter_form.period.data
         if country:
-            objects = (
-                self.model_cls.query.filter_by(country_isocode=country)
-                .filter_by(dataset_id=period)
-                .order_by(self.model_cls.speciesname)
-            )
+            if period == "4":
+                objects = (
+                    self.model_cls.query.filter_by(country=country)
+                    .filter_by(dataset_id=period)
+                    .order_by(self.model_cls.speciesname)
+                )
+            else:
+                objects = (
+                    self.model_cls.query.filter_by(country_isocode=country)
+                    .filter_by(dataset_id=period)
+                    .order_by(self.model_cls.speciesname)
+                )
         else:
             objects = []
 
