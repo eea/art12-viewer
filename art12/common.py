@@ -234,7 +234,7 @@ def get_eu_map_winter_url(subject, sensitive=False):
 
 
 def get_original_url(row):
-    if not row.envelope:
+    if not row.envelope or not row.filename:
         return ""
     CONVERTER_URL = (
         "{scheme}://{host}/Converters/run_conversion?"

@@ -1,0 +1,80 @@
+{# Breeding Population	#}
+
+<td colspan="3" class="default-td border_left">
+  {{ row.br_population_size or '' }} {{ row.br_population_size_unit or '' }}
+</td>
+
+<td colspan="2"
+    class="trend-{{ TREND_CLASSES.get(row.br_population_trend) }} text-center">
+  <span class="conclusion">
+    {{ row.br_population_trend or '' }}
+  </span>
+</td>
+
+<td colspan="3"
+    class="trend-{{ TREND_CLASSES.get(row.br_population_trend_long) }} text-center">
+  <span class="conclusion">
+    {{ row.br_population_trend_long or '' }}
+  </span>
+</td>
+
+
+{# Breeding Range #}
+
+<td colspan="3" class="center border_left">
+  {{ row.br_range_surface_area_downrounded or '' }}
+</td>
+
+<td colspan="2"
+    class="trend-{{ TREND_CLASSES.get(row.br_range_trend) }} text-center">
+  <span class="conclusion">
+    {{ row.br_range_trend or '' }}
+  </span>
+</td>
+
+<td colspan="3"
+    class="trend-{{ TREND_CLASSES.get(row.br_range_trend_long) }} text-center">
+  <span class="conclusion">
+    {{ row.br_range_trend_long or '' }}
+  </span>
+</td>
+
+{# Wintering Population	#}
+
+<td colspan="3" class="default-td border_left">
+  {{ row.wi_population_size or '' }} {{ row.wi_population_size_unit or '' }}
+</td>
+
+<td colspan="2"
+    class="trend-{{ TREND_CLASSES.get(row.wi_population_trend) }} text-center">
+  <span class="conclusion">
+    {{ row.wi_population_trend or '' }}
+  </span>
+</td>
+
+<td colspan="3"
+    class="trend-{{ TREND_CLASSES.get(row.wi_population_trend_long) }} text-center">
+  <span class="conclusion">
+    {{ row.wi_population_trend_long or '' }}
+  </span>
+</td>
+
+{# Areas from gridded maps #}
+
+<td class="center border_left status-{{ STATUS_CLASSES.get(row.conclusion_status_label) }} text-center">
+  <span class="conclusion">
+  {{ row.conclusion_status_label or '' }}
+  </span>
+</td>
+<td class="center">
+  {{ row.contribution_target1_label or '' }}
+</td>
+<td class="center">
+  {{ row.conclusion_status_br_wi or '' }}
+</td>
+<td class="center" title="{{ row.conclusion_status_level2 }}">
+  {{ row.conclusion_status_level2_record or '' }}
+</td>
+<td class="center" title="{{ row.conclusion_status_level1 }}">
+  {{ row.conclusion_status_level1_record or '' }}
+</td>

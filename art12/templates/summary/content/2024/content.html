@@ -1,27 +1,18 @@
 {# MS #}
 
 {% if not request.args.get('country') %}
-  {% if row.envelope and row.filename %}
     {% set s_name, s_info, s_type = get_title_for_country(row) %}
-    {% set original_url = get_original_url(row) %}
     <td class="border" data-tooltip="html">
       <div class="tooltip-html hidden">
         <div class="extra-padding">
           <span class="br margin-small">{{ row.further_information|format_info|safe }}</span>
           &nbsp;
-          <span class="margin-small"><a href="{{ original_url }}"><span class="muted large">
-            <i class="fa fa-external-link"></i>
-          </span></a></span>
         </div>
       </div>
-      <a class="clipped popup-btn block"
-        data-title="Factsheet" href="{{ original_url }}">
+      <span>
         {{ row.country }}
-      </a>
+      </span>
     </td>
-  {% else %}
-    <td class="border">{{ row.country }}</td>
-  {% endif %}
 {% endif %}
 
 {% from 'common/_macros.html' import additional_info %}

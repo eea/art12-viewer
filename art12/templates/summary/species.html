@@ -76,7 +76,11 @@
         <p class="note">Map is only available at subspecific level.</p>
       {% endif %}
       {% set page_type='summary' %}
-      {% include 'common/legend.html' with context %}
+      {% if dataset.id == 4 %}
+        {% include 'common/2024/legend.html' with context %}
+      {% else %}
+        {% include 'common/legend.html' with context %}
+      {% endif %}
       {% if dataset.id == 3 %}
         <p class="note">
           Codes ‘PT’, ‘ES‘ correspond to Portugal mainland (excluding Azores-PTAC and Madeira-PTMA) and Spain
@@ -106,26 +110,23 @@
           </caption>
 
           {% if dataset.id == 3 %}
-            {% include "common/species_table_header_2018.html" with context %}
+            {% include "common/2018/species_table_header.html" with context %}
           {% elif dataset.id == 4 %}
-            {% include "common/species_table_header_2024.html" with context %}
+            {% include "common/2024/species_table_header.html" with context %}
           {% else %}
-            {% include "common/species_table_header.html" with context %}
+            {% include "common/2012/species_table_header.html" with context %}
           {% endif %}
 
           <tbody>
             {% for row in objects %}
               <tr {% if row.is_assesm %}class="assesm"{% endif %}>
                 {% if dataset.id == 3 %}
-                  {% include 'summary/content/content_2018.html' %}
+                  {% include 'summary/content/2018/content.html' %}
                 {% elif dataset.id == 4 %}
-                  {% include 'summary/content/content_2024.html' %}
+                  {% include 'summary/content/2024/content.html' %}
                 {% else %}
-                  {% include 'summary/content/ms.html' %}
-                  {% include 'summary/content/population_bs.html' with context %}
-                  {% include 'summary/content/range.html' with context %}
-                  {% include 'summary/content/population_ws.html' with context %}
-                  {% include 'summary/content/gridded_maps.html' with context %}
+                  {% include 'summary/content/2012/ms.html' %}
+                  {% include 'summary/content/2012/content.html' %}
                 {% endif %}
               </tr>
             {% endfor %}
@@ -134,22 +135,19 @@
           {# EU assessments #}
           {% if dataset.id == 3 %}
             {% set colspan_all=48 %}
-            {% include 'common/species_table_eu_header_2018.html' with context %}
+            {% include 'common/2018/species_table_eu_header.html' with context %}
           {% else %}
-            {% include 'common/species_table_eu_header.html' with context %}
+            {% include 'common/2012/species_table_eu_header.html' with context %}
           {% endif %}
           <tbody>
           {% for row in eu_objects %}
               {% if dataset.id == 3 %}
                 <tr class="stripe_row {% if row.use_for_statistics == 0 %}italic_row{% endif %}">
-                  {% include 'summary/eu/content_2018.html' with context %}
+                  {% include 'summary/eu/2018/content.html' with context %}
               {% else %}
                 <tr class="stripe_row {% if row.additional_record %}italic_row{% endif %}">
                   <td {% if row.additional_record %}title="Additional assessment at the subspecies level for subspecies listed in the Annexes of the Birds Directive"{% endif %}>{{ EU_COUNTRY }}</td>
-                  {% include 'summary/eu/population_bs.html' with context %}
-                  {% include 'summary/eu/range.html' with context %}
-                  {% include 'summary/eu/population_ws.html' with context %}
-                  {% include 'summary/eu/status.html' with context %}
+                  {% include 'summary/eu/2012/content.html' with context %}
               {% endif %}
             </tr>
           {% endfor %}

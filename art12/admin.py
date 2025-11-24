@@ -168,6 +168,7 @@ class EtcDataBirdModelView(ProtectedModelView):
         "country",
         "group",
     ]
+
     column_searchable_list = [
         "speciescode",
         "speciesname",
@@ -222,7 +223,7 @@ class EtcDataBirdModelView(ProtectedModelView):
 
     column_export_list = [
         "country",
-        "country_isocode",
+        "",
         "delivery",
         "envelope",
         "filename",
@@ -384,6 +385,11 @@ class LuDataBirdModelView(ProtectedModelView):
     column_filters = ["speciescode", "speciesname", "dataset_id"]
     column_searchable_list = ["speciescode", "speciesname"]
     column_sortable_list = [
+        "dataset_id",
+        "speciescode",
+        "speciesname",
+    ]
+    form_columns = [
         "dataset_id",
         "speciescode",
         "speciesname",
