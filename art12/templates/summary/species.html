@@ -59,7 +59,9 @@
 
     {% include 'summary/filters.html' %}
 
-    {% if dataset.id in [3,4] %}
+    {% if dataset.id == 4 %}
+      {% set colspan_all=48 %}
+    {% elif dataset.id == 3 %}
       {% set colspan_all=45 %}
     {% else %}
       {% set colspan_all=30 %}
@@ -133,7 +135,10 @@
           </tbody>
 
           {# EU assessments #}
-          {% if dataset.id == 3 %}
+          {% if dataset.id == 4 %}
+            {% set colspan_all=48 %}
+            {% include 'common/2024/species_table_eu_header.html' with context %}
+          {% elif dataset.id == 3 %}
             {% set colspan_all=48 %}
             {% include 'common/2018/species_table_eu_header.html' with context %}
           {% else %}
@@ -141,7 +146,10 @@
           {% endif %}
           <tbody>
           {% for row in eu_objects %}
-              {% if dataset.id == 3 %}
+              {% if dataset.id == 4 %}
+                <tr class="stripe_row {% if row.use_for_statistics == 0 %}italic_row{% endif %}">
+                  {% include 'summary/eu/2024/content.html' with context %}
+              {% elif dataset.id == 3 %}
                 <tr class="stripe_row {% if row.use_for_statistics == 0 %}italic_row{% endif %}">
                   {% include 'summary/eu/2018/content.html' with context %}
               {% else %}

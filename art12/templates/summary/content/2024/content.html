@@ -205,11 +205,11 @@
 
 {# Breeding area/gridded maps #}
 
-<td class="center border_right">
+<td colspan="3" class="center border_right">
   {{ row.distribution_grid_area }}
 </td>
 
-<td class="center border_right">
+<td colspan="2" class="center border_right">
   {% if row.percentage_distribution_grid_area == 'N/A' %}
     {{ row.percentage_distribution_grid_area }}
   {% elif row.percentage_distribution_grid_area|float >= 0.1 %}
