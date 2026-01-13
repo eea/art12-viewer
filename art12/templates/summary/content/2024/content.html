@@ -1,18 +1,30 @@
 {# MS #}
 
 {% if not request.args.get('country') %}
-    {% set s_name, s_info, s_type = get_title_for_country(row) %}
-    <td class="border" data-tooltip="html">
+  <td class="border" data-tooltip="html">
+    {% if row.further_information or row.presence_bs or row.presence_ws %}
       <div class="tooltip-html hidden">
-        <div class="extra-padding">
-          <span class="br margin-small">{{ row.further_information|format_info|safe }}</span>
-          &nbsp;
-        </div>
+        {% if row.further_information %}
+          <p class="br width-600 margin-small">
+            {{ row.further_information|format_info|safe }}
+          </p>
+        {% endif %}
+        {% if row.presence_bs %}
+          <p class="br width-600 margin-small">
+            Breeding population presence: {{ row.presence_bs }}
+          </p>
+        {% endif %}
+        {% if row.presence_ws %}
+          <p class="br width-600 margin-small">
+            Winter population presence: {{ row.presence_ws }}
+          </p>
+        {% endif %}
       </div>
-      <span>
-        {{ row.country }}
-      </span>
-    </td>
+    {% endif %}
+    <span>
+      {{ row.country }}
+    </span>
+  </td>
 {% endif %}
 
 {% from 'common/_macros.html' import additional_info %}
