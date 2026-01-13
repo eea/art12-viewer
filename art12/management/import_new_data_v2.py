@@ -93,6 +93,7 @@ def run(**kwargs):
     """
     Model options:
         EtcDataBird
+        EtcBirdsEu
     """
     df = pd.read_excel(kwargs["file"], sheet_name=kwargs["sheet"])
     df = df.where(pd.notnull(df), "")  # Replace all NaN with None
@@ -110,6 +111,13 @@ def run(**kwargs):
             pop_data = []
             for field in pop_data:
                 filtered_data.pop(field, None)
+
+            # Special handling for EtcBirdsEu - generate id if not provided
+            if kwargs["model"] == "EtcBirdsEu" and "id" not in filtered_data:
+                # Get the maximum id and increment
+                max_id = db.session.query(db.func.max(model_class.id)).scalar() or 0
+                filtered_data["id"] = max_id + 1
+
             new_object = model_class(**filtered_data)
             db.session.add(new_object)
             db.session.commit()

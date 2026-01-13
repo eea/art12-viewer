@@ -27,6 +27,7 @@ TREND_CLASSES = {
     "I": "inc",
     "D": "dec",
     "Unk": "xx",
+    "U": "u",
 }
 
 SEASON_FIELDS = [
