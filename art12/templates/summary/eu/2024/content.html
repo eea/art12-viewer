@@ -87,24 +87,18 @@
   </span>
 </td>
 
-{# Season #}
-
-<td class="default-td border_left">
-  {{ row.conclusion_status_br_wi or '' }}
-</td>
-
 {# Previous status #}
-<td class="center border_left status-{{ STATUS_CLASSES.get(row.conclusion_status_label_prev) }} text-center"
+<td colspan="2" class="center border_left status-{{ STATUS_CLASSES.get(row.conclusion_status_label_prev) }} text-center"
     title="{{ row.red_list_cat_prev }}">
   <span class="conclusion">
     {{ row.conclusion_status_label_prev or '' }}
   </span>
 </td>
 
-<td class="center border_left status-{{ STATUS_CLASSES.get(row.conclusion_status_br_wi_prev) }} text-center"
-    title="{{ row.red_list_cat_prev }}">
+<td class="center border_left status-{{ STATUS_CLASSES.get(row.conclusion_status_label_wi_previous) }} text-center"
+    title="{{ row.red_list_cat_wi_prev }}">
   <span class="conclusion">
-    {{ row.conclusion_status_br_wi_prev or '' }}
+    {{ row.conclusion_status_label_wi_previous or '' }}
   </span>
 </td>
 

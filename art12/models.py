@@ -325,8 +325,10 @@ class EtcBirdsEu(Base):
     dataset = relationship(Dataset)
     use_for_statistics = Column(Text)
     conclusion_status_label_prev = Column(String(50))
+    conclusion_status_label_wi_previous = Column(String(50))
     conclusion_status_br_wi_prev = Column(String(20))
     red_list_cat_prev = Column(String(255))
+    red_list_cat_wi_prev = Column(String(255))
 
     lu_bird = relationship(
         "LuDataBird",
