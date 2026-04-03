@@ -11,6 +11,9 @@ generate_lu_data_bird = AppGroup("generate_lu_data_bird")
 @click.option("-i", "--id", "id")
 def run(**kwargs):
     dataset = models.Dataset.query.filter_by(id=kwargs["id"]).first()
+    lu_data_birds = models.LuDataBird.query.filter_by(dataset=dataset)
+    lu_data_birds.delete()
+    models.db.session.commit()
     etc_data_birds = models.EtcDataBird.query.filter_by(dataset=dataset)
     for etc_data_bird in etc_data_birds:
         lu_data_bird = models.LuDataBird.query.filter_by(

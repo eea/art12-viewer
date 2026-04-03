@@ -5,8 +5,19 @@
     <td class="border" data-tooltip="html">
       <div class="tooltip-html hidden">
         <div class="extra-padding">
+          {% if row.further_information %}
           <span class="br margin-small">{{ row.further_information|format_info|safe }}</span>
           &nbsp;
+          {% endif %}
+          <p class="br width-600 margin-small">
+            {% if row.presence_bs %}
+              Breeding population presence: {{ row.presence_bs }}
+              <br/>
+            {% endif %}
+            {% if row.presence_ws %}
+              Winter population presence: {{ row.presence_ws }}
+            {% endif %}
+          </p>
         </div>
       </div>
       <span>

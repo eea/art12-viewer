@@ -29,6 +29,7 @@
        as part of the Habitats Directive - Article 12 reporting process. The EU assessments have been
        carried out in EU 27 for the period 2008-2012, in EU28 for the period 2013-2018 and in EU 27 for the period 2019-2024.
     </p>
+
     <p>Choose period, species and if relevant sub-specific unit.</p>
     <p>Once a selection has been made the breeding distribution of the species can be visualized in a map.</p>
     <p>The ‘Data sheet info’ includes notes for each assessment per species.</p>
@@ -56,7 +57,6 @@
         the ‘Map’ button.
       </p>
     {% endif %}
-
     {% include 'summary/filters.html' %}
 
     {% if dataset.id == 4 %}
@@ -99,6 +99,14 @@
           mainland (excluding Canary Islands-ESIC) respectively.
         </p>
       {% endif %}
+
+    {% if dataset.id == 4 %}
+      <p class="note">
+        The delayed delivery by Romania did not allow the Romanian report to be used for the EU population 
+        status assessment. Where possible, data available to the BirdLife network were used for the EU assessments
+      </p>
+    {% endif %}
+
       <div style="overflow-x:auto;">
         <table class="complex_datatable">
           {% if sensitive and map_available %}

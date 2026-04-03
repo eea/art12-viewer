@@ -8,41 +8,46 @@ class SpeciesMixin(object):
 
     def get_subjects(self, dataset):
         model = LuDataBird
-        cols = (
-            (model.speciesname, model.speciesname)
-            if dataset.id in [3, 4]
-            else (model.speciescode, model.speciesname)
-        )
-        order_field = model.speciesname
-        entries = (
-            model.query.filter_by(dataset=dataset)
-            .distinct()
-            .with_entities(*cols)
-            .order_by(order_field)
-            .all()
-        )
-        return [(a, b) for a, b in entries]
+        if dataset.id in [3, 4]:
+            return [
+                (entry.speciesname, entry.speciesname)
+                for entry in (
+                    model.query.filter_by(dataset=dataset)
+                    .distinct()
+                    .with_entities(model.speciesname, model.speciesname)
+                    .order_by(model.speciesname)
+                    .all()
+                )
+            ]
+        else:
+            return [
+                (entry.speciescode, entry.speciesname)
+                for entry in (
+                    model.query.filter_by(dataset=dataset)
+                    .distinct()
+                    .with_entities(model.speciescode, model.speciesname)
+                    .order_by(model.speciesname)
+                    .all()
+                )
+            ]
 
     def get_reported_name(self, dataset, speciesname):
         model = EtcDataBird
         lu_data_bird = LuDataBird.query.filter_by(speciesname=speciesname).first()
-        speciesname = getattr(lu_data_bird, "speciesname", "")
 
-        if dataset.id == 4:
-            sub_species_field = model.speciesname
-            sub_species_column_name = "speciesname"
+        if not lu_data_bird:
+            speciesname = ""
         else:
-            sub_species_field = model.reported_name
-            sub_species_column_name = "reported_name"
+            speciesname = lu_data_bird.speciesname
 
         return [
-            (entry.speciescode, getattr(entry, sub_species_column_name))
+            (entry.speciescode, entry.reported_name)
             for entry in (
                 model.query.filter_by(
                     dataset=dataset, assessment_speciesname=speciesname
                 )
-                .with_entities(model.speciescode, sub_species_field)
-                .order_by(sub_species_field)
+                .with_entities(model.speciescode, model.reported_name)
+                .order_by(model.reported_name)
                 .distinct()
                 .all()
             )
