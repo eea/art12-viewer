@@ -10,6 +10,8 @@ from sqlalchemy import inspect
 
 from flask_security import UserMixin, RoleMixin
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import BigInteger, SmallInteger
+from sqlalchemy.dialects.postgresql import BYTEA, TIMESTAMP
 from flask import current_app as app
 from sqlalchemy import (
     Column,
@@ -49,7 +51,7 @@ def get_ldap_connection():
 class Dataset(Base):
     __tablename__ = "datasets"
 
-    id = Column(Integer, primary_key=True, unique=True)
+    id = Column(BigInteger(), primary_key=True, unique=True)
     name = Column(String(255), nullable=False)
 
 
@@ -58,34 +60,34 @@ class EtcDataBird(Base):
 
     country = Column(String(8), primary_key=True, nullable=False)
     country_isocode = Column(String(4))
-    delivery = Column(Integer)
-    envelope = Column(Text, nullable=False)
+    delivery = Column(Boolean)
+    envelope = Column(Text, nullable=True)
     filename = Column(String(60), nullable=True)
     reported_name = Column(Text)
     group = Column(String(30), index=True)
     family = Column(String(30))
     annex = Column(String(11))
     priority = Column(String(1))
-    redlist = Column(Integer)
+    redlist = Column(SmallInteger())
     euringcode = Column(String(30))
     code = Column(String(50))
     speciescode = Column(
         String(255), primary_key=True, nullable=False, server_default=text("''")
     )
     speciesname = Column(String(255))
-    species_name_different = Column(Integer)
+    species_name_different = Column(Boolean)
     subspecies_name = Column(String(255))
-    eunis_species_code = Column(Integer)
+    eunis_species_code = Column(BigInteger())
     alternative_speciesname = Column(String(255))
     common_speciesname = Column(String(128))
     valid_speciesname = Column(Text)
-    n2000_species_code = Column(Integer)
+    n2000_species_code = Column(BigInteger())
     assessment_speciescode = Column(String(10))
     assessment_speciesname = Column(String(255))
-    assessment_speciesname_changed = Column(Integer)
-    grouped_assesment = Column(Integer)
+    assessment_speciesname_changed = Column(BigInteger())
+    grouped_assesment = Column(Boolean)
     species_type = Column(String(10))
-    species_type_asses = Column(Integer)
+    species_type_asses = Column(Boolean)
     range_surface_area_bs = Column(Float(asdecimal=True))
     range_change_reason_bs = Column(String(150))
     percentage_range_surface_area_bs = Column(Float(asdecimal=True))
@@ -117,7 +119,7 @@ class EtcDataBird(Base):
     population_estimateType_bs = Column("population_estimatetype_bs", String(255))
     population_change_reason_bs = Column(String(200))
     number_of_different_population_units_bs = Column(Integer)
-    different_population_percentage_bs = Column(Integer)
+    different_population_percentage_bs = Column(Boolean)
     percentage_population_mean_size_bs = Column(String(30))
     population_additional_info_record_bs = Column(String(1))
     population_additional_info_bs = Column(Text)
@@ -129,7 +131,7 @@ class EtcDataBird(Base):
     population_trend_long_period_bs = Column(String(255))
     population_trend_long_bs = Column(String(3))
     population_trend_long_magnitude_min_bs = Column(Numeric(18, 5))
-    population_trend_long_magnitude_max_bs = Column(Numeric(18, 5))
+    population_trend_long_magnitude_max_bs = Column(Numeric(25, 5))
     population_trend_long_magnitude_bs = Column(String(131))
     population_trend_additional_info_record_bs = Column(String(1))
     population_trend_additional_info_bs = Column(Text)
@@ -166,8 +168,8 @@ class EtcDataBird(Base):
     population_units_other_ws = Column(String(10))
     population_estimateType_ws = Column("population_estimatetype_ws", String(255))
     population_change_reason_ws = Column(String(200))
-    number_of_different_population_units_ws = Column(Integer)
-    different_population_percentage_ws = Column(Integer)
+    number_of_different_population_units_ws = Column(BigInteger())
+    different_population_percentage_ws = Column(BigInteger())
     percentage_population_mean_size_ws = Column(String(30))
     population_additional_info_record_ws = Column(String(1))
     population_additional_info_ws = Column(Text)
@@ -253,7 +255,7 @@ class EtcDataBird(Base):
 class EtcBirdsEu(Base):
     __tablename__ = "etc_birds_eu_view"
 
-    id = Column("id", Integer, primary_key=True, autoincrement=True)
+    id = Column("id", BigInteger(), primary_key=True, autoincrement=True)
     speciescode = Column(String(10), nullable=False, server_default=text("''"))
     speciesname = Column(String(255))
     reported_name = Column(Text)
@@ -261,21 +263,21 @@ class EtcBirdsEu(Base):
     assessment_speciescode = Column(String(10))
     assessment_speciesname = Column(String(255))
     assessment_subpopulation = Column(String(255))
-    euringcode = Column(String(30))
+    euringcode = Column(String(16))
     non_native = Column(String(20))
     br_range_surface_area = Column(String(35))
     br_range_surface_area_downrounded = Column(String(35))
     br_range_trend = Column(String(25))
     br_range_trend_long = Column(String(25))
-    br_population_size = Column(String(255))
-    br_distribution_surface_area = Column(Integer)
+    br_population_size = Column(String(35))
+    br_distribution_surface_area = Column(BigInteger())
     br_distribution_trend = Column(String(3))
     br_distribution_trend_long = Column(String(3))
     br_population_minimum_size = Column(Numeric(18, 5))
     br_population_minimum_size_downrounded = Column(Numeric(18, 5))
     br_population_maximum_size = Column(Numeric(18, 5))
     br_population_maximum_size_uprounded = Column(Numeric(18, 5))
-    br_population_size_unit = Column(String(20))
+    br_population_size_unit = Column(String(225), nullable=True)
     br_population_trend = Column(String(25))
     br_population_trend_long = Column(String(25))
     br_conclusion_status_label = Column(String(255))
@@ -310,10 +312,10 @@ class EtcBirdsEu(Base):
     contribution_target1_label = Column(String(30))
     user = Column(String(50))
     last_update = Column(String(20))
-    deleted_record = Column(Integer)
+    deleted_record = Column(Boolean)
     decision = Column(String(20))
     user_decision = Column(String(50))
-    last_update_decision = Column(String(50))
+    last_update_decision = Column(String(16))
     additional_record = Column("addtionnal_record", Boolean)
     dataset_id = Column(
         "ext_dataset_id",
@@ -379,8 +381,8 @@ class LuRestrictedDataBird(Base):
 class Config(Base):
     __tablename__ = "config"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    default_dataset_id = Column(Integer, default=1)
+    id = Column(BigInteger(), primary_key=True, autoincrement=True)
+    default_dataset_id = Column(BigInteger(), default=1)
     species_map_url = Column(db.String(255))
     sensitive_species_map_url = Column(db.String(255))
     eu_species_map_breeding_url = Column(db.String(255))
@@ -392,7 +394,7 @@ class Config(Base):
 class Wiki(Base):
     __tablename__ = "wiki"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(BigInteger(), primary_key=True)
     speciescode = Column(String(10))
 
     dataset_id = Column(
@@ -409,12 +411,12 @@ class Wiki(Base):
 class WikiChange(Base):
     __tablename__ = "wiki_changes"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(BigInteger(), primary_key=True)
     wiki_id = Column(ForeignKey("wiki.id"), nullable=False)
     body = Column(String(6000), nullable=False)
     editor = Column(String(60), nullable=False)
-    changed = Column(DateTime, nullable=False, default=datetime.now)
-    active = Column(Integer, default=0)
+    changed = Column(TIMESTAMP(timezone=True), nullable=False, default=datetime.now)
+    active = Column(Boolean, default=False)
     dataset_id = Column(
         "ext_dataset_id",
         ForeignKey("datasets.id"),
@@ -433,7 +435,7 @@ class WikiChange(Base):
 class WikiTrail(Base):
     __tablename__ = "wiki_trail"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(BigInteger(), primary_key=True)
     speciescode = Column(String(50))
     reported_name = Column(String(100))
     reported_name_code = Column(String(100))
@@ -451,12 +453,12 @@ class WikiTrail(Base):
 class WikiTrailChange(Base):
     __tablename__ = "wiki_trail_changes"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(BigInteger(), primary_key=True)
     wiki_id = Column(ForeignKey("wiki_trail.id"), nullable=False)
-    body = Column(String(6000), nullable=False)
+    body = Column(String(6000))
     editor = Column(String(60), nullable=False)
-    changed = Column(DateTime, nullable=False, default=datetime.now)
-    active = Column(Integer, default=0)
+    changed = Column(TIMESTAMP(timezone=True), nullable=False, default=datetime.now)
+    active = Column(Boolean, default=False)
     dataset_id = Column(
         "ext_dataset_id",
         ForeignKey("datasets.id"),
@@ -477,7 +479,7 @@ roles_users = db.Table(
     db.Column(
         "registered_users_user", db.String(50), db.ForeignKey("registered_users.user")
     ),
-    db.Column("role_id", db.Integer(), db.ForeignKey("roles.id")),
+    db.Column("role_id", BigInteger(), db.ForeignKey("roles.id")),
 )
 
 
@@ -492,9 +494,9 @@ class RegisteredUser(Base, UserMixin):
     email = Column(String(255))
     qualification = Column(String(255))
     account_date = Column(String(100), nullable=False)
-    show_assessment = Column(Integer, nullable=False, default=1)
+    show_assessment = Column(BigInteger(), nullable=False, default=1)
     active = Column(Boolean)
-    confirmed_at = db.Column(db.DateTime())
+    confirmed_at = db.Column(TIMESTAMP(timezone=True))
     is_ldap = db.Column(Boolean, nullable=False, default=False)
     roles = db.relationship(
         "Role",
@@ -502,7 +504,7 @@ class RegisteredUser(Base, UserMixin):
         backref=db.backref("users", lazy="dynamic"),
     )
     password = db.Column(String(60))
-    fs_uniquifier = db.Column(String(64))
+    fs_uniquifier = db.Column(String(64), nullable=False)
 
     def has_role(self, role):
         return role in [r.name for r in self.roles]
@@ -530,7 +532,7 @@ class RegisteredUser(Base, UserMixin):
 class Role(Base, RoleMixin):
     __tablename__ = "roles"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(BigInteger(), primary_key=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
     description = db.Column(db.String(255), nullable=False, unique=True)
 

@@ -3,7 +3,7 @@ from datetime import datetime, UTC
 import flask
 from flask import current_app
 from flask_principal import PermissionDenied
-from flask_security.forms import ChangePasswordForm, ResetPasswordForm
+from flask_security import ChangePasswordForm, ResetPasswordForm
 from flask_security.changeable import change_user_password
 from flask_security.registerable import register_user
 from werkzeug.datastructures import ImmutableMultiDict

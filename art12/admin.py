@@ -1,4 +1,5 @@
 import os
+from decimal import Decimal
 
 from flask import abort, flash, current_app, request, redirect, url_for
 from flask_admin import Admin, AdminIndexView, BaseView, expose
@@ -66,6 +67,7 @@ class ConfigModelView(ProtectedModelView):
 
 class EtcBirdsEuModelView(ProtectedModelView):
     can_export = True
+    export_types = ["csv", "xlsx"]
     can_set_page_size = True
     column_filters = ["speciescode", "speciesname", "dataset_id"]
     column_searchable_list = ["speciescode", "speciesname"]
@@ -159,6 +161,20 @@ class EtcBirdsEuModelView(ProtectedModelView):
         "red_list_cat_prev",
     ]
 
+    def get_export_columns(self):
+        columns = super().get_export_columns()
+        # import pdb; pdb.set_trace()
+        return [(name, name) for name,_ in columns]
+
+    def get_export_value(self, model, name):
+        """Return raw column value without trailing zeros."""
+        value = getattr(model, name, "")
+
+        if isinstance(value, Decimal):
+            # Strip trailing zeros and decimal point if not needed
+            return str(value.normalize())
+
+        return value
 
 class EtcDataBirdModelView(ProtectedModelView):
     can_export = True
@@ -580,7 +596,6 @@ def admin_register(app):
     admin = Admin(
         app,
         name="Article 12",
-        template_mode="bootstrap3",
         index_view=CustomAdminIndexView(),
     )
     admin.add_view(ConfigModelView(Config, db.session))

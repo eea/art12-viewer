@@ -5,7 +5,7 @@ from wtforms.validators import Optional, Email
 from wtforms.widgets import HiddenInput
 
 from flask_security.forms import (
-    Required,
+    RequiredLocalize,
     RegisterFormMixin,
     unique_user_email,
 )
@@ -29,7 +29,9 @@ class CustomEmailStringField(StringField):
 
 class EeaRegisterFormBase(object):
 
-    name = StringField("Full name", validators=[Required("Full name is required")])
+    name = StringField(
+        "Full name", validators=[RequiredLocalize("Full name is required")]
+    )
     institution = StringField("Institution", validators=[Optional()])
     abbrev = StringField("Abbrev.")
     MS = StringField(widget=HiddenInput())
@@ -69,7 +71,7 @@ class EeaAdminEditUserForm(EeaRegisterFormBase, FlaskForm):
     email = StringField(
         "Email address",
         validators=[
-            Required("Email is required"),
+            RequiredLocalize("Email is required"),
             Email("Invalid email address"),
             custom_unique_user_email,
         ],
@@ -80,7 +82,7 @@ class EeaLDAPRegisterForm(EeaRegisterFormBase, RegisterFormMixin, FlaskForm):
     email = StringField(
         "Email address",
         validators=[
-            Required("Email is required"),
+            RequiredLocalize("Email is required"),
             Email("Invalid email address"),
         ],
     )
@@ -90,7 +92,7 @@ class EeaLocalRegisterForm(EeaRegisterFormBase, ConfirmRegisterForm):
     id = StringField(
         "Username",
         validators=[
-            Required("User ID is required"),
+            RequiredLocalize("User ID is required"),
             check_duplicate_with_local_db,
             check_duplicate_with_ldap,
         ],
@@ -99,7 +101,7 @@ class EeaLocalRegisterForm(EeaRegisterFormBase, ConfirmRegisterForm):
     email = CustomEmailStringField(
         "Email address",
         validators=[
-            Required("Email is required"),
+            RequiredLocalize("Email is required"),
             Email("Invalid email address"),
             unique_user_email,
         ],
