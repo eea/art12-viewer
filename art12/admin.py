@@ -157,8 +157,10 @@ class EtcBirdsEuModelView(ProtectedModelView):
         "dataset_id",
         "use_for_statistics",
         "conclusion_status_label_prev",
+        "conclusion_status_label_br_prev",
         "conclusion_status_br_wi_prev",
         "red_list_cat_prev",
+        "red_list_cat_br_prev",
     ]
 
     def get_export_columns(self):
