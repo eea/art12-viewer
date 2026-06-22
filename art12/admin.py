@@ -166,7 +166,7 @@ class EtcBirdsEuModelView(ProtectedModelView):
     def get_export_columns(self):
         columns = super().get_export_columns()
         # import pdb; pdb.set_trace()
-        return [(name, name) for name,_ in columns]
+        return [(name, name) for name, _ in columns]
 
     def get_export_value(self, model, name):
         """Return raw column value without trailing zeros."""
@@ -177,6 +177,7 @@ class EtcBirdsEuModelView(ProtectedModelView):
             return str(value.normalize())
 
         return value
+
 
 class EtcDataBirdModelView(ProtectedModelView):
     can_export = True

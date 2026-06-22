@@ -4,6 +4,7 @@ import click
 from flask.cli import AppGroup
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql.sqltypes import Boolean, Float, Integer, Numeric
+from sqlalchemy import BigInteger, SmallInteger
 
 from art12.models import db
 import pandas as pd
@@ -29,7 +30,7 @@ def set_correct_values_for_boolean_fields(data, field):
 
 def set_correct_values_for_float_fields(data, field):
     if field in data:
-        if data[field] in [math.nan, "nan", "NaN", "NAN", None, ""]:
+        if data[field] in [math.nan, "nan", "NaN", "NAN", None, "", "NULL"]:
             data[field] = None
         else:
             try:
@@ -41,7 +42,7 @@ def set_correct_values_for_float_fields(data, field):
 
 def set_correct_values_for_integer_fields(data, field):
     if field in data:
-        if data[field] in [math.nan, "nan", "NaN", "NAN", None, ""]:
+        if data[field] in [math.nan, "nan", "NaN", "NAN", None, "", "NULL"]:
             data[field] = None
         else:
             try:
@@ -65,7 +66,7 @@ def clean_data(model, data):
             set_correct_values_for_boolean_fields(data, field)
         elif field_type == Float or field_type == Numeric:
             set_correct_values_for_float_fields(data, field)
-        elif field_type == Integer:
+        elif field_type in [Integer, BigInteger, SmallInteger]:
             set_correct_values_for_integer_fields(data, field)
         try:
 

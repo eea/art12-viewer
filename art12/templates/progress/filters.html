@@ -3,14 +3,30 @@
 
   <div class="box-col width-180">
     <label>{{ filter_form.period.label }}</label>
-    {{ filter_form.period }}
+    {{ filter_form.period(class="select2-period") }}
   </div>
 
   <div class="box-col">
     {{ filter_form.conclusion.label }}
-    {{ filter_form.conclusion() }}
+    {{ filter_form.conclusion(class="select2-conclusion") }}
   </div>
 
-  <button type="submit" class="btn-blue offset_top_label">Filter</button>
+  <button type="submit" class="btn-blue btn-xl offset_top_label">Filter</button>
 
 </form>
+
+<script>
+  $(document).ready(function() {
+    $('.select2-period').select2({
+      placeholder: 'Search period...',
+      allowClear: true,
+      width: '100%'
+    });
+
+    $('.select2-conclusion').select2({
+      placeholder: 'Search conclusion...',
+      allowClear: true,
+      width: '100%'
+    });
+  });
+</script>
