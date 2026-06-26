@@ -80,6 +80,7 @@ class EtcBirdsEuModelView(ProtectedModelView):
         "assessment_speciesname",
         "euringcode",
         "decision",
+        "use_for_statistics",
     ]
     column_sortable_list = [
         "id",
@@ -165,7 +166,6 @@ class EtcBirdsEuModelView(ProtectedModelView):
 
     def get_export_columns(self):
         columns = super().get_export_columns()
-        # import pdb; pdb.set_trace()
         return [(name, name) for name, _ in columns]
 
     def get_export_value(self, model, name):
@@ -219,6 +219,7 @@ class EtcDataBirdModelView(ProtectedModelView):
         "assessment_speciescode",
         "assessment_speciesname",
         "assessment_speciesname_changed",
+        "use_for_statistics",
     ]
     column_sortable_list = [
         "country",

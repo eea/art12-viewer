@@ -87,7 +87,11 @@ class Summary(SpeciesMixin, TemplateView):
             filter_args["dataset"] = dataset
             qs = self.model_cls.query.filter_by(**filter_args)
             if dataset.id == 4:
-                content_objects = qs.filter(self.model_cls.country != EU_COUNTRY)
+                content_objects = qs.filter(
+                    self.model_cls.country != EU_COUNTRY
+                ).order_by(
+                    self.model_cls.use_for_statistics.desc(), self.model_cls.country
+                )
             else:
                 content_objects = qs.filter(
                     self.model_cls.country_isocode != EU_COUNTRY

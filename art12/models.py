@@ -247,6 +247,8 @@ class EtcDataBird(Base):
 
     @property
     def is_assesm(self):
+        if self.dataset.id == 4:
+            return self.use_for_statistics == "N"
         if self.dataset.id == 3:
             return self.use_for_statistics == "0"
         return self.species_type_asses == 0

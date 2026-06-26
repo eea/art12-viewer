@@ -28,6 +28,11 @@ TREND_CLASSES = {
     "D": "dec",
     "Unk": "xx",
     "U": "u",
+    "Stable": "eq",
+    "Uncertain": "u",
+    "Decreasing": "dec",
+    "Increasing": "inc",
+    "Unknown": "xx",
 }
 
 SEASON_FIELDS = [
