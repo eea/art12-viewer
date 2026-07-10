@@ -43,6 +43,7 @@ class DatasetModelView(ProtectedModelView):
     can_export = True
     column_list = [
         "id",
+        "latest",
         "name",
     ]
     column_export_list = [
@@ -59,10 +60,9 @@ class ConfigModelView(ProtectedModelView):
     column_list = (
         "id",
         "default_dataset_id",
-        "species_map_url",
-        "sensitive_species_map_url",
+        "default_public_dataset_id"
     )
-    column_filters = ["id", "default_dataset_id"]
+    column_filters = ["id", "default_dataset_id", "default_public_dataset_id"]
 
 
 class EtcBirdsEuModelView(ProtectedModelView):

@@ -114,10 +114,12 @@ class Summary(SpeciesMixin, TemplateView):
                 sensitive=sensitive,
             )
             eu_map_breeding_url = get_eu_map_breeding_url(
+                dataset=dataset,
                 subject=speciescode,
                 sensitive=sensitive,
             )
             eu_map_winter_url = get_eu_map_winter_url(
+                dataset=dataset,
                 subject=speciescode,
                 sensitive=sensitive,
             )

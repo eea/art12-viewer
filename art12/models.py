@@ -52,7 +52,15 @@ class Dataset(Base):
     __tablename__ = "datasets"
 
     id = Column(BigInteger(), primary_key=True, unique=True)
+    latest = Column(Boolean, default=False)
     name = Column(String(255), nullable=False)
+    public_can_view_assessments = Column(Boolean, default=True)
+    species_map_url = Column(db.String(255))
+    sensitive_species_map_url = Column(db.String(255))
+    eu_species_map_breeding_url = Column(db.String(255))
+    eu_sensitive_species_map_breeding_url = Column(db.String(255))
+    eu_species_map_winter_url = Column(db.String(255))
+    eu_sensitive_species_map_winter_url = Column(db.String(255))
 
 
 class EtcDataBird(Base):
@@ -387,13 +395,7 @@ class Config(Base):
 
     id = Column(BigInteger(), primary_key=True, autoincrement=True)
     default_dataset_id = Column(BigInteger(), default=1)
-    species_map_url = Column(db.String(255))
-    sensitive_species_map_url = Column(db.String(255))
-    eu_species_map_breeding_url = Column(db.String(255))
-    eu_sensitive_species_map_breeding_url = Column(db.String(255))
-    eu_species_map_winter_url = Column(db.String(255))
-    eu_sensitive_species_map_winter_url = Column(db.String(255))
-
+    default_public_dataset_id = Column(BigInteger(), default=1)
 
 class Wiki(Base):
     __tablename__ = "wiki"

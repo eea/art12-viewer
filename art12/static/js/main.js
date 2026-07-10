@@ -267,7 +267,7 @@ $(function() {
         var url = $(this).data('url');
         if (url != "") {
             title = "Map";
-            var params = "left=400,top=100,width=700,height=420," +
+            var params = "left=400,top=100,width=1000,height=600," +
                             "toolbar=0,resizable=0,scrollbars=0";
             window.open(url, title, params).focus();
         }

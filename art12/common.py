@@ -61,7 +61,9 @@ class TemplateView(MethodView):
 
 def get_default_period():
     config = get_config()
-    return config.default_dataset_id
+    if current_user.is_authenticated:
+        return config.default_dataset_id
+    return config.default_public_dataset_id
 
 
 def get_zero(value):
@@ -184,12 +186,14 @@ def get_config():
 
 
 def get_map_url(subject, reported_name, dataset, sensitive=False):
-    config = get_config()
     code = subject
     if sensitive and current_user.is_authenticated:
-        map_href = config.sensitive_species_map_url
+        map_href = dataset.sensitive_species_map_url
     else:
-        map_href = config.species_map_url
+        map_href = dataset.species_map_url
+    if dataset.id == 4:
+        map_href_suffix = f'&url-filter=birds;{subject};filter;filterZoom'
+        return map_href + map_href_suffix
     if dataset.id == 1:
         # setting layer for period 2008-2012
         map_href = map_href.format(0, 1)
@@ -198,20 +202,17 @@ def get_map_url(subject, reported_name, dataset, sensitive=False):
         map_href = map_href.format(2, 3)
         if reported_name:
             code = reported_name
-
     if not map_href:
         return ""
 
     return f"{map_href}&code={code}&zoomto=true&embed=true"
 
 
-def get_eu_map_breeding_url(subject, sensitive=False):
-    config = get_config()
-
+def get_eu_map_breeding_url(dataset, subject, sensitive=False):
     if sensitive:
-        eu_map_breeding_href = config.eu_sensitive_species_map_breeding_url
+        eu_map_breeding_href = dataset.eu_sensitive_species_map_breeding_url
     else:
-        eu_map_breeding_href = config.eu_species_map_breeding_url
+        eu_map_breeding_href = dataset.eu_species_map_breeding_url
 
     if not eu_map_breeding_href:
         return url_for("views.eu_map", speciescode=subject, suffix="breeding")
@@ -219,13 +220,11 @@ def get_eu_map_breeding_url(subject, sensitive=False):
     return eu_map_breeding_href + "&CCode=" + subject
 
 
-def get_eu_map_winter_url(subject, sensitive=False):
-    config = get_config()
-
+def get_eu_map_winter_url(dataset, subject, sensitive=False):
     if sensitive:
-        eu_map_winter_href = config.eu_sensitive_species_map_winter_url
+        eu_map_winter_href = dataset.eu_sensitive_species_map_winter_url
     else:
-        eu_map_winter_href = config.eu_species_map_winter_url
+        eu_map_winter_href = dataset.eu_species_map_winter_url
 
     if not eu_map_winter_href:
         return url_for("views.eu_map", speciescode=subject, suffix="winter")
@@ -320,3 +319,20 @@ def get_map_path(code, suffix):
     maps_path = Path(app.static_folder) / app.config["MAPS_STATIC"] / filename
     if maps_path.exists():
         return Path(app.config["MAPS_STATIC"]) / filename
+
+
+@common.app_template_global("public_view_on_latest_dataset")
+def public_view_on_latest_dataset():
+
+    conf = get_config()
+
+    if not current_user.is_authenticated:
+        return conf.default_dataset_id == conf.default_public_dataset_id
+    return True
+
+
+@common.app_template_global("can_view_assessments")
+def can_view_assessments(dataset):
+    if current_user.is_anonymous and not dataset.public_can_view_assessments:
+        return False
+    return True

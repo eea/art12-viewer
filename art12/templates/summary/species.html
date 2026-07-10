@@ -144,6 +144,7 @@
           </tbody>
 
           {# EU assessments #}
+          {% if can_view_assessments(dataset) %}
           {% if dataset.id == 4 %}
             {% set colspan_all=48 %}
             {% include 'common/2024/species_table_eu_header.html' with context %}
@@ -170,6 +171,7 @@
           {% endfor %}
           </tbody>
         </table>
+        {% endif %}
       </div>
       {% if dataset.id in [1,2] %}
         <p>

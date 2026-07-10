@@ -1,11 +1,13 @@
 from flask import request, abort
 from flask_wtf import FlaskForm
+from sqlalchemy import or_
 from wtforms import SelectField, StringField, PasswordField
 from wtforms.validators import Optional, InputRequired
-from art12.common import get_default_period
+from art12.common import get_default_period, public_view_on_latest_dataset
 from art12.mixins import SpeciesMixin
 from art12.models import Dataset, EtcDataBird
 
+from eea_integration.auth.security import current_user
 
 class CommonFilterForm(FlaskForm):
     period = SelectField("Period...", default=get_default_period)
@@ -13,7 +15,14 @@ class CommonFilterForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super(CommonFilterForm, self).__init__(*args, **kwargs)
-        self.period.choices = [(d.id, d.name) for d in Dataset.query.all()]
+        if not current_user.is_authenticated and not public_view_on_latest_dataset():
+            datasets = Dataset.query.filter(
+                or_(Dataset.latest.is_(False), Dataset.latest.is_(None))
+            ).order_by(Dataset.id)
+            self.period.choices = [(d.id, d.name) for d in datasets]
+        else:
+            self.period.choices = [(d.id, d.name) for d in Dataset.query.order_by(Dataset.id)]
+
         try:
             dataset_id = int(request.args.get("period", get_default_period()))
         except ValueError:
@@ -108,28 +117,7 @@ class ReportsFilterForm(SpeciesMixin, CommonFilterForm):
 
 class ConfigForm(FlaskForm):
     default_dataset_id = SelectField(label="Default period")
-
-    species_map_url = StringField(label="URL for species map", validators=[Optional()])
-    sensitive_species_map_url = StringField(
-        label="URL for sensitive species map", validators=[Optional()]
-    )
-    eu_species_map_breeding_url = StringField(
-        label="URL for EU species map of Breeding population trend",
-        validators=[Optional()],
-    )
-    eu_sensitive_species_map_breeding_url = StringField(
-        label="URL for EU sensitive species map of Breeding population trend",
-        validators=[Optional()],
-    )
-    eu_species_map_winter_url = StringField(
-        label="URL for EU species map of Winter population trend",
-        validators=[Optional()],
-    )
-    eu_sensitive_species_map_winter_url = StringField(
-        label="URL for EU sensitive species map of Winter population trend",
-        validators=[Optional()],
-    )
-
+    default_public_dataset_id = SelectField(label="Default public period")
     class Meta:
         csrf = True
 
@@ -137,6 +125,9 @@ class ConfigForm(FlaskForm):
         super(ConfigForm, self).__init__(*args, **kwargs)
         dataset_qs = Dataset.query.with_entities(Dataset.id, Dataset.name).all()
         self.default_dataset_id.choices = [
+            (str(ds_id), name) for ds_id, name in dataset_qs
+        ]
+        self.default_public_dataset_id.choices = [
             (str(ds_id), name) for ds_id, name in dataset_qs
         ]
 

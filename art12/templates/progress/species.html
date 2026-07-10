@@ -15,8 +15,9 @@
     </p>
 
     {% include 'progress/filters.html' %}
-
-    {% if current_selection %}
+    {% if not can_view_assessments(dataset) %}
+      <p><b>The current period does not have assessment information.</b></p>
+    {% elif current_selection %}
       {% set page_type='progress' %}
       {% include 'common/legend.html' with context %}
       <table class="complex_datatable">

@@ -54,6 +54,7 @@
       {% if AUTH_BLUEPRINT_INSTALLED %}
         <li><a href="{{ url_for('auth.users') }}">Users</a></li>
       {% endif %}
+      <li><a href="/admin/">Admin interface</a></li>
       <li><a href="{{ url_for('common.config') }}">Settings</a></li>
     </ul>
   {% endif %}
