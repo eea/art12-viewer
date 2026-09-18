@@ -2,11 +2,11 @@
 
 {# Breeding population #}
 <td colspan="3" class="default-td border_left">
-  {{ row.br_population_minimum_size_downrounded|int or '' }}
+  {{ row.br_population_minimum_size_downrounded|int_zero }}
 </td>
 
 <td colspan="3" class="default-td border_left text-center">
-  {{ row.br_population_maximum_size_uprounded|int or '' }}
+  {{ row.br_population_maximum_size_uprounded|int_zero }}
 </td>
 
 <td colspan="3" class="default-td border_left text-center">
@@ -27,7 +27,7 @@
 
 {# Breeding distribution #}
 <td colspan="3" class="center border_left">
-  {{ row.br_distribution_surface_area or '' }}
+  {{ row.br_distribution_surface_area|int_zero }}
 </td>
 
 <td colspan="3"
@@ -46,11 +46,11 @@
 
 {# Winter population #}
 <td colspan="4" class="default-td border_left">
-  {{ row.wi_population_minimum_size_downrounded|int or '' }}
+  {{ row.wi_population_minimum_size_downrounded|int_zero }}
 </td>
 
 <td colspan="4" class="default-td border_left">
-  {{ row.wi_population_maximum_size_uprounded|int or '' }}
+  {{ row.wi_population_maximum_size_uprounded|int_zero }}
 </td>
 
 <td colspan="4" class="default-td border_left">
