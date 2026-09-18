@@ -66,7 +66,11 @@ def create_generic_fixtures():
             "('nat', 'National expert')"
         )
     )
-    models.db.session.execute(text("insert into config(default_dataset_id, default_public_dataset_id) values (3, 4)"))
+    models.db.session.execute(
+        text(
+            "insert into config(default_dataset_id, default_public_dataset_id) values (3, 4)"
+        )
+    )
 
 
 def create_testing_app():

@@ -397,6 +397,7 @@ class Config(Base):
     default_dataset_id = Column(BigInteger(), default=1)
     default_public_dataset_id = Column(BigInteger(), default=1)
 
+
 class Wiki(Base):
     __tablename__ = "wiki"
 

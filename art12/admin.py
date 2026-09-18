@@ -57,11 +57,7 @@ class DatasetModelView(ProtectedModelView):
 
 
 class ConfigModelView(ProtectedModelView):
-    column_list = (
-        "id",
-        "default_dataset_id",
-        "default_public_dataset_id"
-    )
+    column_list = ("id", "default_dataset_id", "default_public_dataset_id")
     column_filters = ["id", "default_dataset_id", "default_public_dataset_id"]
 
 

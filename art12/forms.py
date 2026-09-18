@@ -9,6 +9,7 @@ from art12.models import Dataset, EtcDataBird
 
 from eea_integration.auth.security import current_user
 
+
 class CommonFilterForm(FlaskForm):
     period = SelectField("Period...", default=get_default_period)
     model_cls = EtcDataBird
@@ -21,7 +22,9 @@ class CommonFilterForm(FlaskForm):
             ).order_by(Dataset.id)
             self.period.choices = [(d.id, d.name) for d in datasets]
         else:
-            self.period.choices = [(d.id, d.name) for d in Dataset.query.order_by(Dataset.id)]
+            self.period.choices = [
+                (d.id, d.name) for d in Dataset.query.order_by(Dataset.id)
+            ]
 
         try:
             dataset_id = int(request.args.get("period", get_default_period()))
@@ -118,6 +121,7 @@ class ReportsFilterForm(SpeciesMixin, CommonFilterForm):
 class ConfigForm(FlaskForm):
     default_dataset_id = SelectField(label="Default period")
     default_public_dataset_id = SelectField(label="Default public period")
+
     class Meta:
         csrf = True
 

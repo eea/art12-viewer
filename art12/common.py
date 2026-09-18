@@ -192,7 +192,7 @@ def get_map_url(subject, reported_name, dataset, sensitive=False):
     else:
         map_href = dataset.species_map_url
     if dataset.id == 4:
-        map_href_suffix = f'&url-filter=birds;{subject};filter;filterZoom'
+        map_href_suffix = f"&url-filter=birds;{subject};filter;filterZoom"
         return map_href + map_href_suffix
     if dataset.id == 1:
         # setting layer for period 2008-2012

@@ -53,11 +53,13 @@ def format_subpopulation(subpopulation):
 def format_info(value):
     return value.replace("|", "<br>")
 
+
 @factsheet.app_template_filter("int_zero")
 def int_zero(value):
     if value is None:
-        return ''
+        return ""
     return int(value)
+
 
 @factsheet.app_template_global("get_map_url")
 def get_map_url(code, suffix):
