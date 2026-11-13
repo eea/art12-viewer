@@ -2,7 +2,7 @@ Project Name
 ------------
 The Project Name is `Art 12 Consultation Tool`
 
-[![Travis](https://travis-ci.org/eea/art12-viewer.svg?branch=master)](https://travis-ci.org/eea/art12-viewer)
+[![Tests](https://github.com/eea/art12-viewer/actions/workflows/tests.yml/badge.svg)](https://github.com/eea/art12-viewer/actions/workflows/tests.yml)
 [![Docker](https://img.shields.io/docker/build/eeacms/art12-viewer)](https://hub.docker.com/r/eeacms/art12-viewer/builds/)
 
 Prerequisites - System packages
@@ -116,6 +116,10 @@ Tests
 7. Run tests:
 
        pytest testsuite
+
+8. Run tests with coverage (same as the GitHub Actions workflow):
+
+       pytest testsuite --cov=art12 --cov=eea_integration --cov-report=term --cov-report=html
 
 
 Build production

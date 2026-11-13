@@ -306,15 +306,14 @@ def load_user(id=None):
     return db.session.get(RegisteredUser, id)
 
 
-def try_local_login(username, password, form):
+def try_local_login(username, password):
     user = RegisteredUser.query.filter_by(id=username).first()
-    if not user or not verify(password, user):
-        flash("Please check your login details and try again.")
-        return render_template("login.html", form=form)
+    # EIONET accounts must authenticate against LDAP, never the local hash
+    if not user or user.is_ldap or not user.password or not verify(password, user):
+        return False
     login_user(user)
     g.user = user
-    flash("You have successfully logged in.", "success")
-    return redirect(url_for(HOMEPAGE_VIEW_NAME))
+    return True
 
 
 class LoginView(TemplateView):
@@ -334,16 +333,15 @@ class LoginView(TemplateView):
             flash("You are already logged in.")
             return redirect(url_for(HOMEPAGE_VIEW_NAME))
         form = LoginForm(request.form)
-        if form.errors:
-            flash(form.errors, "danger")
-        username = request.form.get("username")
-        password = request.form.get("password")
+        if not form.validate():
+            flash("Invalid username or password. Please try again.", "danger")
+            return render_template("login.html", form=form)
+        username = form.username.data
+        password = form.password.data
         try:
             RegisteredUser.try_login(username, password)
         except ldap.INVALID_CREDENTIALS:
-
-            try_local_login(username, password, form)
-            if not current_user.is_authenticated:
+            if not try_local_login(username, password):
                 flash("Invalid username or password. Please try again.", "danger")
                 return render_template("login.html", form=form)
 

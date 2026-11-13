@@ -519,7 +519,10 @@ class RegisteredUser(Base, UserMixin):
     @staticmethod
     def try_login(username, password):
         conn = get_ldap_connection()
-        conn.simple_bind_s("uid=%s,ou=Users,o=EIONET,l=Europe" % username, password)
+        user_dn = "uid=%s,ou=Users,o=EIONET,l=Europe" % ldap.dn.escape_dn_chars(
+            username
+        )
+        conn.simple_bind_s(user_dn, password)
 
     @property
     def is_authenticated(self):

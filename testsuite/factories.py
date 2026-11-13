@@ -86,7 +86,7 @@ class EtcDataBirdFactory(SQLAlchemyModelFactory):
     population_estimateType_bs = "population_estimateType_bs"
     population_change_reason_bs = "population_change_reason_bs"
     number_of_different_population_units_bs = 12
-    different_population_percentage_bs = 13
+    different_population_percentage_bs = True
     percentage_population_mean_size_bs = "ppmsb"
     population_additional_info_record_bs = "1"
     population_additional_info_bs = "population_additional_info_bs"
@@ -247,7 +247,7 @@ class EtcBirdsEuFactory(SQLAlchemyModelFactory):
     deleted_record = 0
     decision = "decision"
     user_decision = "user_decision"
-    last_update_decision = "last_update_decision"
+    last_update_decision = "2024-01-01"
     dataset_id = 1
     conclusion_status_label_prev = "cslp"
     conclusion_status_br_wi_prev = "csbw"

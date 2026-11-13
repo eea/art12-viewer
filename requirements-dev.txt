@@ -1,8 +1,9 @@
 -r requirements.txt
 Flask-WebTest==0.1.6
-WebTest==3.0.1
-factory-boy==3.3.1
-mock==5.1.0
-pytest==8.3.3
-flake8==7.1.1
-black==24.10.0
+WebTest==3.0.7
+factory-boy==3.3.3
+mock==5.2.0
+pytest==9.2.0
+pytest-cov==7.1.0
+flake8==7.5.0
+black==26.10.1

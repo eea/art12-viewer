@@ -1,4 +1,3 @@
-import jinja2
 import subprocess
 import urllib
 
@@ -6,6 +5,7 @@ from flask import Blueprint, abort
 from flask import render_template, request, current_app as app, url_for
 from flask.cli import AppGroup
 from flask.views import MethodView
+from markupsafe import Markup, escape
 from path import Path
 
 from sqlalchemy import text
@@ -41,8 +41,8 @@ factsheet = Blueprint("factsheet", __name__)
 
 @factsheet.app_template_filter("format_subpopulation")
 def format_subpopulation(subpopulation):
-    subpopulation = f"<i>{subpopulation}</i>"
-    return jinja2.Markup(
+    subpopulation = f"<i>{escape(subpopulation)}</i>"
+    return Markup(
         subpopulation.replace("[", "</i>[")
         .replace("]", "]<i>")
         .replace("all others", "</i>all others<i>")
@@ -51,7 +51,7 @@ def format_subpopulation(subpopulation):
 
 @factsheet.app_template_filter("format_info")
 def format_info(value):
-    return value.replace("|", "<br>")
+    return Markup("<br>").join(escape(value).split("|"))
 
 
 @factsheet.app_template_filter("int_zero")

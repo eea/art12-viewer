@@ -179,7 +179,7 @@ $(document).ready(function () {
     });
 
     var copy_alert = 'Copying the data is not allowed';
-    $('.copy-disabled').bind('contextmenu', function(e){
+    $('.copy-disabled').on('contextmenu', function(e){
         alert(copy_alert);
         return false;
     });
@@ -193,7 +193,7 @@ $(document).ready(function () {
         if (e.keyCode == ctrlKey) ctrlDown = false;
     });
 
-    $('.copy-disabled').bind('keydown', (function(e) {
+    $('.copy-disabled').on('keydown', (function(e) {
         if (ctrlDown && (e.keyCode == cKey || e.keyCode == aKey)){
             alert(copy_alert);
             return false;

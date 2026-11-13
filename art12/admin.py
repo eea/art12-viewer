@@ -598,27 +598,27 @@ def admin_register(app):
         name="Article 12",
         index_view=CustomAdminIndexView(),
     )
-    admin.add_view(ConfigModelView(Config, db.session))
-    admin.add_view(DatasetModelView(Dataset, db.session))
-    admin.add_view(EtcBirdsEuModelView(EtcBirdsEu, db.session))
-    admin.add_view(EtcDataBirdModelView(EtcDataBird, db.session))
-    admin.add_view(LuDataBirdModelView(LuDataBird, db.session))
-    admin.add_view(LuRestrictedDataBirdModelView(LuRestrictedDataBird, db.session))
-    admin.add_view(WikiModelView(Wiki, db.session, name="Wiki", endpoint="wiki_admin"))
+    admin.add_view(ConfigModelView(Config, db))
+    admin.add_view(DatasetModelView(Dataset, db))
+    admin.add_view(EtcBirdsEuModelView(EtcBirdsEu, db))
+    admin.add_view(EtcDataBirdModelView(EtcDataBird, db))
+    admin.add_view(LuDataBirdModelView(LuDataBird, db))
+    admin.add_view(LuRestrictedDataBirdModelView(LuRestrictedDataBird, db))
+    admin.add_view(WikiModelView(Wiki, db, name="Wiki", endpoint="wiki_admin"))
     admin.add_view(
         WikiChangeModelView(
-            WikiChange, db.session, name="Wiki Changes", endpoint="wikichange_admin"
+            WikiChange, db, name="Wiki Changes", endpoint="wikichange_admin"
         )
     )
     admin.add_view(
         WikiTrailModelView(
-            WikiTrail, db.session, name="Wiki Trails", endpoint="wikitrail_admin"
+            WikiTrail, db, name="Wiki Trails", endpoint="wikitrail_admin"
         )
     )
     admin.add_view(
         WikiTrailChangeModelView(
             WikiTrailChange,
-            db.session,
+            db,
             name="Wiki Trail Changes",
             endpoint="wikitrailchange_admin",
         )
