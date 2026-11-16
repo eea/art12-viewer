@@ -90,6 +90,12 @@ def clean_data(model, data):
     required=False,
     help="Excel sheet name or index",
 )
+@click.option(
+    "--replace",
+    is_flag=True,
+    default=False,
+    help="Delete the existing rows of the imported datasets before importing",
+)
 def run(**kwargs):
     """
     Model options:
@@ -101,9 +107,21 @@ def run(**kwargs):
     data = df.to_dict(orient="records")
     model_class = db.get_model(kwargs["model"])
 
+    model_fields = {attr.key for attr in model_class.__mapper__.column_attrs}
+    skipped = [column for column in df.columns if column not in model_fields]
+    if skipped:
+        print(f"Skipping columns not in {kwargs['model']}: {', '.join(skipped)}")
+
+    if kwargs["replace"]:
+        dataset_ids = {row["dataset_id"] for row in data}
+        deleted = model_class.query.filter(
+            model_class.dataset_id.in_(dataset_ids)
+        ).delete(synchronize_session=False)
+        print(f"Deleted {deleted} existing rows for datasets {sorted(dataset_ids)}")
+
     for data_object in data:
         # Filter data_object to only include keys that are actual model columns
-        filtered_data = {k: v for k, v in data_object.items()}
+        filtered_data = {k: v for k, v in data_object.items() if k in model_fields}
         clean_data(model_class, filtered_data)
 
         try:
@@ -121,10 +139,14 @@ def run(**kwargs):
 
             new_object = model_class(**filtered_data)
             db.session.add(new_object)
-            db.session.commit()
+            db.session.flush()
         except Exception as e:
+            db.session.rollback()
             print(f"Error: {e}")
             print("Problematic data:")
             for k, v in filtered_data.items():
                 print(f"  {k}: {v} ({type(v)})")
             raise
+
+    db.session.commit()
+    print(f"Imported {len(data)} rows")

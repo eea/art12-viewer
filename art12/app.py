@@ -25,6 +25,7 @@ from art12.management.import_new_data import import_new_data
 from art12.management.import_new_data_v2 import import_new_data_v2
 from art12.management.import_new_wiki_data import import_new_wiki_data
 from art12.management.generate_new_period import generate_new_period
+from art12.management.import_audit_trail_2026 import import_audit_trail_2026
 
 from eea_integration.auth.script import user_manager, role_manager
 from eea_integration.layout import layout
@@ -91,9 +92,13 @@ def create_app(config={}, testing=False):
         app.wsgi_app = create_url_prefix_middleware(app.wsgi_app, url_prefix)
 
     if app.config.get("SENTRY_DSN"):
-        from raven.contrib.flask import Sentry
+        import sentry_sdk
 
-        Sentry(app)
+        sentry_sdk.init(
+            dsn=app.config.get("SENTRY_DSN"),
+            send_default_pii=True,
+            environment=app.config.get("SENTRY_ENVIRONMENT", "production"),
+        )
 
     return app
 

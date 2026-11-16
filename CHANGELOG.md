@@ -1,6 +1,29 @@
 Changelog
 =========
 
+2.8.0 (2026-11-16)
+------------------
+* Upgrade backend packages to the latest versions (Flask 3.1.3,
+  SQLAlchemy 2.0.57, Flask-Security 5.9.2, Flask-Admin 2.2.1, WTForms 3.3.2,
+  pandas 3.1.1, gunicorn 27.0.1 etc.); replace passlib with libpass
+* Replace the deprecated raven client with sentry-sdk
+* Upgrade frontend libraries: jQuery 3.7.1, PowerTip 1.3.2, select2 4.1.0
+  (loaded with SRI hashes); remove unused jquery.chained.remote and the
+  old jQuery 1.10.2 CDN include
+* Security fixes: validate the login form and reject empty passwords,
+  escape the username in the LDAP DN, stop EIONET users from logging in
+  with a stale local password, escape HTML in data sheet info and
+  subpopulation fields, remove unneeded ``|safe`` filters from templates
+* Replace Travis with a GitHub Actions workflow that runs the tests with
+  coverage; fix outdated test factories and add login/escaping tests
+* ``import_new_data_v2``: skip columns that are not part of the model, add
+  ``--replace`` option to overwrite existing rows for the imported period,
+  run the import in a single transaction
+* Hide the audit trail (button, intro text and page) from anonymous users
+  while the EU assessments of a period are not public, so the 2019-2024
+  Member State data can be opened before the EU level
+  [dianaboiangiu]
+
 2.7.8 (2025-09-29)
 ------------------
 * Remove wkhtmltopdf from Dockerfile

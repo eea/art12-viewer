@@ -8,6 +8,7 @@ from flask import (
     abort,
 )
 
+from art12.common import can_view_assessments
 from art12.models import (
     Dataset,
     EtcDataBird,
@@ -16,7 +17,6 @@ from art12.models import (
     WikiTrail,
     WikiTrailChange,
 )
-
 
 wiki = Blueprint("wiki", __name__)
 
@@ -139,6 +139,9 @@ class AuditView(views.View):
         try:
             rq["period"] = int(rq["period"])
         except ValueError:
+            abort(404)
+        # audit trails hold EU-level information, hidden with the EU assessments
+        if not can_view_assessments(Dataset.query.get_or_404(rq["period"])):
             abort(404)
         wikis = self.section.wiki_cls.query.filter(
             self.section.wiki_cls.subject == rq["subject"],

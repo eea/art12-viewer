@@ -6,9 +6,11 @@
     View data sheet info
   </button>
 
-  <button type="button" id="wikibutton" href="{{ audittrail_url }}" {% if dataset.id == 2 %}disabled{% endif %}>
-    Audit trail
-  </button>
+  {% if can_view_assessments(dataset) %}
+    <button type="button" id="wikibutton" href="{{ audittrail_url }}" {% if dataset.id == 2 %}disabled{% endif %}>
+      Audit trail
+    </button>
+  {% endif %}
 
   {% if map_url and dataset.id != 2 and map_available %}
     <button type="button" id="show-map" data-url="{{ map_url }}">Map</button>

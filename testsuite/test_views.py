@@ -1,5 +1,6 @@
 import flask
 import json
+from mock import patch
 
 from art12 import models
 
@@ -158,3 +159,47 @@ def test_eu_map_get(
         url, params={"suffix": "PR", "speciescode": entry.speciescode}
     )
     assert response.status_code == 200
+
+
+def _get_audit_trail(client, dataset):
+    url = flask.url_for("wiki.audittrail")
+    params = {"period": dataset.id, "subject": "Species name 1"}
+    return client.get(url, params=params, expect_errors=True)
+
+
+def test_audit_trail_hidden_from_public_when_assessments_hidden(
+    app, plone_auth, client
+):
+    dataset = DatasetFactory(public_can_view_assessments=False)
+    assert _get_audit_trail(client, dataset).status_code == 404
+
+
+def test_audit_trail_visible_to_logged_in_users_when_assessments_hidden(
+    app, plone_auth, client
+):
+    dataset = DatasetFactory(public_can_view_assessments=False)
+    create_user("test_user")
+    force_login(client, "test_user")
+    assert _get_audit_trail(client, dataset).status_code == 200
+
+
+def test_audit_trail_visible_to_public_when_assessments_public(app, plone_auth, client):
+    dataset = DatasetFactory(public_can_view_assessments=True)
+    assert _get_audit_trail(client, dataset).status_code == 200
+
+
+@patch("art12.views.get_factsheet_url", return_value="")
+def test_summary_hides_audit_trail_button_from_public(
+    factsheet_url, app, plone_auth, client
+):
+    dataset = DatasetFactory(
+        id=4, public_can_view_assessments=False, species_map_url="http://maps"
+    )
+    subject = LuDataBirdFactory(dataset=dataset)
+    models.db.session.commit()
+    url = flask.url_for("views.summary")
+    params = {"period": dataset.id, "subject": subject.speciesname}
+    response = client.get(url, params=params)
+    assert response.status_code == 200
+    assert "View data sheet info" in response.text
+    assert "Audit trail" not in response.text

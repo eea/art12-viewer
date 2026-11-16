@@ -33,9 +33,11 @@
     <p>Choose period, species and if relevant sub-specific unit.</p>
     <p>Once a selection has been made the breeding distribution of the species can be visualized in a map.</p>
     <p>The ‘Data sheet info’ includes notes for each assessment per species.</p>
-    <p>The 'Audit trail' includes the methods used for the EU biogeographical assessments and justifications for decisions made by the assessors.</br>
-      Some inconsistencies may appear in the data reported by Member States. To ensure the robustness of the EU-level assessments, all assessments </br>
-      undergo expert review. Where inconsistencies or potential errors are identified, they are documented transparently and per bird taxon in the assessment audit trail.</p>
+    {% if can_view_assessments(dataset) %}
+      <p>The 'Audit trail' includes the methods used for the EU biogeographical assessments and justifications for decisions made by the assessors.</br>
+        Some inconsistencies may appear in the data reported by Member States. To ensure the robustness of the EU-level assessments, all assessments </br>
+        undergo expert review. Where inconsistencies or potential errors are identified, they are documented transparently and per bird taxon in the assessment audit trail.</p>
+    {% endif %}
     {% if dataset.id == 2 %}
       <p class="note">
         IMPORTANT: 2008-2012bis reporting period displays data from the delayed delivery by Greece
