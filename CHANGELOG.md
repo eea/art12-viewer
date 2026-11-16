@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.8.1 (2026-11-16)
+------------------
+* Fix build
+  [dianaboiangiu]
+
 2.8.0 (2026-11-16)
 ------------------
 * Upgrade backend packages to the latest versions (Flask 3.1.3,
