@@ -1,3 +1,5 @@
 -r requirements.txt
 gunicorn==27.0.1
 gevent==26.9.0
+# imported by the gunicorn gevent worker, not declared as a gunicorn dependency
+packaging==26.3
